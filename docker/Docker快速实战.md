@@ -307,7 +307,7 @@ DockerFile就是用来构建docker镜像的构建文件！命令脚本！
 docker build -f 源dockerfile -t 目标镜像名 保存地址
 ```
 
-![](images\dockerfile01.png)
+![](https://gitee.com/mylsaber/learn-notes/raw/master/docker/images/dockerfile01.png)
 
 #### 基础知识
 
