@@ -307,7 +307,7 @@ DockerFile就是用来构建docker镜像的构建文件！命令脚本！
 docker build -f 源dockerfile -t 目标镜像名 保存地址
 ```
 
-![](https://gitee.com/mylsaber/learn-notes/raw/master/docker/images/dockerfile01.png)
+![](images/dockerfile01.png)
 
 #### 基础知识
 
@@ -320,4 +320,234 @@ dockerfile是面向开发的，发布项目，做镜像，就需要编写dockerf
 
 docke镜像逐渐成为企业交付标准
 
+#### DockerFile基本指令
+
+```shell
+FROM          #用于为映像文件构建过程指定基准镜像，后续的指令运行于此基准镜像所提供的运行环境<digest>为校验码
+FROM <repository>[:<tag>] 或者 FROM <repository>@<digest> 
+
+MAINTANIER    #用于让镜像制作者提供本人的详细信息 姓名+邮箱
+MAINTAINER jiangfangwei<mylsaber@163.com>
+
+LABEL         #LABEL用于为镜像添加元数据，元数以键值对的形式指定
+LABEL version="1.0" description="web服务器" Autor="mylsaber"
+
+RUN           #用于指定 docker build过程中运行的程序，其可以是任何命令，但是这里有个限定，一般为基础镜像可以运行的命令，如基础镜像为centos，安装软件命令为yum而不是ubuntu里的apt-get命令
+RUN <command>或 RUN ["<executable>", "<param1>", "<param2>"]
+
+ADD           #ADD指令类似于COPY指令，ADD支持使用tar文件和url路径
+ADD <src> ... <dest>或ADD ["<src>",... "<dest>"]
+
+WORKDIR       #镜像的工作目录,指当前容器环境的工作目录，用于为 Dockerfile中所有的 RUN、CMD、ENTRYPOINT、COPY和 ADD指定设定工作目录
+
+VOLUME        #挂载目录
+VOLUME <mountpoint>或VOLUME ["<mountpoint>"]
+
+EXPOST        #暴露指定端口，用于为容器打开指定要监听的端口以实现与外部通信
+EXPOSE <port>[/<protocol>] [<port>[/<protocol>] ...]
+
+CMD           #指定容器启动时运行的命令，只有最后一个会生效，可被替代
+CMD <command>或CMD ["<executable>","<param1>","<param2>"]或CMD["<param1>","<param2>"]
+
+ENTRYPOINT    #指定容器启动时运行的命令，可以追加命令
+ENTRYPOINT <command>或ENTRYPOINT ["<excutable>","<param1>","<param2>"]
+
+ONBUILD       #当构建一个被继承DockerFile时，触发指令
+
+COPY          #用于从 Docker主机复制文件至创建的新映像文件
+COPY <src> ... <dest>或 COPY ["<src>",... "<dest>"]
+
+ENV           #用于为镜像定义所需的环境变量，并可被 Dockerfile文件中位于其后的其它指令（如 ENV、ADD、COPY等）所调用 ，即先定义后调用,调用格式为 $variable_name或${variable_name}
+ENV <key> <value>或 . ENV <key>=<value> ...
+第一种格式中， <key>之后的所有内容均会被视作其 <value>的组成部分，因此一次只能设置一个变量
+第二种格式，可用一次设置多个变量，每个变量为一个“<key>=<value>”的键值对，如果<value>包含空格，可以以反斜线（\）进行转义，也可通过对<value>加引号进行标识；另外反斜线也可以用于续行；定义多个变量时，建议使用第二种方式，以便在同一层中完成所有功能
+```
+
+#### 实战测试
+
+Docker Hub中大多数镜像都是从scratch继承。
+
+**centos**
+
+```shell
+[root@mylsaber dockerfiles]# cat mydockerfile 
+FROM centos
+MAINTAINER jiangfangwei<mylsaber@163.com>
+
+ENV MYPATH /user/local
+WORKDIR $MYPATH
+
+RUN yum -y install vim
+RUN yum -y install net-tools
+
+EXPOSE 80
+
+CMD echo $MYPATH
+CMD echo "----end----"
+CMD /bin/bash
+```
+
+**Tomcat镜像**
+
+```shell
+#准备好jdk和tomcat安装包
+#编写dockerfile文件，官方命名Dockerfile
+FROM centos
+MAINTAINET jiangfangwei<mylsaber@163.com>
+
+COPY readme.txt /usr/local/readme.txt
+
+ADD jdk-8u311-linux-x64.tar.gz /usr/local
+ADD apache-tomcat-9.0.56.tar.gz /usr/local
+
+RUN yum -y install vim
+
+ENV MYPATH /usr/local
+WORKDIR $MYPATH
+
+ENV JAVA_HOME /usr/local/jdk1.8.0_311
+ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+ENV CATALINA_HOME /usr/local/apache-tomcat-9.0.56
+ENV CATALINA_BASE /usr/local/apache-tomcat-9.0.56
+ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin
+
+EXPOSE 8080
+
+CMD /usr/local/apache-tomcat-9.0.56/bin/startup.sh && tail -F /usr/local/apache-tomcat-9.0.56/bin/logs/catalina.out
+#构建镜像
+docker build -t mytomcat:1.0 .
+```
+
+#### 推送到阿里镜像
+
+登录阿里云，选择控制台，选择容器镜像服务，新建命名空间，创建镜像仓库
+
+```
+#登录阿里云Docker Registry
+docker login --username=username registry.cn-hangzhou.aliyuncs.com
+docker tag [ImageId] registry.cn-hangzhou.aliyuncs.com/mylsaber/tomcat:[镜像版本号]
+docker push registry.cn-hangzhou.aliyuncs.com/mylsaber/tomcat:[镜像版本号]
+```
+
+docker history 镜像id
+
+```shell
+[root@mylsaber dockerfiles]# docker history redis
+IMAGE          CREATED       CREATED BY                                      SIZE      COMMENT
+7614ae9453d1   4 weeks ago   /bin/sh -c #(nop)  CMD ["redis-server"]         0B        
+<missing>      4 weeks ago   /bin/sh -c #(nop)  EXPOSE 6379                  0B        
+<missing>      4 weeks ago   /bin/sh -c #(nop)  ENTRYPOINT ["docker-entry…   0B        
+<missing>      4 weeks ago   /bin/sh -c #(nop) COPY file:df205a0ef6e6df89…   374B      
+<missing>      4 weeks ago   /bin/sh -c #(nop) WORKDIR /data                 0B        
+<missing>      4 weeks ago   /bin/sh -c #(nop)  VOLUME [/data]               0B        
+<missing>      4 weeks ago   /bin/sh -c mkdir /data && chown redis:redis …   0B        
+<missing>      4 weeks ago   /bin/sh -c set -eux;   savedAptMark="$(apt-m…   27.8MB    
+<missing>      4 weeks ago   /bin/sh -c #(nop)  ENV REDIS_DOWNLOAD_SHA=5b…   0B        
+<missing>      4 weeks ago   /bin/sh -c #(nop)  ENV REDIS_DOWNLOAD_URL=ht…   0B        
+<missing>      4 weeks ago   /bin/sh -c #(nop)  ENV REDIS_VERSION=6.2.6      0B        
+<missing>      4 weeks ago   /bin/sh -c set -eux;  savedAptMark="$(apt-ma…   4.24MB    
+<missing>      4 weeks ago   /bin/sh -c #(nop)  ENV GOSU_VERSION=1.12        0B        
+<missing>      4 weeks ago   /bin/sh -c groupadd -r -g 999 redis && usera…   329kB     
+<missing>      4 weeks ago   /bin/sh -c #(nop)  CMD ["bash"]                 0B        
+<missing>      4 weeks ago   /bin/sh -c #(nop) ADD file:09675d11695f65c55…   80.4MB    
+```
+
+
+
 ## Docker网络
+
+![](images\2022-01-19 153742.png)
+
+```shell
+docker run -d -P --name tomcat01 tomcat
+#查看容器内部网络地址ip addr
+docker exec -it tomcat01 ip addr
+```
+
+> 原理
+
+我们每启动一个docker容器，docker就会给容器分配一个ip，我们只要安装了docker，就会有一个docker0桥接模式，使用的技术是evth-pair技术
+
+--link就是在hosts中增加一个地址映射
+
+### 自定义网络
+
+#### 网络模式
+
+bridge：桥接docker（默认）
+
+none：不配置网络
+
+host：和宿主机共享网络
+
+container：容器网络连通（少用，局限大）
+
+**测试**
+
+```shell
+# 我们直接启动命令默认自动加了 --net bridge，这个就是我们的docker0
+docker run -d -P --name tomcat01 --net bridge tomcat
+# 自定义网络
+[root@mylsaber tomcat]# docker network create --driver bridge --subnet 192.168.0.0/16 --gateway 192.168.0.1 mynet
+
+# 启动两个在自定义网络上的tomcat
+[root@mylsaber tomcat]# docker run -d -P --rm --net mynet --name tomcat01 tomcat
+9b9ad5cabdae141dbc9dda14100d34a5405b5616f9fc975749ed292f9c4afd2d
+[root@mylsaber tomcat]# docker run -d -P --rm --net mynet --name tomcat02 tomcat
+16dc26f04265f78cce37d1d2ccbb4b7465f6eac813f600f6de5c5e0b0baf9313
+
+#可以相互ping通
+[root@mylsaber tomcat]# docker exec -it tomcat01 ping tomcat02
+PING tomcat02 (192.168.0.3) 56(84) bytes of data.
+64 bytes from tomcat02.mynet (192.168.0.3): icmp_seq=1 ttl=64 time=0.200 ms
+64 bytes from tomcat02.mynet (192.168.0.3): icmp_seq=2 ttl=64 time=0.087 ms
+[root@mylsaber tomcat]# docker exec -it tomcat02 ping tomcat01
+PING tomcat01 (192.168.0.2) 56(84) bytes of data.
+64 bytes from tomcat01.mynet (192.168.0.2): icmp_seq=1 ttl=64 time=0.056 ms
+
+```
+
+#### 连接网络
+
+```shell
+# 默认docker0启动，无法ping通mynet下的容器
+[root@mylsaber tomcat]# docker run -d -P --rm --name tomcat03 tomcat
+# 可以通过docker network connect连接mynet，实现方式通过给容器再增加一个ip地址
+[root@mylsaber tomcat]# docker network connect mynet tomcat03
+```
+
+![](D:\JavaLearn\learn-notes\docker\images\2022-01-19 162906.png)
+
+#### 实战：部署redis集群
+
+```shell
+# 创建网卡
+docker network create redis --subnet 172.38.0.0、16
+
+# 通过脚本创建redis配置
+for port in $(seq 1 6); \
+do \
+mkdir -p /mydata/redis/node-${port}/conf
+touch /mydata/redis/node-${port}/conf/redis.conf
+cat << EOF >/mydata/redis/node-${port}/conf/redis.conf
+port 6379 
+bind 0.0.0.0
+cluster-enabled yes 
+cluster-config-file nodes.conf
+cluster-node-timeout 5000
+cluster-announce-ip 172.38.0.1${port}
+cluster-announce-port 6379
+cluster-announce-bus-port 16379
+appendonly yes
+EOF
+done
+
+# 启动redis
+docker run -p 6374:6379 -p 16374:16379 --name redis-4 \
+    -v /mydata/redis/node-4/data:/data \
+    -v /mydata/redis/node-4/conf/redis.conf:/etc/redis/redis.conf \
+    -d --net redis --ip 172.38.0.14 redis redis-server /etc/redis/redis.conf
+# 创建集群
+# redis-cli --cluster create 172.38.0.11:6379 172.38.0.12:6379 172.38.0.13:6379 172.38.0.14:6379
+```
+
