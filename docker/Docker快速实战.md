@@ -34,7 +34,7 @@ Docker仓库类似于代码仓库，它是Docker集中存放镜像文件的场�
 每个仓库集中存放某一类镜像，往往包 括多个镜像文件，通过不同的标签（tag）来进行区分
 ## Docker安装
  卸载历史版本
-```
+```shell
 #查看安装
 yum list installed | grep docker
 #卸载
@@ -45,16 +45,16 @@ yum -y remove docker-ce-cli.x86_64
 rm -rf /var/lib/docker
 ```
  安装官方yum源
- ```
+ ```shell
  yum install -y yum-utils
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
  ```
  安装Docker引擎
- ```
+ ```shell
  yum install -y docker-ce docker-ce-cli containerd.io
  ```
 启动Docker
-```
+```shell
 #开机启动
 systemctl enable docker
 #启动
@@ -237,45 +237,64 @@ REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
 itomcat      1.0       e12236548928   6 seconds ago   685MB
 ```
 
-## 容器数据卷
-### 什么是容器数据卷
-Docker为容器提供了两个选项来将文件存储在主机中，以便即使容器停止后文件也可以持久存储：
-* 数据卷（Data Volumes）：容器内数据直接映射到本地主机环境
-* 数据卷容器（Data Volume Containers）：使用特定容器维护数据卷，也成为bind mounts（绑定挂载）
+## 数据卷（data volumes）
 
-如果在Linux上运行Docker，则还可以使用 tmpfs 挂载。如果在Windows上运行Docker，则还可以使
-用命名管道
+### 数据卷容器
 
-### 使用容器卷
-> 方式一:直接使用命令来挂载 -v
+容器内数据直接映射到宿主机目录
+
 ```shell
-docker run -it -v 主机目录：容器目录
-
-[root@mylsaber home]# docker run -it -v /home/test:/home centos /bin/bash
+# redis数据绑定到/home/redis/data下，配置文件绑定到/home/redis/conf下
+docker run -v /home/redis/data:/data -v /home/redis/conf:/usr/local/etc/redis redis redis-server /usr/local/etc/redis/redis.conf
 ```
-实战：安装MySQL
+
+### 数据卷
+由Docker创建和管理，是一个可供容器使用的特殊目录，它将主机操作系统目录直接映射进容器
+
+#### 特性
+
+- 可以在容器之间共享和复用
+- 对数据卷内数据修改立马生效
+- 对数据卷更新不会影响镜像
+- 卷会一直存在，直到没有容器使用时，可以安全卸载它
+
+#### 创建方式
+
+> 具名挂载
+
 ```shell
-# dockerhub官方启动命令
-docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
-# 挂载mysql目录
-[root@mylsaber home]# docker run -d --rm -p 3306:3306 -v /home/mysql/conf:/etc/mysql/conf.d -v /home/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root mysql:5.7
+# 卷命令帮助
+docker volume --help
+# 显示创建卷
+docker volume create
+# 删除数据卷
+docker volume rm 
+# 挂载数据卷到容器
+docker run -v volume:/etc/nginx ngnix
 ```
-#### 具名挂载和匿名挂载
+
+> 匿名挂载
+
 ```shell
-# 匿名挂载
--v 容器内路径
-docker run -d -P -v /etc/ngnix ngnix
-# 查看所有volume卷
+docker run -d -it -v /data --name redis-2 redis
+# 查看所有容器卷
 docker volume ls
-
-# 具名挂载
-docker run -d -P -v ngnixvolume:/etc/ngnix ngnix
 ```
+
+> 多个容器间共享数据
+
+```shell
+# 通过--volumes-form可以实现多个容器数据的共享，只要有一个容器还存在，数据都不会删除
+[root@mylsaber volumes]# docker run -it --rm --name centos01 mylsaber/centos:1.0
+[root@mylsaber volumes]# docker run -it --rm --name centos02 --volumes-from centos01 mylsaber/centos:1.0
+```
+
 所有的docker容器内的卷，没有指定目录的情况下都是在/var/lib/docker/volumes/xxx/_data
 
 我们通过具名挂载可以方便的找到需要的卷，大多数情况下都是使用具名挂载
 
-拓展
+#### 拓展
+
 ```shell
 # 通过-v容器内路径 ：ro rw 改变读写权限
 ro readonly #只读，只能通过宿主机写，容器无法写
@@ -284,14 +303,13 @@ rw readwrite #读写，默认rw
 docker run -d -P --rm -v volume1:/etc/nginx:ro nginx
 docker run -d -P --rm -v volume1:/etc/nginx:rw nginx
 ```
-#### 数据卷容器
-
-多个容器间共享数据
+### 实战：安装MySQL
 
 ```shell
-# 通过--volumes-form可以实现多个容器数据的共享，只要有一个容器还存在，数据都不会删除
-[root@mylsaber volumes]# docker run -it --rm --name centos01 mylsaber/centos:1.0
-[root@mylsaber volumes]# docker run -it --rm --name centos02 --volumes-from centos01 mylsaber/centos:1.0
+# dockerhub官方启动命令
+docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
+# 挂载mysql目录
+[root@mylsaber home]# docker run -d --rm -p 3306:3306 -v /home/mysql/conf:/etc/mysql/conf.d -v /home/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root mysql:5.7
 ```
 ## DockerFile
 ### DockerFile概念
@@ -304,7 +322,7 @@ DockerFile就是用来构建docker镜像的构建文件！命令脚本！
 4. docker push 发布镜像（docker hub，阿里云镜像仓库等）
 
 ```shell
-docker build -f 源dockerfile -t 目标镜像名 保存地址
+docker build -f 源dockerfile -t 目标镜像名 保存地址 . # 目录中有默认名Dockerfile文件时，可省略源dockerfile名
 ```
 
 ![](https://gitee.com/mylsaber/learn-notes/raw/master/docker/images/dockerfile01.png)
@@ -549,5 +567,25 @@ docker run -p 6374:6379 -p 16374:16379 --name redis-4 \
     -d --net redis --ip 172.38.0.14 redis redis-server /etc/redis/redis.conf
 # 创建集群
 # redis-cli --cluster create 172.38.0.11:6379 172.38.0.12:6379 172.38.0.13:6379 172.38.0.14:6379
+```
+
+## docker swarm集群管理
+
+docker swarm是docker官方提供的一套容器编排系统，是Docker公司推出的官方容器集群平台。基于 Go语言实现。
+
+## DockerCompose
+
+批量容器编排
+
+> 下载Compose
+
+```shell
+sudo curl -L "https://get.daocloud.io/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+
+> 授权
+
+```shell
+sudo chmod +x /usr/local/bin/docker-compose
 ```
 
