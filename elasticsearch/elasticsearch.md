@@ -487,3 +487,377 @@ GET /lagou-property/_search
 
 ```
 
+#### 词条级搜索(term-level queries)
+
+##### 词条搜索(term query)
+
+term 查询用于查询指定字段包含某个词项的文档
+
+```json
+POST /book/_search
+{
+    "query": {
+        "term" : { "name" : "solr" }
+    }
+}
+```
+
+##### 词条集合搜索(terms query)
+
+```json
+GET /book/_search
+{
+    "query": {
+        "terms" : { "name" : ["solr", "elasticsearch"]}
+    }
+}
+```
+
+#####  范围搜索(range query)
+
+- gte：大于等于
+-  gt：大于
+-  lte：小于等于 
+- lt：小于 
+- boost：查询权重
+
+```json
+GET /book/_search
+{
+    "query": {
+        "range" : {
+            "price" : {
+                "gte" : 10,
+                "lte" : 200,
+                "boost" : 2.0
+            }
+        }
+    }
+}
+GET /book/_search
+{
+    "query": {
+        "range" : {
+            "timestamp" : {
+                "gte" : "now-2d/d",
+                "lt" : "now/d"
+            }
+        }
+    }
+}
+GET book/_search
+{
+    "query": {
+        "range" : {
+            "timestamp" : {
+                "gte": "18/08/2020",
+                "lte": "2021",
+                "format": "dd/MM/yyyy||yyyy"
+            }
+        }
+    }
+}
+```
+
+##### 不为空搜索(exists query)
+
+```json
+GET /book/_search
+{
+    "query": {
+        "exists" : { "field" : "price" }
+    }
+}
+
+```
+
+##### 词项前缀搜索(prefix query)
+
+```json
+GET /book/_search
+{ 
+    "query": {
+        "prefix" : { "name" : "so" }
+    }
+}
+
+```
+
+##### 通配符搜索(wildcard query)
+
+```json
+GET /book/_search
+{
+    "query": {
+        "wildcard" : { "name" : "so*r" }
+    }
+}
+GET /book/_search
+{
+    "query": {
+        "wildcard": {
+            "name": {
+                "value": "lu*",
+                "boost": 2
+            }
+        }
+    }
+}
+```
+
+##### 正则搜索(regexp query)
+
+regexp允许使用正则表达式进行term查询.注意regexp如果使用不正确，会给服务器带来很严重的性能 压力。比如.*开头的查询，将会匹配所有的倒排索引中的关键字，这几乎相当于全表扫描，会很慢。因 此如果可以的话，最好在使用正则前，加上匹配的前缀。
+
+```json
+GET /book/_search
+{
+    "query": {
+        "regexp":{
+            "name": "s.*"
+        }
+    }
+}
+GET /book/_search
+{
+    "query": {
+        "regexp":{
+            "name":{
+                "value":"s.*",
+                "boost":1.2
+            }
+        }
+    }
+}
+```
+
+##### 模糊搜索(fuzzy query)
+
+```json
+GET /book/_search
+{
+    "query": {
+        "fuzzy" : { "name" : "so" }
+    }
+}
+GET /book/_search
+{
+    "query": {
+        "fuzzy" : {
+            "name" : {
+                "value": "so",
+                "boost": 1.0,
+                "fuzziness": 2
+            }
+        }
+    }
+}
+GET /book/_search
+{
+    "query": {
+        "fuzzy" : {
+            "name" : {
+                "value": "sorl",
+                "boost": 1.0,
+                "fuzziness": 2
+            }
+        }
+    }
+}
+```
+
+#####  ids搜索(id集合查询)
+
+```json
+GET /book/_search
+{
+    "query": {
+        "ids" : {
+            "type" : "_doc",
+            "values" : ["1", "3"]
+        }
+    }
+}
+```
+
+#### 复合搜索(compound query)
+
+##### constant_score query
+
+用来包装另一个查询，将查询匹配的文档的评分设为一个常值
+
+```json
+GET /book/_search
+{
+    "query": {
+        "term" : { "description" : "solr"}
+    }
+}
+GET /book/_search
+{
+    "query": {
+        "constant_score" : {
+            "filter" : {
+                "term" : { "description" : "solr"}
+            },
+            "boost" : 1.2
+        }
+    }
+}
+```
+
+##### 布尔搜索(bool query)
+
+bool 查询用bool操作来组合多个查询字句为一个查询。 可用的关键字： 
+
+- must：必须满足 
+- filter：必须满足，但执行的是filter上下文，不参与、不影响评分 
+- should：或 
+- must_not：必须不满足，在filter上下文中执行，不参与、不影响评分
+
+```json
+POST /book/_search
+{
+    "query": {
+        "bool" : {
+            "must" : {
+                "match" : { "description" : "java" }
+            },
+            "filter": {
+                "term" : { "name" : "solr" }
+            },
+            "must_not" : {
+                "range" : {
+                    "price" : { "gte" : 200, "lte" : 300 }
+                }
+            },
+            "minimum_should_match" : 1,
+            "boost" : 1.0
+        }
+    }
+}
+```
+
+minimum_should_match代表了最小匹配精度，如果设置minimum_should_match=1，那么should 语句中至少需要有一个条件满足。
+
+#### 排序
+
+- 相关性评分排序
+
+  默认情况下，返回的结果是按照 相关性 进行排序的——最相关的文档排在最前。 在本章的后面部 分，我们会解释 相关性 意味着什么以及它是如何计算的， 不过让我们首先看看 sort 参数以及如 何使用它。 为了按照相关性来排序，需要将相关性表示为一个数值。在 Elasticsearch 中， 相关性得分 由一 个浮点数进行表示，并在搜索结果中通过 _score 参数返回， 默认排序是 _score 降序，按照相 关性评分升序排序如下
+
+  ```json
+  POST /book/_search
+  {
+      "query": {
+          "match": {"description":"solr"}
+      }
+  }
+  POST /book/_search
+  {
+      "query": {
+          "match": {"description":"solr"}
+      },
+      "sort": [
+          {
+              "_score": {"order": "asc"}
+          }
+      ]
+  }
+  ```
+
+- 字段值排序
+
+  ```json
+  POST /book/_search
+  {
+      "query": {
+          "match_all": {}
+      },
+      "sort": [
+          {"price": {"order": "desc"}}
+      ]
+  }
+  ```
+
+- 多级排序
+
+  假定我们想要结合使用 price和 _score（得分） 进行查询，并且匹配的结果首先按照价格排序， 然后按照相关性得分排序：
+
+  ```json
+  POST /book/_search
+  {
+      "query":{
+          "match_all":{}
+      },
+      "sort": [
+          { "price": { "order": "desc" }},
+          { "timestamp": { "order": "desc" }}
+      ]
+  }
+  ```
+
+#### 分页
+
+```json
+POST /book/_search
+{
+    "query": {
+        "match_all": {}
+    },
+    "size": 2,
+    "from": 0
+}
+POST /book/_search
+{
+    "query": {
+        "match_all": {}
+    },
+    "sort": [
+        {"price": {"order": "desc"}}
+    ],
+    "size": 2,
+    "from": 2
+}
+```
+
+- size:每页显示多少条 
+- from:当前页起始索引, int start = (pageNum - 1) * size
+
+#### 高亮
+
+```json
+POST /book/_search
+{
+    "query": {
+        "match": {
+            "name": "elasticsearch"
+        }
+    },
+    "highlight": {
+        "pre_tags": "<font color='pink'>",
+        "post_tags": "</font>",
+        "fields": [{"name":{}},{"description":{}}]
+    }
+}
+POST /book/_search
+{
+    "query": {
+        "query_string" : {
+            "query" : "elasticsearch"
+        }
+    },
+    "highlight": {
+        "pre_tags": "<font color='pink'>",
+        "post_tags": "</font>",
+        "fields": [{"name":{}},{"description":{}}]
+    }
+}
+```
+
+在使用match查询的同时，加上一个highlight属性： 
+
+- pre_tags：前置标签
+-  post_tags：后置标签
+-  fields：需要高亮的字段 
+  - name：这里声明title字段需要高亮，后面可以为这个字段设置特有配置，也可以空
