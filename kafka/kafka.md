@@ -46,7 +46,7 @@
 
   一个独立的kafka服务器被称为broker，broker接收生产者的消息，为消息设置偏移量，并提交消息到磁盘保存，borker为消费者提供服务，对读取分区的请求做响应，返回已经提交到磁盘上的消 息。单个broker可以轻松处理数千个分区以及每秒百万级的消息量。
 
-  ![](D:\JavaLearn\learn-notes\kafka\images\01.png)
+  ![](https://gitee.com/mylsaber/learn-notes/raw/master/kafka/images/01.png)
 
 每个集群都有一个broker是集群控制器（自动从集群活跃成员中选举）
 
@@ -475,7 +475,7 @@ broker 会往拥有最少数目分区的路径新增分区，而不是往拥有�
 
 #### 数据生产流程
 
-![](D:\JavaLearn\learn-notes\kafka\images\02.png)
+![](https://gitee.com/mylsaber/learn-notes/raw/master/kafka/images/02.png))
 
 1. Producer创建时，会创建一个Sender线程并设置为守护线程。 
 2. 生产消息时，内部其实是异步流程；生产的消息先经过拦截器->序列化器->分区器，然后将消 息缓存在缓冲区（该缓冲区也是在Producer创建时创建）。
@@ -665,7 +665,7 @@ public class UserInterceptor<K, V> implements ProducerInterceptor<K, V> {
 
 ### 原理剖析
 
-![](D:\JavaLearn\learn-notes\kafka\images\03.png)
+![](https://gitee.com/mylsaber/learn-notes/raw/master/kafka/images/03.png)
 
 KafkaProducer有两个基本线程：
 
