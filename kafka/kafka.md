@@ -1,4 +1,4 @@
-# Kfaka架构和实战
+# 	Kfaka架构和实战
 
 ## 概念和基本架构
 
@@ -793,6 +793,58 @@ KafkaConsumer#commitSync()
 
 KafkaConsumer#commitAsync()：非同步操作
 
+#### 消费者位移管理
+
+Kafka提供了消费者API，让消费者可以管理自己的位移。
+
+```java
+public void assign(Collection<TopicPartition> partitions)
+/**给当前消费者手动分配一系列主题分区。手动分配分区不支持增量分配，如果先前有分配分区，则该操作会覆盖之前的分配。如果给出的主题分区是空的，则等价于调用unsubscribe方法。手动分配主题分区的方法不使用消费组管理功能。当消费组成员变了，或者集群或主题的元数据改变了，不会触发分区分配的再平衡。手动分区分配assign(Collection)不能和自动分区分配subscribe(Collection,ConsumerRebalanceListener)一起使用。如果启用了自动提交偏移量，则在新的分区分配替换旧的分区分配之前，会对旧的分区分配中的消费偏移量进行异步提交。**/
+```
+
+```java
+public Set<TopicPartition> assignment()
+/**获取给当前消费者分配的分区集合。如果订阅是通过调用assign方法直接分配主题分区，则返回相同的集合。如果使用了主题订阅，该方法返回当前分配给该消费者的主题分区集合。如果分区订阅还没开始进行分区分配，或者正在重新分配分区，则会返回none。**/
+```
+
+```java
+public Map<String, List<PartitionInfo>> listTopics()
+/**获取对用户授权的所有主题分区元数据。该方法会对服务器发起远程调用。**/
+```
+
+```java
+public List<PartitionInfo> partitionsFor(String topic)
+/**获取指定主题的分区元数据。如果当前消费者没有关于该主题的元数据，就会对服务器发起远程调用。**/
+```
+
+```java
+public Map<TopicPartition, Long> beginningOffsets(Collection<TopicPartition> partitions)
+/**对于给定的主题分区，列出它们第一个消息的偏移量。注意，如果指定的分区不存在，该方法可能会永远阻塞。该方法不改变分区的当前消费者偏移量。**/
+```
+
+```java
+public void seekToEnd(Collection<TopicPartition> partitions)
+/**将偏移量移动到每个给定分区的最后一个。该方法延迟执行，只有当调用过poll方法或position方法之后才可以使用。如果没有指定分区，则将当前消费者分配的所有分区的消费者偏移量移动到最后。如果设置了隔离级别为：isolation.level=read_committed，则会将分区的消费偏移量移动到最后一个稳定的偏移量，即下一个要消费的消息现在还是未提交状态的事务消息。
+**/
+```
+
+```java
+public void seek(TopicPartition partition, long offset)
+/**将给定主题分区的消费偏移量移动到指定的偏移量，即当前消费者下一条要消费的消息偏移量。若该方法多次调用，则最后一次的覆盖前面的。如果在消费中间随意使用，可能会丢失数据。**/
+```
+
+```java
+public long position(TopicPartition partition)
+/**检查指定主题分区的消费偏移量**/
+```
+
+```java
+public void seekToBeginning(Collection<TopicPartition> partitions)
+/**将给定每个分区的消费者偏移量移动到它们的起始偏移量。该方法懒执行，只有当调用过poll方法或position方法之后才会执行。如果没有提供分区，则将所有分配给当前消费者的分区消费偏移量移动到起始偏移量。**/
+```
+
+
+
 #### 消费者拦截器
 
 消费者在拉取了分区消息之后，要首先经过反序列化器对key和value进行反序列化处理。 处理完之后，如果消费端设置了拦截器，则需要经过拦截器的处理之后，才能返回给消费者应用程 序进行处理。
@@ -841,3 +893,16 @@ public class UserConsumerInterceptor<K,V> implements ConsumerInterceptor<K,V> {
 }
 ```
 
+### 消费者组
+
+consumer group是kafka提供的可扩展且具有容错性的消费者机制。
+
+三个特性：
+
+1. 消费组有一个或多个消费者，消费者可以是一个进程，也可以是一个线程
+2. group.id是一个字符串，唯一标识一个消费组
+3. 消费组订阅的主题每个分区只能分配给消费组一个消费者。
+
+#### 消费者位移(consumer position)
+
+消费者在消费的过程中记录已消费的数据，即消费位移（offset）信息。
