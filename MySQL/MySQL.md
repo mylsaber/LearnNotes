@@ -591,3 +591,127 @@ create or replace view sales_by_client as -- 创建或者替换语句
 -- 视图最后加上with check option，当更新视图可能造成数据消失时，执行会报错防止数据消失
 ```
 
+## 存储过程
+
+> 创建存储过程
+
+```mysql
+delimiter $$ -- 更改结束字符
+CREATE PROCEDURE get_user()
+BEGIN
+	SELECT * FROM user;
+END$$
+delimiter ; -- 更改结束字符
+```
+
+> 删除存储过程
+
+```mysql
+DROP procedure if exists get_user_new;
+```
+
+> 带参数
+
+```mysql
+CREATE PROCEDURE get_user(pName CHAR (10))
+BEGIN
+	if pName is null 
+	then set pName = '姜';
+	end IF ;
+	SELECT
+		*
+	FROM
+	user
+	WHERE
+		NAME LIKE CONCAT( '%', pName, '%' );
+END
+```
+
+> 参数验证
+
+```mysql
+CREATE PROCEDURE set_name(PId int,PName varchar(10))
+BEGIN
+	if pName = '张三' then
+	signal sqlstate '22003'
+	set MESSAGE_TEXT = '不能输入张三';
+	end if;
+	INSERT into user values
+	(Pid,PName);
+END
+```
+
+> 输出参数
+
+```mysql
+CREATE PROCEDURE get_user_name(
+pId int ,
+out pName varchar(10)
+)
+BEGIN
+	SELECT name into pName FROM user WHERE id = pId;
+END
+
+set @name = '';
+CALL get_user_name(01,@name);
+SELECT @name as name;
+```
+
+> 过程本地变量
+
+```mysql
+CREATE PROCEDURE mylsaber.get_all_name()
+BEGIN
+	declare localName varchar(100) default '';
+	SELECT name into localName from user WHERE id = 1;
+	set localName = CONCAT(localName,'pro') ;
+	SELECT localName;
+END
+```
+
+## 函数
+
+只能返回单一值，不能像过程一样返回多行多列数据
+
+```mysql
+CREATE FUNCTION mylsaber.get_name(pId int)
+RETURNS varchar(100)
+deterministic -- 不读取或者改变数据库数据时添加，比如实现绝对值函数
+reads sql data -- 读取数据库数据时添加
+modifies sql data -- 修改数据库值时添加
+BEGIN
+	declare res varchar(100);
+	SELECT name into res from user where id = pId;
+	return res;
+END
+
+drop function if exists get_name;
+```
+
+## 触发器
+
+```mysql
+DELIMITER $$
+
+CREATE trigger user_after_insert
+after INSERT on `user` FOR EACH ROW 
+BEGIN 
+	insert into color values (default, NEW.name ,CONCAT(NEW.name,'触发器'));
+END$$
+
+DELIMITER ;
+```
+
+> 查看触发器
+
+```mysql
+show triggers like 'user%';
+show triggers;
+```
+
+> 删除触发器
+
+```mysql
+drop trigger if exists user_after_insert;
+```
+
