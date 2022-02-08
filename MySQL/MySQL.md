@@ -715,3 +715,223 @@ show triggers;
 drop trigger if exists user_after_insert;
 ```
 
+## 事务
+
+事务的四大特性ACID：原子性、一致性、隔离性、持久性
+
+事务可能会产生的问题：
+
+- 脏读
+
+  所谓脏读，就是指**事务A读到了事务B还没有提交的数据**
+
+- 不可重复读
+
+  就是指**在同一个事务中读取了两次某个数据，读出来的数据不一致**
+
+- 幻读
+
+  是指**在一个事务里面的操作中发现了未被操作的数据**。比如学生信息，事务A开启事务-->修改所有学生当天签到状况为false，此时切换到事务B，事务B开启事务-->事务B插入了一条学生数据，此时切换回事务A，事务A提交的时候发现了一条自己没有修改过的数据，这就是幻读，就好像发生了幻觉一样。幻读出现的前提是并发的事务中有事务发生了插入、删除操作。
+
+事务的隔离级别：MySQL默认可重复读
+
+- read_uncommitted：读取未提交
+- read_committed：读取已提交
+- repeatable_read：可重复读
+- serializable：串行化
+
+> 创建事务
+
+```mysql
+start transaction; # 开启事务
+INSERT INTO mylsaber.`user` (name) VALUES('姓名1');
+INSERT INTO mylsaber.`user` (name) VALUES('姓名2');
+commit; # 提交事务
+rollback; # 退回事务
+```
+
+> 查看设置事务级别
+
+```mysql
+show variables like 'transaction_isolation';
+# 查看事务级别
+set SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED ;
+# 设置当前连接事务基本，断开后恢复默认
+set GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE ;
+# 设置数据库全局事务级别
+```
+
+## 数据类型
+
+### 字符串类型
+
+- char：固定长度字符串
+- varchar：可变长度字符串、最大65535位、64kb
+- mediumtext：最大16mb
+- longtext：最大4GB
+- tinytext：最大255bytes
+- text：最大64kb，和varchar一样
+
+### 整数类型
+
+- tinyint：1b
+- unsigned tinyint：1b
+- smallint：2b 
+- mediumint：3b
+- int：4b 
+- bigint：8b
+
+### 定点数、浮点数
+
+- decimal(p,s)：p决定位数，s决定小数位数、如decimal(9,2) => 1234567.89、decimal可以写成dec，numeric、fixed
+- float：4b、不能保证精度
+- double：8b、不能保证精度
+
+### 布尔类型
+
+- boolean、bool：实际1等效TRUE，0等效FALSE
+
+### 枚举、集合
+
+- enum('small','medium','large')：避免使用
+- set(...)：和枚举类相识，但可以存多个数据，避免使用
+
+### 时间日期类型
+
+- date：日期
+- time：时间
+- datetime：日期时间、8b
+- timestamp：日期时间、4b（up to 2038）
+- year：年
+
+### blob类型
+
+存储大型二进制数据，尽量避免在数据库中存二进制文件，影响数据库性能
+
+- tinyblob：255b
+- blob：65k
+- mediumblob：16mb
+- longblob：4GB
+
+### JSON类型
+
+8版本以上支持
+
+> 设置数据
+
+```mysql
+update products set properties = '
+{
+"dimensions":[1,2,3],
+"weight":10,
+"manufacturer":{"name","sony"}
+}
+'
+where product_id = 1;
+```
+
+```mysql
+update products set properties = JSON_OBJECT(
+	'weight',10,
+    'dimensions':JSON_ARRAY(1,2,3),
+    'manufacturer':JSON_OBJECT('name','sony')
+)
+where product_id = 1;
+```
+
+```mysql
+update products set properties = JSON_SET(
+	properties,
+    '$.weight':20,
+    '$.age':10
+)
+where product_id = 1;
+```
+
+```mysql
+update products set properties = JSON_REMOVE(
+	properties,
+    '$.age':10
+)
+where product_id = 1;
+```
+
+
+
+> 查询数据
+
+```mysql
+select product_id,JSON_EXTRACT(properties,'$.manufacturer.name') from products where product_id = 1;
+```
+
+```mysql
+select product_id,properties -> '$.dimensions[0]' from products where product_id = 1;
+select product_id,properties ->> '$.manufacturer.name' from products where product_id = 1;
+# ->>可以去除字符串双引号
+```
+
+## 索引
+
+> 创建索引
+
+```mysql
+create index inx_name on user(name);
+```
+
+> 查看索引
+
+```mysql
+show indexes in user；
+```
+
+> 前缀索引
+
+```mysql
+create index idx_lastnem on customers (last_name(20))
+# last_name前20位作为索引
+```
+
+> 全文索引
+
+```mysql
+create fulltext index idx_title_body on posts (title,body)
+
+select * from posts where match(title,body) against('react real -redux +from');
+# 匹配含有react或者real，必不包含redux，必包含from
+# "handling a from"严格匹配字符串
+```
+
+> 复合索引
+
+- 频繁使用的索引排在最前面
+- 索引重复率低的排在前面
+
+```mysql
+create index idx_state_points on customers (state,points);
+# 最多复合16个
+drop index idx_state on customers;
+```
+
+## 数据库权限
+
+```mysql
+CREATE user john@127.0.0.1 identified by '1234';
+create user john identified by '1234';
+-- 创建用户
+SELECT * FROM mysql.`user` u ;
+-- 查询用户
+DROP user john;
+-- 删除用户
+set PASSWORD FOR john = '123456';
+-- 更改用户密码
+set PASSWORD = '123456';
+-- 更改当前登录用户密码
+grant SELECT ,INSERT ,UPDATE , DELETE, EXECUTE on mylsaber.* to john;
+-- 授权
+SHOW GRANTS FOR john;
+show grants;
+-- 查看权限
+revoke CREATE VIEW on mylsaber.* from john;
+-- 撤销权限
+```
+
