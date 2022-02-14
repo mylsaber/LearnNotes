@@ -1,6 +1,6 @@
 ## 常用集合分类
 
-![](D:\JavaLearn\learn-notes\java基础\images\1.png)
+![](https://gitee.com/mylsaber/learn-notes/raw/master/java%E5%9F%BA%E7%A1%80/images/1.png)
 
 ## List和Set集合详解
 
