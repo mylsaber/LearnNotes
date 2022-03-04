@@ -568,24 +568,3 @@ docker run -p 6374:6379 -p 16374:16379 --name redis-4 \
 # 创建集群
 # redis-cli --cluster create 172.38.0.11:6379 172.38.0.12:6379 172.38.0.13:6379 172.38.0.14:6379
 ```
-
-## docker swarm集群管理
-
-docker swarm是docker官方提供的一套容器编排系统，是Docker公司推出的官方容器集群平台。基于 Go语言实现。
-
-## DockerCompose
-
-批量容器编排
-
-> 下载Compose
-
-```shell
-sudo curl -L "https://get.daocloud.io/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-```
-
-> 授权
-
-```shell
-sudo chmod +x /usr/local/bin/docker-compose
-```
-
