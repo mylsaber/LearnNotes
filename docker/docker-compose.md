@@ -211,9 +211,15 @@ services: #定义服务
 - 运行
 
   ```shell
-  docker-compose up -d
+  docker-compose up -d ## -d 后台启动
   ```
 
+- 后台运行指定yml
+
+  ```shell
+  docker-compose -f mysql.yml up -d ## -f 指定yml
+  ```
+  
 - 查看
 
   ```shell
