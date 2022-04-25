@@ -175,7 +175,7 @@ spring.cloud.nacos.discovery.group=dev
       }
       ```
 
-## Nacos作为配置中心
+# Nacos作为配置中心
 
 1. 添加依赖
 
