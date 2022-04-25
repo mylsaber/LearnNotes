@@ -52,55 +52,175 @@ cluster模式需要依赖Mysql，然后修改配置文件`conf/cluster.conf`和`
 
   > 注意：不支持 MySQL 8.0 版本
 
+# Nacos命名空间、分组和DataID
+
+```properties
+spring.application.name=service-provider
+server.port=9001
+
+spring.profiles.active=dev
+spring.cloud.nacos.config.server-addr=124.223.91.119:8848
+spring.cloud.nacos.config.file-extension=yaml
+spring.cloud.nacos.config.namespace=6a40fa3a-f8e3-48bf-a108-a1b631815f29
+spring.cloud.nacos.config.group=dev
+
+spring.cloud.nacos.discovery.server-addr=124.223.91.119:8848
+spring.cloud.nacos.discovery.namespace=6a40fa3a-f8e3-48bf-a108-a1b631815f29
+spring.cloud.nacos.discovery.group=dev
+```
+
+- 命名空间：用于进行租户粒度的配置隔离。不同的**命名空间**下，可以存在相同的**Group**或**Data ID**的配置。Namespace 的常用场景之一是不同环境的配置的区分隔离，例如开发测试环境和生产环境的资源（如配置、服务）隔离等。
+
+- 分组：Nacos 中的一组配置集，是组织配置的维度之一。通过一个有意义的字符串（如 Buy 或 Trade ）对配置集进行分组，从而区分 Data ID 相同的配置集。当您在 Nacos 上创建一个配置时，如果未填写配置分组的名称，则配置分组的名称默认采用 DEFAULT_GROUP 。配置分组的常见场景：不同的应用或组件使用了相同的配置类型，如 database_url 配置和 MQ_topic 配置。
+
+- Data ID：在 Nacos Spring Cloud 中，`dataId` 的完整格式如下：
+
+  ```properties
+  ${prefix}-${spring.profiles.active}.${file-extension}
+  ```
+
+  - `prefix` 默认为 `spring.application.name` 的值，也可以通过配置项 `spring.cloud.nacos.config.prefix`来配置。
+
+  - `spring.profiles.active` 即为当前环境对应的 profile。 **注意：当 `spring.profiles.active` 为空时，对应的连接符 `-` 也将不存在，dataId 的拼接格式变成 `${prefix}.${file-extension}`**
+
+  - `file-exetension` 为配置内容的数据格式，可以通过配置项 `spring.cloud.nacos.config.file-extension` 来配置。目前只支持 `properties` 和 `yaml` 类型。
+
+    > Profile：Java项目一般都会有多个Profile配置，用于区分开发环境，测试环境，准生产环境，生成环境等，每个环境对应一个properties文件（或是yml/yaml文件），然后通过设置 spring.profiles.active 的值来决定使用哪个配置文件。
+
 # Nacos作为注册中心
 
-1. 引入spring-cloud-starter-alibaba-nacos-discovery依赖
-2. 在启动类上添加SpringCloud原生注解@EnableDiscoveryClient 开启服务注册与发现
+1. 添加依赖
+
+   ```xml
+   <dependency>
+       <groupId>com.alibaba.cloud</groupId>
+       <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+       <version>${latest.version}</version>
+   </dependency>
+   ```
+
+2. 配置服务提供者，从而服务提供者可以通过 Nacos 的服务注册发现功能将其服务注册到 Nacos server 上。
+
+   1. 在 `application.properties` 中配置 Nacos server 的地址：
+
+      ```properties
+      server.port=8070
+      spring.application.name=service-provider
+      
+      spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848
+      ```
+
+   2. 通过 Spring Cloud 原生注解 `@EnableDiscoveryClient` 开启服务注册发现功能：
+
+      ```java
+      @SpringBootApplication
+      @EnableDiscoveryClient
+      public class NacosProviderApplication {
+      
+      	public static void main(String[] args) {
+      		SpringApplication.run(NacosProviderApplication.class, args);
+      	}
+      
+      	@RestController
+      	class EchoController {
+      		@RequestMapping(value = "/echo/{string}", method = RequestMethod.GET)
+      		public String echo(@PathVariable String string) {
+      			return "Hello Nacos Discovery " + string;
+      		}
+      	}
+      }
+      ```
+
+3. 配置服务消费者，从而服务消费者可以通过 Nacos 的服务注册发现功能从 Nacos server 上获取到它要调用的服务。
+
+   1. 在 `application.properties` 中配置 Nacos server 的地址：
+
+      ```properties
+      server.port=8080
+      spring.application.name=service-consumer
+      
+      spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848
+      ```
+
+   2. 通过 Spring Cloud 原生注解 `@EnableDiscoveryClient` 开启服务注册发现功能。给 [RestTemplate](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-resttemplate.html) 实例添加 `@LoadBalanced` 注解，开启 `@LoadBalanced` 与 Ribbon的集成：
+
+      ```java
+      @SpringBootApplication
+      @EnableDiscoveryClient
+      public class NacosConsumerApplication {
+      
+          @LoadBalanced
+          @Bean
+          public RestTemplate restTemplate() {
+              return new RestTemplate();
+          }
+      
+          public static void main(String[] args) {
+              SpringApplication.run(NacosConsumerApplication.class, args);
+          }
+      
+          @RestController
+          public class TestController {
+      
+              private final RestTemplate restTemplate;
+      
+              @Autowired
+              public TestController(RestTemplate restTemplate) {this.restTemplate = restTemplate;}
+      
+              @RequestMapping(value = "/echo/{str}", method = RequestMethod.GET)
+              public String echo(@PathVariable String str) {
+                  return restTemplate.getForObject("http://service-provider/echo/" + str, String.class);
+              }
+          }
+      }
+      ```
 
 ## Nacos作为配置中心
 
-## 基本概念
+1. 添加依赖
 
-### Profile
+   ```xml
+   <dependency>
+       <groupId>com.alibaba.cloud</groupId>
+       <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+       <version>${latest.version}</version>
+   </dependency>
+   ```
 
-Java项目一般都会有多个Profile配置，用于区分开发环境，测试环境，准生产环境，生成环境等，每个环境对应一个properties文件（或是yml/yaml文件），然后通过设置 spring.profiles.active 的值来决定使用哪个配置文件。
+2. 在 `bootstrap.properties` 中配置 Nacos server 的地址和应用名
 
-例如：
+   ```properties
+   spring.application.name=service-provider
+   spring.profiles.active=dev
+   spring.cloud.nacos.config.server-addr=localhost:8848
+   spring.cloud.nacos.config.file-extension=yaml
+   ```
 
-```yaml
-spring:
-  application:
-    name: sharding-jdbc-provider
-  jpa:
-    hibernate:
-      ddl-auto: none
-      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-      show-sql: true
-  profiles:
-     active: sharding-db-table    # 分库分表配置文件
-    #active: atomiclong-id    # 自定义主键的配置文件
-    #active: replica-query    # 读写分离配置文件
-```
+3. 通过 Spring Cloud 原生注解 `@RefreshScope` 实现配置自动更新：
 
-Nacos Config的作用就把这些文件的内容都移到一个统一的配置中心，即方便维护又支持实时修改后动态刷新应用。
-
-### Data ID
-
-当使用Nacos Config后，Profile的配置就存储到Data ID下，即一个Profile对应一个Data ID
-
-Data ID的拼接格式：${prefix} - ${spring.profiles.active} . ${file-extension}
-
-- prefix 默认为 spring.application.name 的值，也可以通过配置项 spring.cloud.nacos.config.prefix 来配置
-- spring.profiles.active 取 spring.profiles.active 的值，即为当前环境对应的 profile
-- file-extension 为配置内容的数据格式，可以通过配置项 spring.cloud.nacos.config.file-extension 来配置
-
-### Group
-
-Group 默认为 DEFAULT_GROUP，可以通过 spring.cloud.nacos.config.group 来配置，当配置项太多或者有重名时，可以通过分组来方便管理
-
-## 通过Nacos控制面板增加配置
-
-首先要在nacos中配置相关的配置，打开Nacos配置界面，依次创建2个Data ID
-
-- nacos-config-demo-dev.yaml 开发环境的配置
-- nacos-config-demo-test.yaml 测试环境的配置
+   ```
+   package com.mylsaber.provider.controller;
+   
+   import org.springframework.beans.factory.annotation.Value;
+   import org.springframework.cloud.context.config.annotation.RefreshScope;
+   import org.springframework.web.bind.annotation.GetMapping;
+   import org.springframework.web.bind.annotation.RestController;
+   
+   /**
+    * @author jiangfangwei
+    */
+   @RefreshScope
+   @RestController
+   public class HelloWorldController {
+   
+       @Value("${user.name}")
+       private String name;
+       @Value("${user.age}")
+       private String age;
+       
+       @GetMapping(value = "/hello")
+       public String hello() {
+           return "hello, " + name + age;
+       }
+   }
+   ```
