@@ -59,12 +59,12 @@ spring.application.name=service-provider
 server.port=9001
 
 spring.profiles.active=dev
-spring.cloud.nacos.config.server-addr=124.223.91.119:8848
+spring.cloud.nacos.config.server-addr=localhost:8848
 spring.cloud.nacos.config.file-extension=yaml
 spring.cloud.nacos.config.namespace=6a40fa3a-f8e3-48bf-a108-a1b631815f29
 spring.cloud.nacos.config.group=dev
 
-spring.cloud.nacos.discovery.server-addr=124.223.91.119:8848
+spring.cloud.nacos.discovery.server-addr=localhost:8848
 spring.cloud.nacos.discovery.namespace=6a40fa3a-f8e3-48bf-a108-a1b631815f29
 spring.cloud.nacos.discovery.group=dev
 ```
