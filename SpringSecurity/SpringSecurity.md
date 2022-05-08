@@ -1387,3 +1387,25 @@ public AuthenticationManager getAuthenticationManager() throws Exception {
     }
 }
 ```
+
+上面带出两个问题。
+
+> **第一个问题是 AuthenticationManagerBuilder 是如何注入Spring IoC的？**
+>
+> `AuthenticationManagerBuilder` 注入的过程也是在 `AuthenticationConfiguration` 中完成的，注入的是其内部的一个静态类 `DefaultPasswordEncoderAuthenticationManagerBuilder` ，这个类和 `Spring Security`的主配置类 `WebSecurityConfigurerAdapter` 的一个内部类同名，这两个类几乎逻辑相同，没有什么特别的。具体使用哪个由 `WebSecurityConfigurerAdapter.disableLocalConfigureAuthenticationBldr`决定。
+>
+> **另一个问题是 GlobalAuthenticationConfigurerAdapter 从哪儿来？**
+>
+> `AuthenticationConfiguration` 包含下面自动注入 `GlobalAuthenticationConfigurerAdapter` 的 方法：
+>
+> ```java
+> @Autowired(
+>     required = false
+> )
+> public void setGlobalAuthenticationConfigurers(List<GlobalAuthenticationConfigurerAdapter> configurers) {
+>     configurers.sort(AnnotationAwareOrderComparator.INSTANCE);
+>     this.globalAuthConfigurers = configurers;
+> }
+> ```
+>
+> 该方法会根据它们各自的 Order 进行排序。该排序的意义在于 `AuthenticationManagerBuilder` 在执行构建 `AuthenticationManager` 时会按照排序的先后执行 `GlobalAuthenticationConfigurerAdapter` 的 `configure` 方法。
