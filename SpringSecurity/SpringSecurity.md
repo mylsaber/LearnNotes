@@ -1281,3 +1281,109 @@ public class UsernamePasswordAuthenticationFilter extends AbstractAuthentication
 ```
 
 ## 9 认证管理器AuthenticationManager
+
+前面介绍了` UsernamePasswordAuthenticationFilter`的工作流程，作为一个Servlet Filter应该存在一个`doFilter`方法，而它却没有，其实这个方法在它的父类`AbstractAuthenticationProcessingFilter`提供了具体的实现。
+
+### 9.1 AbstractAuthenticationProcessingFilter
+
+`AbstractAuthenticationProcessingFilter`作为`UsernamePasswordAuthenticationFilter`的父类，实现了认证过滤器的处理逻辑。我们来看看它的核心方法`doFilter`的实现：
+
+```java
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest)req;
+        HttpServletResponse response = (HttpServletResponse)res;
+        // 先通过请求的uri来判断是否需要认证,比如默认的/login
+        if (!this.requiresAuthentication(request, response)) {
+            chain.doFilter(request, response);
+        } else {
+            if (this.logger.isDebugEnabled()) {
+                this.logger.debug("Request is to process authentication");
+            }
+
+            Authentication authResult;
+            try {
+                // 接着就是执行子类钩子方法attemptAuthentication来获取认证结果对象Authentication，这个对象不能是空 否则直接返回
+                authResult = this.attemptAuthentication(request, response);
+                if (authResult == null) {
+                    return;
+                }
+
+                // 处理session 策略，这里默认没有任何策略
+                this.sessionStrategy.onAuthentication(authResult, request, response);
+            } catch (InternalAuthenticationServiceException var8) {
+                this.logger.error("An internal error occurred while trying to authenticate the user.", var8);
+                // 如果遇到异常 就会交给认证失败处理器 AuthenticationFailureHandler 来处理
+                this.unsuccessfulAuthentication(request, response, var8);
+                return;
+            } catch (AuthenticationException var9) {
+                this.unsuccessfulAuthentication(request, response, var9);
+                return;
+            }
+
+            // 认证成功后继续其它过滤器链 并最终交给认证成功处理器 AuthenticationSuccessHandler 处理
+            if (this.continueChainBeforeSuccessfulAuthentication) {
+                chain.doFilter(request, response);
+            }
+
+            this.successfulAuthentication(request, response, chain, authResult);
+        }
+    }
+```
+
+大部分逻辑这里是清晰的，关键在于 `attemptAuthentication`方法，这个我们已经在上一文分析了是通过 `AuthenticationManager`的`authenticate`方法进行认证逻辑的处理，接下来我们将重点分析这个接口来帮助我们了解`Spring Seucirty`的认证过程。
+
+### 9.2 AuthenticationManager
+
+`AuthenticationManager` 这个接口方法非常奇特，入参和返回值的类型都是 `Authentication` 。该接口的作用是对用户的未授信凭据进行认证，认证通过则返回授信状态的凭据，否则将抛出认证异常 `AuthenticationException` 。
+
+#### 9.2.1 AuthenticationManager的初始化流程
+
+那么 `AbstractAuthenticationProcessingFilter` 中的 `AuthenticationManager` 是在哪里配置的呢？其实 `WebSecurityConfigurerAdapter`中的`void configure(AuthenticationManagerBuilder auth)`是配置`AuthenticationManager`的地方。
+
+#### 9.2.2 AuthenticationManager的认证过程
+
+`AuthenticationManager` 的实现 `ProviderManager` 管理了众多的` AuthenticationProvider` 。每 一个 `AuthenticationProvider `都只支持特定类型的 `Authentication` ，然后是对适配到的 `Authentication` 进行认证，只要有一个 `AuthenticationProvider` 认证成功，那么就认为认证成功，所有的都没有通过才认为是认证失败。认证成功后的`Authentication`就变成授信凭据，并触发认证成功的事件。认证失败的就抛出异常触发认证失败的事件。
+
+认证管理器 `AuthenticationManager` 针对特定的 `Authentication` 提供了特定的认证功能，我们可以借此来实现多种认证并存。
+
+## 10 AuthenticationManager的初始化细节
+
+ `AuthenticationManager` 的默认初始化是由 `AuthenticationConfiguration` 完成的。初始化的核心方法是下面这个方法：
+
+```java
+public AuthenticationManager getAuthenticationManager() throws Exception {
+    // 先判断 AuthenticationManager 是否初始化
+    if (this.authenticationManagerInitialized) {
+        // 如果已经初始化 那么直接返回初始化的
+        return this.authenticationManager;
+    } else {
+        // 否则就去 Spring IoC 中获取其构建类
+        AuthenticationManagerBuilder authBuilder = (AuthenticationManagerBuilder)this.applicationContext.getBean(AuthenticationManagerBuilder.class);
+        // 如果不是第一次构建 好像是每次总要通过Builder来进行构建
+        if (this.buildingAuthenticationManager.getAndSet(true)) {
+            // 返回 一个委托的AuthenticationManager
+            return new AuthenticationConfiguration.AuthenticationManagerDelegator(authBuilder);
+        } else {
+            // 如果是第一次通过Builder构建 将全局的认证配置整合到Builder中 那么以后就不用再整合全局的配置了
+            Iterator var2 = this.globalAuthConfigurers.iterator();
+
+            while(var2.hasNext()) {
+                GlobalAuthenticationConfigurerAdapter config = (GlobalAuthenticationConfigurerAdapter)var2.next();
+                authBuilder.apply(config);
+            }
+
+            // 构建AuthenticationManager
+            this.authenticationManager = (AuthenticationManager)authBuilder.build();
+            // 如果构建结果为null
+            if (this.authenticationManager == null) {
+                // 再次尝试去Spring IoC 获取懒加载的 AuthenticationManager Bean
+                this.authenticationManager = this.getAuthenticationManagerBean();
+            }
+
+            // 修改初始化状态
+            this.authenticationManagerInitialized = true;
+            return this.authenticationManager;
+        }
+    }
+}
+```
