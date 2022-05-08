@@ -733,11 +733,11 @@ public class SecurityFilterAutoConfiguration {
 | `*`    | /ant/*/path  | /ant/path、/ant/a/path、/ant/bxx/path都匹配，不匹配/ant/axx/bxx/path |
 | `**`   | /ant/**/path | /ant/path、/ant/a/path、/ant/bxx/path、/ant/axx/bxx/path都匹配 |
 
-## 5 自定义配置类WebSecurityConfigurerAdapter
+## 6 自定义配置类WebSecurityConfigurerAdapter
 
 前面多次提到`WebSecurityConfigurerAdapter`，而且springboot中的自动配置实际上是通过自动配置包下的`SecurityAutoConfiguration`总配置类上导入Spring Boot Web安全配置类`SpringBootWebSecurityConfiguration`来配置的。所以从它开始。
 
-### 5.1 自定义安全配置类
+### 6.1 自定义安全配置类
 
 自定义一个CustomSpringBootWebSecurityConfiguration类，并将SpringBootWebSecurityConfiguration源码抄过来。
 
@@ -810,7 +810,7 @@ public class CustomSpringBootWebSecurityConfiguration {
 
 `void configure(HttpSecurity http)`这个是我们使用最多的，用来配置`HttpSecurity`。这个用于构建一个安全过滤链`SecurityFilterChain`。`SecurityFilterChain`最终被注入核心过滤器。我们可以通过它来进行自定义安全访问策略。
 
-### 5.2 HttpSecurity配置
+### 6.2 HttpSecurity配置
 
 `HttpSecurity`使用了`builder`的构建方式来灵活制定访问策略。
 
@@ -841,7 +841,7 @@ public class CustomSpringBootWebSecurityConfiguration {
 | addFilterAfter()    | 在指定的Filter类的之后添加过滤器                             |
 | and()               | 连接以上策略的连接器，用来组合安全策略。实际上就是"而且"的意思 |
 
-## 6 实现自定义登陆
+## 7 实现自定义登陆
 
 ### 6.1 Spring Security 中的登录
 
@@ -851,13 +851,433 @@ public class CustomSpringBootWebSecurityConfiguration {
 
 以上三种方式统统是 `AbstractAuthenticationFilterConfigurer` 实现的。
 
-### 6.2 HttpSecurity **中的** form 表单登录
+### 7.2 HttpSecurity **中的** form 表单登录
 
 启用表单登录通过两种方式一种是通过`HttpSecurity`的`apply(C configurer)`方法自己构造一个`AbstractAuthenticationFilterConfigurer`的实现，这种是比较高级的玩法。另一种是我们常见的使用`HttpSecurity`的`formLogin()`方法来自定义 `FormLoginConfigurer` 。我们先搞一下比 较常规的第二种。
 
-#### 6.2.1 FormLoginConfigurer
+#### 7.2.1 FormLoginConfigurer
 
 该类是 form 表单登录的配置类。它提供了一些我们常用的配置方法:
 
 - `loginPage(String loginPage)`：登陆**页面**，并不是接口。对于前后端分离模式需要我们进行改造，默认为`/login`。
 - `/loginProcessingUrl(String loginProcessingUrl)`：实际标点向后台提交用户信息的`Action`，再由过滤器`UsernamePasswordAuthenticationFilter`拦截器处理。该`Action`其实不会处理任何逻辑。
+- `usernameParameter(String usernameParameter)` 用来自定义用户参数名，默认 `username`
+- `passwordParameter(String passwordParameter)` 用来自定义用户密码名，默认 `password`
+- `failureUrl(String authenticationFailureUrl)` 登录失败后会重定向到此路径， 一般前后分离不会使用它。
+- `failureForwardUrl(String forwardUrl)` 登录失败会转发到此， 一般前后分离用到它。 可定义一个 `Controller`（控制器）来处理返回值,但是要注意`RequestMethod`。
+- `defaultSuccessUrl(String defaultSuccessUrl, boolean alwaysUse) `默认登陆成功后跳转到此 ，如果 `alwaysUse` 为 `true` 只要进行认证流程而且成功，会一直跳转到此。一般推荐默认值 `false`
+- `successForwardUrl(String forwardUrl)` 效果等同于上面 `defaultSuccessUrl` 的 `alwaysUse `为 `true` 但是要注意 `RequestMethod` 。
+- `successHandler(AuthenticationSuccessHandler successHandler) `自定义认证成功处理器，可替代上面所有的`success`方式
+- `failureHandler(AuthenticationFailureHandler authenticationFailureHandler)`自定义失败处理器，可替代上面所有的`failure`方式
+- `permitAll(boolean permitAll)`form表单登录是否放开
+
+### 7.3 登录实例
+
+#### 7.3.1 简单需求
+
+定一个一个成功失败控制器，返回json数据
+
+```java
+package com.mylsaber.security.controller;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author jfw
+ */
+@RestController
+@RequestMapping("/login")
+public class LoginController {
+
+    @PostMapping("/failure")
+    public Map<String, Object> LoginFailure(){
+        return new HashMap<String, Object>(1){{put("message","登陆失败了");}};
+    }
+
+    @PostMapping("/success")
+    public Map<String, Object> loginSuccess(){
+        return new HashMap<String, Object>(1){{put("message","登录成功了");}};
+    }
+}
+```
+
+自定义配置文件
+
+```java
+package com.mylsaber.security.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+/**
+ * @author jfw
+ */
+@Configuration
+public class CustomSecurityConfiguration extends WebSecurityConfigurerAdapter {
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        super.configure(web);
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        super.configure(auth);
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .cors()
+                .and()
+                .authorizeRequests().anyRequest().authenticated()
+                .and()
+                .formLogin().loginProcessingUrl("/process")
+                .successForwardUrl("/login/success")
+                .failureForwardUrl("/login/failure");
+//        http.addFilterBefore(new PreLoginFilter("/process",null), UsernamePasswordAuthenticationFilter.class);
+    }
+}
+```
+
+使用postman工具进行表单提交http://localhost:7001/process?username=user&password=26f0e12b-91e5-4dcf-9dfd-579800b445a3。返回成功信息。
+
+```json
+{
+    "message": "登录成功了"
+}
+```
+
+或者失败信息
+
+```json
+{
+    "message": "登陆失败了"
+}
+```
+
+#### 7.3.2 多种登录方式
+
+登录方式花样繁多，邮箱，短信，扫码，第三方等等。扩展登录方式，我们可以在`UsernamePasswordAuthenticationFilter`判定前加一个适配器即可。
+
+只要保证uri为上面配置的`/process`并且能够通过`UsernamePasswordAuthenticationFilter`中默认`getParameter(String name)`获取用户名密码即可
+
+可以模仿` DelegatingPasswordEncoder`的模式，维护一个注册表执行不同处理策略。
+
+1. 定义登录枚举方式
+
+   ```java
+   package com.mylsaber.security.constant;
+   
+   /**
+    * @author jfw
+    */
+   
+   public enum LoginTypeEnum {
+       /**
+        * 原始表单登录
+        */
+       FORM,
+       /**
+        * json 提交登录
+        */
+       JSON,
+       /**
+        * 验证码登录
+        */
+       CAPTCHA
+   }
+   ```
+
+2. 定义前置处理器的接口
+
+   ```java
+   package com.mylsaber.security.login;
+   
+   import com.mylsaber.security.constant.LoginTypeEnum;
+   
+   import javax.servlet.ServletRequest;
+   
+   /**
+    * @author jfw
+    */
+   public interface LoginPostProcessor {
+   
+       /**
+        * 获取登录类型
+        * @return 登录类型
+        */
+       LoginTypeEnum getLoginTypeEnum();
+   
+       /**
+        * 获取用户名
+        * @param request 请求
+        * @return 用户名
+        */
+       String obtainUsername(ServletRequest request);
+   
+       /**
+        * 获取密码
+        * @param request 请求i
+        * @return 密码
+        */
+       String obtainPassword(ServletRequest request);
+   }
+   ```
+
+3. 实现前置过滤器
+
+   这个过滤器维护了一个`LoginPostProcessor`映射表。通过前端传入的登录方式进行预处理策略。比如json格式数据提交时，默认的`UsernamePasswordAuthenticationFilter`是获取不到用户名密码的，我们可以在这个手动添加到request的parameter中，达到一个适配器的功能。
+
+   ```java
+   package com.mylsaber.security.filter;
+   
+   import com.mylsaber.security.constant.LoginTypeEnum;
+   import com.mylsaber.security.login.LoginPostProcessor;
+   import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+   import org.springframework.security.web.util.matcher.RequestMatcher;
+   import org.springframework.util.Assert;
+   import org.springframework.util.CollectionUtils;
+   import org.springframework.web.filter.GenericFilterBean;
+   
+   import javax.servlet.FilterChain;
+   import javax.servlet.ServletException;
+   import javax.servlet.ServletRequest;
+   import javax.servlet.ServletResponse;
+   import javax.servlet.http.HttpServletRequest;
+   import javax.servlet.http.HttpServletRequestWrapper;
+   import java.io.IOException;
+   import java.util.Collection;
+   import java.util.HashMap;
+   import java.util.Map;
+   
+   import static org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY;
+   import static org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY;
+   
+   /**
+    * 预登录控制器
+    *
+    * @author jfw
+    */
+   public class PreLoginFilter extends GenericFilterBean {
+   
+       private static final String LOGIN_TYPE_KEY = "login_type";
+   
+       private RequestMatcher requiresAuthenticationRequestMatcher;
+   
+       private Map<LoginTypeEnum, LoginPostProcessor> processors = new HashMap<>();
+   
+   
+       public PreLoginFilter(String loginProcessingUrl, Collection<LoginPostProcessor> loginPostProcessors) {
+           Assert.notNull(loginProcessingUrl, "loginProcessingUrl must not be null");
+           requiresAuthenticationRequestMatcher = new AntPathRequestMatcher(loginProcessingUrl, "POST");
+           LoginPostProcessor loginPostProcessor = defaultLoginPostProcessor();
+           processors.put(loginPostProcessor.getLoginTypeEnum(), loginPostProcessor);
+           if (!CollectionUtils.isEmpty(loginPostProcessors)) {
+               loginPostProcessors.forEach(element -> processors.put(element.getLoginTypeEnum(), element));
+           }
+   
+       }
+   
+       private LoginTypeEnum getTypeFromReq(ServletRequest request) {
+           String parameter = request.getParameter(LOGIN_TYPE_KEY);
+           int i = Integer.parseInt(parameter);
+           LoginTypeEnum[] values = LoginTypeEnum.values();
+           return values[i];
+       }
+   
+       private LoginPostProcessor defaultLoginPostProcessor() {
+           return new LoginPostProcessor() {
+               @Override
+               public LoginTypeEnum getLoginTypeEnum() {
+                   return LoginTypeEnum.FORM;
+               }
+   
+               @Override
+               public String obtainUsername(ServletRequest request) {
+                   return request.getParameter(SPRING_SECURITY_FORM_USERNAME_KEY);
+               }
+   
+               @Override
+               public String obtainPassword(ServletRequest request) {
+                   return request.getParameter(SPRING_SECURITY_FORM_PASSWORD_KEY);
+               }
+           };
+       }
+   
+       @Override
+       public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+           HttpServletRequestWrapper parameterRequestWrapper = new HttpServletRequestWrapper((HttpServletRequest) request);
+           if (requiresAuthenticationRequestMatcher.matches((HttpServletRequest) request)) {
+               LoginTypeEnum typeFromReq = getTypeFromReq(request);
+               LoginPostProcessor loginPostProcessor = processors.get(typeFromReq);
+               String username = loginPostProcessor.obtainUsername(request);
+               String password = loginPostProcessor.obtainPassword(request);
+               parameterRequestWrapper.setAttribute(SPRING_SECURITY_FORM_USERNAME_KEY, username);
+               parameterRequestWrapper.setAttribute(SPRING_SECURITY_FORM_PASSWORD_KEY, password);
+           }
+           filterChain.doFilter(parameterRequestWrapper, response);
+       }
+   }
+   ```
+
+4. 配置过滤器
+
+   ```java
+   package com.mylsaber.security.config;
+   
+   import com.mylsaber.security.filter.PreLoginFilter;
+   import org.springframework.context.annotation.Configuration;
+   import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+   import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+   import org.springframework.security.config.annotation.web.builders.WebSecurity;
+   import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+   import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+   
+   /**
+    * @author jfw
+    */
+   @Configuration
+   public class CustomSecurityConfiguration extends WebSecurityConfigurerAdapter {
+       @Override
+       public void configure(WebSecurity web) throws Exception {
+           super.configure(web);
+       }
+   
+       @Override
+       protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+           super.configure(auth);
+       }
+   
+       @Override
+       protected void configure(HttpSecurity http) throws Exception {
+           http.csrf().disable()
+                   .cors()
+                   .and()
+                   .authorizeRequests().anyRequest().authenticated()
+                   .and()
+                   .formLogin().loginProcessingUrl("/process")
+                   .successForwardUrl("/login/success")
+                   .failureForwardUrl("/login/failure");
+           http.addFilterBefore(new PreLoginFilter("/process",null), UsernamePasswordAuthenticationFilter.class);
+       }
+   }
+   ```
+
+## 8 认证过滤器 UsernamePasswordAuthenticationFilter
+
+`UsernamePasswordAuthenticationFilter`继承于`AbstractAuthenticationProcessingFilter`。它的作用是拦截登录请求并获取账号密码。然后把账号密码封装到认证凭据`UsernamePasswordAuthenticationToken`中，交个指定配置的`AuthenticationManager`去做认证。
+
+```java
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
+package org.springframework.security.web.authentication;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.lang.Nullable;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.util.Assert;
+
+public class UsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+    // 默认账户名、密码的key
+    public static final String SPRING_SECURITY_FORM_USERNAME_KEY = "username";
+    public static final String SPRING_SECURITY_FORM_PASSWORD_KEY = "password";
+    // 可以通过对应的set方法修改
+    private String usernameParameter = "username";
+    private String passwordParameter = "password";
+    // 默认只支持POST请求
+    private boolean postOnly = true;
+
+    // 默认匹配uri是/login，请求方式是POST
+    public UsernamePasswordAuthenticationFilter() {
+        super(new AntPathRequestMatcher("/login", "POST"));
+    }
+
+    // 实现其父类 AbstractAuthenticationProcessingFilter 提供的钩子方法 用去尝试认证
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        // 判断请求方式是否是POST
+        if (this.postOnly && !request.getMethod().equals("POST")) {
+            throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
+        } else {
+            // 先去 HttpServletRequest 对象中获取账号名、密码
+            String username = this.obtainUsername(request);
+            String password = this.obtainPassword(request);
+            if (username == null) {
+                username = "";
+            }
+
+            if (password == null) {
+                password = "";
+            }
+
+            username = username.trim();
+            // 然后把账号名、密码封装到 一个认证Token对象中，这是就是一个通行证，但是这时的状态时不可信的，一旦通过认证就变为可信的
+            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
+            // 会将 HttpServletRequest 中的一些细节 request.getRemoteAddr()，request.getSession 存入的到Token中
+
+            this.setDetails(request, authRequest);
+            // 然后 使用 父类中的 AuthenticationManager 对Token 进行认证
+            return this.getAuthenticationManager().authenticate(authRequest);
+        }
+    }
+
+    // 获取密码 很重要 如果你想改变获取密码的方式要么在此处重写，要么通过自定义一个前置的过滤器保证能此处能get到
+    @Nullable
+    protected String obtainPassword(HttpServletRequest request) {
+        return request.getParameter(this.passwordParameter);
+    }
+
+    // 获取账户很重要 如果你想改变获取密码的方式要么在此处重写，要么通过自定义一个前置的过滤器保证能此处能get到
+    @Nullable
+    protected String obtainUsername(HttpServletRequest request) {
+        return request.getParameter(this.usernameParameter);
+    }
+
+    // 参见上面对应的说明为凭据设置一些请求细节
+    protected void setDetails(HttpServletRequest request, UsernamePasswordAuthenticationToken authRequest) {
+        authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
+    }
+
+    // 设置账户参数的key
+    public void setUsernameParameter(String usernameParameter) {
+        Assert.hasText(usernameParameter, "Username parameter must not be empty or null");
+        this.usernameParameter = usernameParameter;
+    }
+
+    // 设置密码参数的key
+    public void setPasswordParameter(String passwordParameter) {
+        Assert.hasText(passwordParameter, "Password parameter must not be empty or null");
+        this.passwordParameter = passwordParameter;
+    }
+
+    // 认证的请求方式是只支持POST请求
+    public void setPostOnly(boolean postOnly) {
+        this.postOnly = postOnly;
+    }
+
+    public final String getUsernameParameter() {
+        return this.usernameParameter;
+    }
+
+    public final String getPasswordParameter() {
+        return this.passwordParameter;
+    }
+}
+```
+
+## 9 认证管理器AuthenticationManager
