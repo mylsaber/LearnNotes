@@ -458,9 +458,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 public @interface EnableWebSecurity {
     boolean debug() default false;
 }
+@Enable*`这类注解都是带配置导入的注解。通过导入一下配置来启用一下特定功能。`@EnableWebSecurity`导入了`WebSecurityConfiguration.class`, `SpringWebMvcImportSelector.class`, `OAuth2ImportSelector.class`以及启用了`@EnableGlobalAuthentication
 ```
-
-`@Enable*`这类注解都是带配置导入的注解。通过导入一下配置来启用一下特定功能。`@EnableWebSecurity`导入了`WebSecurityConfiguration.class`, `SpringWebMvcImportSelector.class`, `OAuth2ImportSelector.class`以及启用了`@EnableGlobalAuthentication`
 
 #### 4.3.2 WebSecurityConfiguration
 
@@ -1400,12 +1399,519 @@ public AuthenticationManager getAuthenticationManager() throws Exception {
 >
 > ```java
 > @Autowired(
->     required = false
+>  required = false
 > )
 > public void setGlobalAuthenticationConfigurers(List<GlobalAuthenticationConfigurerAdapter> configurers) {
->     configurers.sort(AnnotationAwareOrderComparator.INSTANCE);
->     this.globalAuthConfigurers = configurers;
+>  configurers.sort(AnnotationAwareOrderComparator.INSTANCE);
+>  this.globalAuthConfigurers = configurers;
 > }
 > ```
 >
 > 该方法会根据它们各自的 Order 进行排序。该排序的意义在于 `AuthenticationManagerBuilder` 在执行构建 `AuthenticationManager` 时会按照排序的先后执行 `GlobalAuthenticationConfigurerAdapter` 的 `configure` 方法。
+
+### 10.1 全局认证配置
+
+1. 第一个为 `EnableGlobalAuthenticationAutowiredConfigurer` ,它目前除了打印一下初始化信息没 有什么实际作用。
+
+2. 第二个为 `InitializeAuthenticationProviderBeanManagerConfigurer `，核心方法为其内部类的实现：
+
+   ```java
+   public void configure(AuthenticationManagerBuilder auth) {
+     // 如果存在 AuthenticationProvider 已经注入或者已经有AuthenticationManager被代理
+       if (!auth.isConfigured()) {
+         // 尝试从Spring IoC获取 AuthenticationProvider
+           AuthenticationProvider authenticationProvider = (AuthenticationProvider)this.getBeanOrNull(AuthenticationProvider.class);
+         // 获取得到就配置到AuthenticationManagerBuilder中，最终会配置到AuthenticationManager中
+           if (authenticationProvider != null) {
+               auth.authenticationProvider(authenticationProvider);
+           }
+       }
+   }
+   ```
+
+   这里的 getBeanOrNull 方法是有误区的，如果不仔细看的话，核心代码如下：
+
+   ```java
+   private <T> T getBeanOrNull(Class<T> type) {
+       String[] beanNames = InitializeAuthenticationProviderBeanManagerConfigurer.this.context.getBeanNamesForType(type);
+     // Spring IoC 不能同时存在多个type相关类型的Bean 否则无法注入
+       return beanNames.length != 1 ? null : InitializeAuthenticationProviderBeanManagerConfigurer.this.context.getBean(beanNames[0], type);
+   }
+   ```
+
+   如果 Spring IoC 容器中存在了多个 AuthenticationProvider ，那么这些 AuthenticationProvider 就不会生效
+
+3. 第三个为 InitializeUserDetailsBeanManagerConfigurer ，优先级低于上面。它的核心方法为：
+
+4. ```java
+   public void configure(AuthenticationManagerBuilder auth) throws Exception {
+       if (!auth.isConfigured()) {
+         // 不能有多个 否则 就中断
+           UserDetailsService userDetailsService = (UserDetailsService)this.getBeanOrNull(UserDetailsService.class);
+           if (userDetailsService != null) {
+             // 开始配置普通 密码认证器 DaoAuthenticationProvider
+               PasswordEncoder passwordEncoder = (PasswordEncoder)this.getBeanOrNull(PasswordEncoder.class);
+               UserDetailsPasswordService passwordManager = (UserDetailsPasswordService)this.getBeanOrNull(UserDetailsPasswordService.class);
+               DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+               provider.setUserDetailsService(userDetailsService);
+               if (passwordEncoder != null) {
+                   provider.setPasswordEncoder(passwordEncoder);
+               }
+   
+               if (passwordManager != null) {
+                   provider.setUserDetailsPasswordService(passwordManager);
+               }
+   
+               provider.afterPropertiesSet();
+               auth.authenticationProvider(provider);
+           }
+       }
+   }
+   ```
+
+   和 `InitializeAuthenticationProviderBeanManagerConfigurer` 流程差不多，只不过这里主要处 理的是 `UserDetailsService` 、 `DaoAuthenticationProvider` 。当执行到上面这个方法时，如果 Spring IoC 容器中存在了多个 `UserDetailsService` ，那么这些 `UserDetailsService` 就不会生效， 影响 `DaoAuthenticationProvider` 的注入。
+
+### 10.2 总结
+
+使用Spring Security默认配置时，向SpringIoc注入多个`UserDetailsService`会导致`DaoAuthenticationProvider`不能生效。也就是说一套配置中如果你存在多个`UserDetailsService`的SpringBean将会影响`DaoAuthenticationProvider`的注入。
+
+> 如果需要注入多个`AuthenticationProvider`怎么办。
+>
+> 首先把你需要配置的 `AuthenticationProvider` 注入Spring IoC，然后在 `HttpSecurity` 中这么写：
+>
+> ```java
+> protected void configure(HttpSecurity http) throws Exception {
+>   ApplicationContext context = http.getSharedObject(ApplicationContext.class);
+>   CaptchaAuthenticationProvider captchaAuthenticationProvider = context.getBean("captchaAuthenticationProvider",CaptchaAuthenticationProvider.class);
+>   http.authenticationProvider(captchaAuthenticationProvider);
+> // 省略
+> }
+> ```
+>
+> 有几个`AuthenticationProvider`就配置几个，一般情况下一个`UserDetailsService`对应一个`AuthenticationProvider`。
+
+## 11 SpringSecurity中的“分布式对象”
+
+在上面的代码中，我们运用到了`SharedObject`从`HttpSecurity`对象中获取到了Spring的应用上下文对象`ApplicationContext`，它是怎么做到的呢?
+
+在Spring Security中SharedObject既不是对象也不是接口，而是某一类“可共享”的对象的统称。
+
+顾名思义，SharedObject的意思是可共享的对象。它的作用是如果一些对象你希望在不同的作用域配置 中共享它们就把这些对象变成SharedObject，有点分布式对象的感觉。
+
+## 12 SpringSecurity中的内置Filter
+
+### 12.1 内置过滤器初始化
+
+在 Spring Security 初始化核心过滤器时 HttpSecurity 会通过将 Spring Security 内置的一些过滤器 以 FilterComparator 提供的规则进行比较按照比较结果进行排序注册。
+
+#### 12.1.1 排序规则
+
+`FilterComparator`维护了一个顺序的注册表`filterToOrder`。通过过滤器的类全限定名从注册表`filterToOrder`中获取自己的序号，如果没有直接获取到序号通过递归获取父类在注册表中的序号作为自己的序号，序号越小优先级越高。过滤器并非全部会被初始化。有的需要额外引入一些功能包，有的看`HttpSEcurity`的配置情况。前面我们使用过`CSRF`功能，就意味着`CsrfFilter`不会被注册。
+
+### 12.2 内置过滤器
+
+#### 12.2.1 ChannelProcessingFilter
+
+这个过滤器通常是用来过滤那些请求必须用`Https`协议，那些请求必须用`Http`协议，那些请求随便用哪个协议都行。他主要有两个属性：
+
+1. `ChannelDecisionManager` 用来判断请求是否符合既定的协议规则。它维护了一个 `ChannelProcessor` 列表这些 `ChannelProcessor` 是具体用来执行 `ANY_CHANNEL` 策略 （任何通道都可以）, `REQUIRES_SECURE_CHANNEL` 策略 （只能通过 https 通道）, `REQUIRES_INSECURE_CHANNEL` 策略 （只能通过 http 通道）。
+2. `FilterInvocationSecurityMetadataSource` 用来存储 `url` 与 对应的 `ANY_CHANNEL` 、 `REQUIRES_SECURE_CHANNEL` 、 `REQUIRES_INSECURE_CHANNEL` 的映射关系。
+
+`ChannelProcessingFilter` 通过 `HttpScurity#requiresChannel()` 等相关方法引入其配置对象 `ChannelSecurityConfigurer` 来进行配置。
+
+#### 12.2.2 ConcurrentSessionFilter
+
+ConcurrentSessionFilter 主要用来判断 session 是否过期以及更新最新的访问时间。其流程为：
+
+1. session 检测，如果不存在直接放行去执行下一个过滤器。存在则进行下一步。
+2. 根据 `sessionid` 从 `SessionRegistry` 中获取 `SessionInformation` ，从 `SessionInformation` 中获取 `session` 是否过期；没有过期则更新 `SessionInformation` 中的访问日期； 如果过期，则执行 `doLogout()` 方法，这个方法会将 `session` 无效，并将 `SecurityContext` 中的 `Authentication` 中的权限置空，同时在 `SecurityContenxtHoloder` 中清除 `SecurityContext` 然后查看是否有跳转的 `expiredUrl` ，如果有就跳转，没有就输出提示信 息。
+
+`ConcurrentSessionFilter` 通过 `SessionManagementConfigurer` 来进行配置。
+
+#### 12.2.3 WebAsyncManagerIntegrationFilter
+
+`WebAsyncManagerIntegrationFilter` 用于集成`SecurityContext`到`Spring`异步执行机制中的 `WebAsyncManager`。用来处理异步请求的安全上下文。具体逻辑为：
+
+1.  从请求属性上获取所绑定的 `WebAsyncManager `，如果尚未绑定，先做绑定。
+2. 从 `asyncManager` 中获取 `key` 为 `CALLABLE_INTERCEPTOR_KEY` 的安全上下文多线程处理器 `SecurityContextCallableProcessingInterceptor` , 如果获取到的为 `null` ， 新建一个 `SecurityContextCallableProcessingInterceptor` 并绑定 `CALLABLE_INTERCEPTOR_KEY` 注册到 `asyncManager` 中。
+
+这里简单说一下 `SecurityContextCallableProcessingInterceptor` 。它实现了接口 `CallableProcessingInterceptor` ， 当它被应用于一次异步执行时， `beforeConcurrentHandling()` 方法会在调用者线程执行，该方法会相应地从当前线程获取 `SecurityContext` ,然后被调用者线程中执行逻辑时，会使用这个 `SecurityContext` ，从而实现安全上下文从调用者线程到被调用者线程的传输。
+
+ `WebAsyncManagerIntegrationFilter` 通过 `WebSecurityConfigurerAdapter#getHttp()` 方法添加到 `HttpSecurity` 中成为 `DefaultSecurityFilterChain` 的一个链节。
+
+#### 12.2.4 SecurityContextPersistenceFilter
+
+`SecurityContextPersistenceFilter` 主要控制 `SecurityContext` 的在一次请求中的生命周期 。 请求来临时，创建 `SecurityContext` 安全上下文信息，请求结束时清空 `SecurityContextHolder` 。
+
+`SecurityContextPersistenceFilter` 通过 `HttpScurity#securityContext()` 及相关方法引入其配置对象 `SecurityContextConfigurer` 来进行配置。
+
+#### 12.2.5 HeaderWriterFilter
+
+`HeaderWriterFilter` 用来给 `http` 响应添加一些 `Header` ,比如 `X-Frame-Options` , `X-XSSProtection` ， `X-Content-Type-Options` 。 
+
+你可以通过 `HttpScurity#headers()` 来定制请求 `Header` 。
+
+####  12.2.6 CorsFilter
+
+跨域相关的过滤器。这是 `Spring MVC Java` 配置和` XML` 命名空间 `CORS` 配置的替代方法， 仅对依赖于 `spring-web` 的应用程序有用（不适用于 `spring-webmvc` ）或要求在 `javax.servlet.Filter` 级别进行CORS检查的安全约束链接。 
+
+可以通过 `HttpSecurity#cors()` 来定制。
+
+#### 12.2.7 CsrfFilter
+
+`CsrfFilter` 用于防止 `csrf` 攻击，前后端使用`json`交互需要注意的一个问题。 
+
+可以通过 `HttpSecurity.csrf()` 来开启或者关闭它。在使用 `jwt` 等 `token` 技术时，是不需要这个的。
+
+#### 12.2.8 LogoutFilter
+
+`LogoutFilter` 很明显这是处理注销的过滤器。 
+
+可以通过 `HttpSecurity.logout()` 来定制注销逻辑，非常有用。
+
+#### 12.2.9 OAuth2AuthorizationRequestRedirectFilter
+
+这个需要依赖 `spring-scurity-oauth2` 相关的模块。该过滤器是处理 `OAuth2` 请求首选重定向相关逻辑的。
+
+#### 12.2.10 Saml2WebSsoAuthenticationRequestFilter
+
+这个需要用到 `Spring Security SAML` 模块，这是一个基于 `SMAL` 的 `SSO` 单点登录请求认证过滤器。
+
+#### 12.2.11 X509AuthenticationFilter
+
+X509 认证过滤器。可以通过 `HttpSecurity#X509()` 来启用和配置相关功能。
+
+#### 12.2.12 AbstractPreAuthenticatedProcessingFilter
+
+`AbstractPreAuthenticatedProcessingFilter` 处理经过预先认证的身份验证请求的过滤器的基类，其中认证主体已经由外部系统进行了身份验证。 目的只是从传入请求中提取主体上的必要信息， 而不是对它们进行身份验证。 
+
+可以继承该类进行具体实现并通过 `HttpSecurity#addFilter` 方法来添加个性化的 `AbstractPreAuthenticatedProcessingFilter` 。
+
+#### 12.2.13 CasAuthenticationFilter
+
+CAS 单点登录认证过滤器 。依赖 Spring Security CAS 模块
+
+#### 12.2.14 OAuth2LoginAuthenticationFilter
+
+这个需要依赖 spring-scurity-oauth2 相关的模块。 OAuth2 登录认证过滤器。处理通过 OAuth2 进行认证登录的逻辑。
+
+#### 12.2.15 Saml2WebSsoAuthenticationFilter
+
+这个需要用到 Spring Security SAML 模块，这是一个基于 SMAL 的 SSO 单点登录认证过滤器。
+
+#### 12.2.16 UsernamePasswordAuthenticationFilter
+
+处理用户以及密码认证的核心过滤器。认证请求提交的 username 和 password ，被封装成 token 进行一系列的认证，便是主要通过这个过滤器完成的，在 表单认证的方法中，这是最最关键的过滤器。
+
+可以通过 `HttpSecurity#formLogin()` 及相关方法引入其配置对象 FormLoginConfigurer 来进行配置。
+
+#### 12.2.17 ConcurrentSessionFilter
+
+上面讲过，改过滤器可能会被多次执行。
+
+#### 12.2.18 OpenIDAuthenticationFilter
+
+基于 OpenID 认证协议的认证过滤器。 你需要在依赖中依赖额外的相关模块才能启用它。
+
+#### 12.2.19 DefaultLoginPageGeneratingFilter
+
+生成默认的登录页。默认 /login 。
+
+#### 12.2.20 DefaultLogoutPageGeneratingFilter
+
+生成默认的退出页。 默认 /logout 。
+
+#### 12.2.21 ConcurrentSessionFilter
+
+该过滤器可能会被多次执行。
+
+#### 12.2.23 DigestAuthenticationFilter
+
+`Digest` 身份验证是 `Web` 应用程序中流行的可选的身份验证机制 。 `DigestAuthenticationFilter` 能够处理 `HTTP` 头中显示的摘要式身份验证凭据。你可以通过 `HttpSecurity#addFilter()` 来启用和配置相关功能。
+
+#### 12.2.24 BasicAuthenticationFilter
+
+和 `Digest` 身份验证一样都是 `Web` 应用程序中流行的可选的身份验证机制 。 `BasicAuthenticationFilter` 负责处理 `HTTP` 头中显示的基本身份验证凭据。这个 `Spring Security` 的 `Spring Boot` 自动配置默认是启用的 。
+
+`BasicAuthenticationFilter` 通过 `HttpSecurity#httpBasic(`) 及相关方法引入其配置对象 `HttpBasicConfigurer` 来进行配置。
+
+#### 12.2.25 RequestCacheAwareFilter
+
+用于用户认证成功后，重新恢复因为登录被打断的请求。当匿名访问一个需要授权的资源时。会跳转到认证处理逻辑，此时请求被缓存。在认证逻辑处理完毕后，从缓存中获取最开始的资源请求进行再次请求。 `RequestCacheAwareFilter` 通过 `HttpScurity#requestCache()` 及相关方法引入其配置对象`RequestCacheConfigurer` 来进行配置。
+
+#### 12.2.26 SecurityContextHolderAwareRequestFilter
+
+用来实现 j2ee 中 `Servlet Api` 一些接口方法, 比如 `getRemoteUser` 方法、 `isUserInRole` 方法， 在使用 `Spring Security` 时其实就是通过这个过滤器来实现的。
+
+`SecurityContextHolderAwareRequestFilter` 通过 `HttpSecurity.servletApi()` 及相关方法引入其配置对象 `ServletApiConfigurer` 来进行配置。
+
+#### 12.2.27 JaasApiIntegrationFilter
+
+适用于 `JAAS` （ Java 认证授权服务）。 如果 `SecurityContextHolder` 中拥有的 `Authentication` 是一个 `JaasAuthenticationToken` ，那么该 `JaasApiIntegrationFilter` 将使用包含在` JaasAuthenticationToken` 中的 `Subject` 继续执行 `FilterChain` 。
+
+#### 12.2.28 RememberMeAuthenticationFilter
+
+处理记住我功能的过滤器。 `RememberMeAuthenticationFilter` 通过 `HttpSecurity.rememberMe()` 及相关方法引入其配置对象`RememberMeConfigurer` 来进行配置。
+
+#### 12.2.29 AnonymousAuthenticationFilter
+
+匿名认证过滤器。对于 `Spring Security` 来说，所有对资源的访问都是有 `Authentication` 的。对于无需登录（ `UsernamePasswordAuthenticationFilter`）直接可以访问的资源，会授予其匿名用户身份。
+
+`AnonymousAuthenticationFilter` 通过 `HttpSecurity.anonymous()` 及相关方法引入其配置对象 `AnonymousConfigurer` 来进行配置。
+
+#### 12.2.30 SessionManagementFilter
+
+`Session` 管理器过滤器，内部维护了一个 `SessionAuthenticationStrategy` 用于管理 `Session`。
+
+`SessionManagementFilter` 通过 `HttpScurity#sessionManagement()` 及相关方法引入其配置对象 `SessionManagementConfigurer` 来进行配置。
+
+#### 12.2.31 ExceptionTranslationFilter
+
+主要来传输异常事件，还记得之前我们见过的 `DefaultAuthenticationEventPublisher` 吗？
+
+#### 12.2.32 FilterSecurityInterceptor
+
+这个过滤器决定了访问特定路径应该具备的权限，访问的用户的角色，权限是什么？访问的路径需要什么样的角色和权限？这些判断和处理都是由该类进行的。如果要实现动态权限控制就必须研究该类 。
+
+#### 12.2.33 SwitchUserFilter
+
+`SwitchUserFilter` 是用来做账户切换的。默认的切换账号的 `url` 为 `/login/impersonate` ，默认注销切换账号的 `url` 为 `/logout/impersonate` ，默认的账号参数为 `username` 。 可以通过此类实现自定义的账户切换。
+
+## 13 过滤器链
+
+### 13.1过滤器链
+
+客户端向应用程序发送请求，然后应用根据请求的 URI 的路径来确定该请求 的过滤器链（Filter）以及最终的具体 Servlet 控制器（Controller）。
+
+springsecurity以一个单Filter（FilterChainProxy）存在于整个过滤器链中，而这个`FilterChainProxy`实际内部代理着众多的Spring SecurityFilter。
+
+### 13.2 过滤器链的形成过程
+
+首先Filter按照一定的顺序被`SecutiryBuilder`的实现来组装为`SecurityFilterChain`，然后通过`WebSecurity`注入到`FilterChainProxy`中去，接着`FilterChainProxy`又在`WebSecurityConfiguration`中以`springSecurityFilterChain`的名称注册为SpringBean，实际上还有一个隐藏层`DelegatingFilterProxy`代理了`springSecurityFilterChain`注入到最后整个Servlet过滤器链中。
+
+> 事实上Spring Security的内置Filter对于Spring Ioc容器来说都是不可见的。
+
+Spring Security允许有多条过滤器链并行，Spring Security的`FilterChainProxy`可以代理多条过滤器链并根据不同的URI匹配策略进行分发。但是每个请求只能被分发到一条过滤器链。
+
+> 实际上每条过滤链就是一个`SecurityFilterChain`
+
+### 13.3 Servlet Filter体系
+
+在Servlet体系中，客户端发起一个请求过程是经过0到N个`Filter`然后交给`Servlet`处理。
+
+`Filter`不但可以修改`HttpServletRequest`和`HttpServletResponse`，可以让我们在请求响应的前后做一些事情，甚至可以终止过滤器链`FilterChain`的传递。
+
+```java
+public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
+  // 请求被servlet 处理前
+  if(condition){
+  // 根据条件来进入下一个过滤器
+  chain.doFilter(request, response);
+  }
+  // 请求被执行完毕后处理一些事情
+}
+```
+
+由于 `Filter` 仅影响下游`Filters`和`Servlet`，因此每个 `Filter` 调用的顺序非常重要。`Spring Security`正是根据这个个特性来实现一系列的安全功能。接下来我们来看看它们是如何结合的。
+
+#### 13.3.1 GenericFilterBean
+
+`Spring`结合`Servlet Filter`自然是要为`Servlet Filter`注入`Spring Bean`的特性，所以就搞出了一个抽象`Filter Bean`，这个抽象过滤器`GenericFilterBean`并不是在`Spring Security`下，而是`Spring Web`体系中。分析类继承图，可以看到`Filter`接口被注入了多个Spring Bean的特性。纳入了Spring Bean生命周期，使得Spring Ioc容器能够充分的管理`Filter`
+
+#### 13.3.2 DelegatingFilterProxy
+
+我们希望`Servlet`能够按照它自己的标准来注册到过滤器链中工作，但是同时也希望它能够被`Spring IoC` 管理，所以`Spring`提供了一个 `GenericFilterBean` 的实现 `DelegatingFilterProxy` 。我们可以将原生的`Servlet Filter`或者`Spring Bean Filter`委托给 `DelegatingFilterProxy` ，然后在结合到`Servlet FilterChain`中。
+
+#### 13.3.3 SecurityFilterChain
+
+针对不同符合`Ant Pattern`的请求可能会走不同的过滤器链，比如登录会去验证，然后返回登录结果；管理后台的接口走后台的安全逻辑，应用客户端的接口走客户端的安全逻辑。`Spring Security`提供了一个 `SecurityFilterChain` 接口来满足被匹配 `HttpServletRequest` 走特定的过滤器链的需求。
+
+```java
+public interface SecurityFilterChain {
+// 判断请求 是否符合该过滤器链的要求
+boolean matches(HttpServletRequest request);
+// 对应的过滤器链
+List<Filter> getFilters();
+}
+```
+
+#### 13.3.4 FilterChainProxy
+
+不同的 `SecurityFilterChain` 应该是互斥而且平等的，它们之间不应该是上下游关系。
+
+请求被匹配到不同的 `SecurityFilterChain` 然后在执行剩余的过滤器链。它们经过 `SecurityFilterChain` 的总流程是相似的，而且有些时候特定的一些 `SecurityFilterChain` 也需要被集中管理来实现特定一揽子的请求的过滤逻辑。所以就有了另外一个 `GenericFilterBean` 实现来做这个事情，它就是 `FilterChainProxy` 。它的作用就是拦截符合条件的请求，然后根据请求筛选出符合要求的 `SecurityFilterChain` ，然后链式的执行这些Filter，最后继续执行剩下的`FilterChain`。
+
+## 14 无状态会话Token技术JWT
+
+目前web开发前后端已经算非常的普及了。前后端分离要求我们对用户会话状态要进行一个无状态处 理。我们都知道通常管理用户会话是session。用户每次从服务器认证成功后，服务器会发送一个 sessionid给用户，session是保存在服务端 的，服务器通过session辨别用户，然后做权限认证等。那如何 才知道用户的session是哪个？这时候cookie就出场了，浏览器第一次与服务器建立连接的时候，服务器 会生成一个sessionid返回浏览器，浏览器把这个sessionid存储到cookie当中，以后每次发起请求都会在请 求头cookie中带上这个sessionid信息，所以服务器就是根据这个sessionid作为索引获取到具体session。
+
+上面的场景会有一个痛点。对于前后端分离来说。比如前端都是部署在一台服务器的nginx上，后端部署 在另一台服务器的web容器上。甚至 前端不能直接访问后端，中间还加了一层代理层。
+
+也就是说前后端分离在应用解耦后增加了部署的复杂性。通常用户一次请求就要转发多次。如果用 session 每次携带sessionid 到服务器，服务器还要查询用户信息。同时如果用户很多。这些信息存储在服 务器内存中，给服务器增加负担。还有就是CSRF（跨站伪造请求攻击）攻击，session是基于cookie进行 用户识别的, cookie如果被截获，用户就会很容易受到跨站请求伪造的攻击。还有就是sessionid就是一个 特征值，表达的信息不够丰富。不容易扩展。而且如果你后端应用是多节点部署。那么就需要实现 session共享机制。不方便集群应用。
+
+### 14.1 什么是JWT
+
+JSON WEB TOKEN（以下称JWT）是一种token。token 是服务器颁发给客户端的。就像户籍管理部门给你发的身份证一样。你拿着这个证件就能去其他部门办事。其他部门验 证你这个身份证是否过期，是否真假。不用每次都让户籍来认可。同时token 天然防止CSRF攻击。而且 JWT可以携带一些不敏感的用户信息。这样服务器不用每次都去查询用户信息。开箱即用，方便服务器处理鉴权逻辑。
+
+JWT是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准（(RFC 7519)。该token被设计为紧凑且安全的，特别适用于分布式站点的单点登录（SSO）场景。 JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。
+
+JWT的特点：
+
+- 简洁(Compact): 可以通过URL，POST参数或者在HTTP header发送，因为数据量小，传输速度也很快
+- 自包含(Self-contained)：负载中包含了所有用户所需要的信息，避免了多次查询数据库或缓存
+
+JWT消息结构：
+
+- 头部（header) 声明类型以及加密算法 如 {"alg":"HS256","typ":"JWT"} 用Base64进行了处理
+- 载荷（payload) 携带一些用户身份信息，用户id，颁发机构，颁发时间，过期时间等。用Base64进行了处理。这一段其实是明文，所以一定不要放敏感信息。
+- 签证（signature) 签名信息，使用了自定义的一个密钥然后加密后的结果，目的就是为了保证签名的信息没有被别人改过，这个一般是让服务器验证的。
+
+JWT并不是完美的。JWT不足之处：
+
+1. 比如说有可能一个用户同时出现两个可用的token情况。 
+2. 还有如果失效过期了如何进行续期的问题。
+3. 同样会出现token被盗用的问题。
+4. 注销如何让token失效的问题。
+5. 用户信息修改让token同步的问题。
+
+## 15 自定义异常处理
+
+### 15.1 Spring Security中的异常
+
+Spring Security 中的异常主要分为两大类：一类是认证异常，另一类是授权相关的异常。
+
+#### 15.1.1 AuthenticationException
+
+`AuthenticationException` 是在用户认证的时候出现错误时抛出的异常。他存在很多子类。系统用户不存在，被锁定，凭证失效，密码错误等认证过程中出现的异常都由 `AuthenticationException` 处理。
+
+#### 15.1.2  AccessDeniedException
+
+`AccessDeniedException` 主要是在用户在访问受保护资源时被拒绝而抛出的异常。同 `AuthenticationException` 一样它也提供了一些具体的子类。`AccessDeniedException` 的子类比较少，主要是 CSRF 相关的异常和授权服务异常。
+
+### 15.2 Spring Security 中的异常处理
+
+前面提到过， `HttpSecurity` 提供的 `exceptionHandling()` 方法用来提供异常处理。该方法构造出 `ExceptionHandlingConfigurer` 异常处理配置类。该配置类提供了两个实用接口：
+
+- `AuthenticationEntryPoint` 该类用来统一处理 `AuthenticationException` 异常
+- `AccessDeniedHandler` 该类用来统一处理 `AccessDeniedException` 异常
+
+我们只要实现并配置这两个异常处理类即可实现对 `Spring Security` 认证授权相关的异常进行统一的自定义处理。
+
+实现了上述两个接口后，我们只需要在 `WebSecurityConfigurerAdapter` 的 `configure(HttpSecurity http)` 方法中配置即可。相关的配置片段如下：
+
+```java
+http.exceptionHandling()
+.accessDeniedHandler(new SimpleAccessDeniedHandler())
+.authenticationEntryPoint(new SimpleAuthenticationEntryPoint())
+```
+
+## 16 安全上下文SecurityContext
+
+### 16.1 安全上下文 SecurityContext
+
+当服务端通过授权认证后，会将认证授权信息封装到`UsernamePasswordAuthenticationToken`中并使用工具类放入安全上下文`SecurityContext`中，当服务端响应用户后又使用同一个工具将`UsernamePasswordAuthenticationToken`从`SecurityContext`中`clear`掉。这是一个什么东西呢。
+
+```java
+package org.springframework.security.core.context;
+import java.io.Serializable;
+import org.springframework.security.core.Authentication;
+public interface SecurityContext extends Serializable {
+  Authentication getAuthentication();
+  void setAuthentication(Authentication var1);
+}
+```
+
+从源码上来看很简单就是一个 存储 `Authentication` 的容器。而 `Authentication` 是一个用户凭证接口用来作为用户认证的凭证使用，通常常用的实现有认证用户 `UsernamePasswordAuthenticationToken` 和匿名用户 `AnonymousAuthenticationToken` 。其中 `UsernamePasswordAuthenticationToken` 包含了 `UserDetails` , `AnonymousAuthenticationToken` 只包含了一个字符串 `anonymousUser` 作为匿名用户的标识。我 们通过 `SecurityContext` 获取上下文时需要来进行类型判断。
+
+### 16.2 SecurityContextHolder
+
+这个工具类就是 `SecurityContextHolder` 。 它提供了两个有用的方法：
+
+1. `setContext` 设置当前的 `SecurityContext` 
+2. `getContext` 获取当前的 `SecurityContext` , 进而你可以获取到当前认证用户。
+3. `clearContext` 清除当前的 `SecurityContext`
+
+平常我们通过这三个方法来操作安全上下文 `SecurityContext` 。你可以直接在代码中使用工具类 `SecurityContextHolder` 获取用户信息，像下面一样：
+
+```java
+public String getCurrentUser() {
+  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+  if (authentication instanceof AnonymousAuthenticationToken){
+    return "anonymousUser";
+  }
+  UserDetails principal = (UserDetails)
+    authentication.getPrincipal();
+  return principal.getUsername();
+}
+```
+
+通过上面的自定义方法就可以解析到 `UserDetails` 的用户信息,可以扩展 `UserDetails` 使得信息符合的业务需要。上面方法中的判断是必须的，如果是匿名用户（ `AnonymousAuthenticationToken` ）返回的 `Principal` 类型是一个字符串 `anonymousUser` 。
+
+### 16.3 SecurityContextHolder 存储策略
+
+`SecurityContextHolder`默认有三种存储 `SecurityContext` 的策略： 
+
+1. `MODE_THREADLOCAL` 利用 `ThreadLocal` 机制来保存每个使用者的`SecurityContext` ，缺省策略，平常我们使用这个就行了。
+2. `MODE_INHERITABLETHREADLOCAL` 利用 `InheritableThreadLocal` 机制来保存每个使用者的 `SecurityContext` 。多用于多线程环境环境下。 
+3. `MODE_GLOBAL` 静态机制，作用域为全局。目前不太常用。
+
+## 17 动态权限
+
+### 17.1 请求认证过程
+
+总体的思路是我们的请求肯定是带下面两个东西（起码在走到进行访问决策这一 步是必须有的）：
+
+- URI 访问资源必然要用 URI 来定位，我们同样通过 URI 来和资源接口进行匹配；最好是 Ant match，因为` /user/1` 和 `/user/2` 有可能访问的是同一个资源接口。如果你想避免这种情况， 要么在开发规约中禁止这种风格，这样的好处是配置人员可以不必熟悉 Ant 风格；要么必须让配置 人员掌握 Ant 风格。
+- Principal ，Spring Security 中为 `Authentication`（认证主体），之前讲过的一个比较绕的概念，Spring Security 中的用户身份有两种，一种是认证用户，另一种是匿名用户 ，它们都包含角色。 拿到角色到角色集进行匹配。
+
+### 17.2 FilterSecurityInterceptor
+
+前面提到的第 32 个Filter：`FilterSecurityInterceptor`，它决定了访问特定路径应该具备的权限，访问的用户的角色，权限是什么？访问的路径需要什么样的角色和权限？我们来看它的过滤逻辑：
+
+```java
+public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException{
+  FilterInvocation fi = new FilterInvocation(request, response,chain);
+  invoke(fi);
+}
+```
+
+初始化了一个 FilterInvocation 然后被 invoke 方法处理：
+
+```java
+public void invoke(FilterInvocation fi) throws IOException, ServletException {
+    if (fi.getRequest() != null && fi.getRequest().getAttribute("__spring_security_filterSecurityInterceptor_filterApplied") != null && this.observeOncePerRequest) {
+        fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
+    } else {
+        if (fi.getRequest() != null && this.observeOncePerRequest) {
+            fi.getRequest().setAttribute("__spring_security_filterSecurityInterceptor_filterApplied", Boolean.TRUE);
+        }
+
+        InterceptorStatusToken token = super.beforeInvocation(fi);
+
+        try {
+            fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
+        } finally {
+            super.finallyInvocation(token);
+        }
+
+        super.afterInvocation(token, (Object)null);
+    }
+
+}
+```
+
+每次请求被`Filter`过滤都会被打上标记`Filter_APPLIED`，没有被打上标记的走父类的`beforeInvocation`方法然后再进入过滤器链，看上去是走了一个前置的处理。那么前置处理了什么呢?
+
+首先会通过 `this.obtainSecurityMetadataSource().getAttributes(Object object)`拿受保护对象（就是当前请求的URI）所有的映射角色（ ConfigAttribute 直接理解为角色的进一步抽象） 。然后使用访问决策管理器`AccessDecisionManager` 进行投票决策来确定是否放行。
+
+### 17.3 FilterInvocationSecurityMetadataSource
+
+这个接口是 FilterSecurityInterceptor 的属性
+
+`FilterInvocationSecurityMetadataSource` 是一个标记接口，其抽象方法继承自`SecurityMetadataSource`,`AopInfrastructureBean` 。它的作用是来获取资源角色元数据。
+
+- Collection getAttributes(Object object) 根据提供的受保护对象的信息，其实就是URI，获取该URI 配 置的所有角色
+- Collection getAllConfigAttributes() 这个就是获取全部角色
+- boolean supports(Class clazz) 对特定的安全对象是否提供 ConfigAttribute 支持
+
+### 17.4 自定义实现 FilterInvocationSecurityMetadataSource 的思路分析
