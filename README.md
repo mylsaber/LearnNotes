@@ -15,9 +15,19 @@
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1. 构建docker镜像
+
+   ```shell
+   docker build -f Dockerfile -t docsify/learnNotes:1.0 .
+   ```
+
+2. 运行docker镜像
+
+   ```shell
+   docker run -it -d -p 3000:3000 --name=learnNotes -v $(pwd):/docs docsify/learnNotes:1.0
+   ```
+
+   
 
 #### 参与贡献
 
