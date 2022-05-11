@@ -13,7 +13,7 @@ Apache Dubbo是一款高性能的Java RPC框架。其前身是阿里巴巴公司
 
 ## dubbo处理流程
 
-![](D:\JavaLearn\learn-notes\dubbo\images\dubbo处理流程.png)
+![](images\dubbo处理流程.png)
 
 节点说明：
 

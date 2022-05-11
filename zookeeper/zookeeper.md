@@ -73,7 +73,7 @@ Zookeeper 节点类型可以分为三⼤类：
 
 #### ZNode 的状态信息
 
-![](D:\JavaLearn\learn-notes\zookeeper\1.png)
+![](1.png)
 
 整个 ZNode 节点内容包括两部分：节点数据内容和节点状态信息。图中quota 是数据内容，其他的属 于状态信息。
 
