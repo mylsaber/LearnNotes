@@ -512,7 +512,150 @@ person.displayName();       // 输出：Peter
 person["displayName"]();    // 输出：Peter
 ```
 
+## Number（数字）对象
+在 JavaScript 中您可以使用十进制、十六进制或八进制表示法来表示整数或浮点数。与其它编程语言不同，JavaScript 中的数字并不区分整数和浮点数，统一使用 IEEE754 标准（二进制浮点数算术标准）的 64 位浮点格式表示数字，能表示的最大值（Number.MAX_VALUE）为 ±1.7976931348623157e+308，最小值（Number.MIN_VALUE）为 ±5e-324。
 
+### ±Infinity（无穷）
+Infinity 是一个特殊的值，表示无穷大。当一个表达式的运算结果超过了 JavaScript 所能表示的数字上限或下限时，JavaScript 就会使用 Infinity 或 -Infinity 表示这个结果，其中 Infinity 表示正无穷大，-Infinity 表示负无穷大。
+
+### NaN（非数字）
+NaN 同样是 JavaScript 中的一个特殊值，用来表示某个值不是数字。NaN 不等于（通过 ==、!=、===、!=== 比较）其它任何值（包括另外一个 NaN 值），使用 isNaN() 函数可以判断一个数是否为 NaN。
+
+以下几种操作会返回 NaN：
+- 使用函数无法将参数转换为数字时会返回 NaN，例如 parseInt("abc")、new Number("abc")；
+- 结果不是实数的数学运算，例如 Math.sqrt(-1)；
+- 任何操作数中包含 NaN 的表达式，例如 5 * NaN；
+- 涉及字符串的非加法运算，且字符串无法自动转换为数字，例如 "foo" / 5。
+
+### Number 对象
+Number 对象是原始数值的包装对象，创建 Number 对象的语法格式如下：
+```javascript
+var myNum = new Number(value);
+var myNum = Number(value);
+```
+其中 value 为要创建的 Number 对象的数值，若 value 为一个非数字的值，则会尝试将其转换为数字，若转换失败则会返回 NaN。
+
+当 Number() 函数和 new 运算符一起使用时，会创建一个新的 Number 对象。如果不用 new 运算符，把 Number() 当作一个函数来调用，则会将其中的参数转换为一个数值，并且返回这个值（如果转换失败，则返回 NaN）。
+```javascript
+var a = new Number("123");
+var b = Number("456");
+var c = 789;
+var d = new Number("abc");
+document.write(typeof a + "<br>");      // 输出：object
+document.write(typeof b + "<br>");      // 输出：number
+document.write(typeof c + "<br>");      // 输出：number
+document.write(d + "<br>");             // 输出：NaN
+```
+
+### Number 属性
+|属性|	描述|
+|---|---|
+|Number.MAX_VALUE	|JavaScript 中所能表示的最大值|
+|Number.MIN_VALUE	|JavaScript 中所能表示的最小值|
+|Number.NaN|	非数字|
+|Number.NEGATIVE_INFINITY	|负无穷，在溢出时返回|
+|Number.POSITIVE_INFINITY	|正无穷，在溢出时返回|
+|Number.EPSILON	|表示 1 与 Number 所能表示的大于 1 的最小浮点数之间的差|
+|Number.MIN_SAFE_INTEGER|	最小安全整数，即 -9007199254740991|
+|Number.MAX_SAFE_INTEGER|	最大安全整数，即 9007199254740991|
+
+### Number 方法
+|方法|	描述|
+|---|---|
+|Number.parseFloat()|	将字符串转换成浮点数，和全局方法 parseFloat() 作用相同|
+|Number.parseInt()	|将字符串转换成整型数字，和全局方法 parseInt() 作用相同|
+|Number.isFinite()	|判断 Number 对象是否为有穷数|
+|Number.isInteger()	|判断 Number 对象是否为整数|
+|Number.isNaN()|	判断 Number 对象是否为 NaN 类型|
+|Number.isSafeInteger()	|判断 Number 对象是否为安全整数，即范围为 -(2⁵³ - 1)到 2⁵³ - 1 之间的整数|
+|Number.toString()	|把 Number 对象转换为字符串，使用指定的基数|
+|Number.toLocaleString()|	把 Number 对象转换为字符串，使用本地数字格式顺序|
+|Number.toFixed()	|把 Number 对象转换为字符串，结果的小数点后有指定位数的数字|
+|Number.toExponential()|	把 Number 对象的值转换为指数计数法|
+|Number.toPrecision()	|把 Number 对象格式化为指定的长度|
+|Number.valueOf()	|返回一个 Number 对象的基本数字值|
+
+## String（字符串）对象
+
+创建 String 对象的语法格式如下：
+```javascript
+var val = new String(value);
+var val = String(value);
+```
+JavaScript 中，字符串和字符串对象之间能够自由转换，因此不论是创建字符串对象还是直接声明字符串类型的变量，都可以直接使用字符串对象中提供的方法和属性。
+
+### String 对象中的属性
+|属性|	描述|
+|---|---|
+|constructor|	获取创建此对象的 String() 函数的引用|
+|length	|获取字符串的长度|
+|prototype	|通过该属性您可以向对象中添加属性和方法|
+
+```javascript
+var str = new String('JavaScript');
+String.prototype.name = null;
+str.name = "Hello World!";
+document.write(str.constructor + "<br>");       // 输出：function String() { [native code] }
+document.write(str.length + "<br>");            // 输出：10
+document.write(str.name);                       // 输出：Hello World!
+```
+
+## Array（数组）对象
+
+创建 Array 对象的语法格式如下：
+```javascript
+var arr = new Array(values);
+var arr = Array(values);
+```
+其中，values 为数组中各个元素组成的列表，多个元素之间使用逗号分隔。
+> 提示：在使用 new Array() 来定义数组时，如果只提供一个数值参数，那么这个数值将用来表示数组的初始长度，例如new Array(5)表示定义一个长度为 5 的数组。JavaScript 中，数组允许的最大长度为 2³²-1，即 4294967295。
+
+除了可以使用 Array() 函数来定义数组外，您也可以直接使用方括号[ ]来定义数组，[ ]中为数组中的各个元素，多个元素之间使用逗号,进行分隔。示例代码如下：
+```javascript
+var fruits = [ "apple", "orange", "mango" ];
+console.log(fruits);        // 输出：(3) ["apple", "orange", "mango"]
+```
+
+## 定时器：setTimeout和setInterval
+JavaScript 中提供了两种方式来设置定时器，分别是 setTimeout() 和 setInterval()，它们之间的区别如下：
+
+|方法	|说明|
+|---|---|
+|setTimeout()	|在指定的时间后（单位为毫秒），执行某些代码，代码只会执行一次|
+|setInterval()	|按照指定的周期（单位为毫秒）来重复执行某些代码，定时器不会自动停止，除非调用 clearInterval() 函数来手动停止或着关闭浏览器窗口|
+
+### setTimeout()
+JS setTimeout() 函数的语法格式如下：
+```javascript
+setTimeout(function[, delay, arg1, arg2, ...]);
+setTimeout(function[, delay]);
+setTimeout(code[, delay]);
+```
+
+参数说明如下：
+- function：一个函数（通常使用匿名函数），其中定义了定时器中要执行的代码；
+- code：字符串类型的代码，这些代码会在定时器到期后被编译执行，出于安全考虑不建议使用；
+- delay：可选参数，定时器在执行的其中代码之前，要等待的时间，单位为毫秒（1秒 = 1000毫秒），如果省略此参数，则表示立即执行；
+- arg1、arg2、...、argN：要传递给函数的参数。
+
+### setInterval()
+JS setInterval() 函数的语法格式如下：
+```javascript
+setInterval(function, delay, [arg1, arg2, ...]);
+setInterval(code, delay);
+```
+参数说明如下：
+- function：一个函数（通常使用匿名函数），其中定义了定时器中要执行的代码；
+- code：字符串类型的代码，这些代码会在定时器到期后被编译执行，出于安全考虑不建议使用；
+- delay：可选参数，定时器在执行的其中代码之前，要等待的时间，单位为毫秒（1秒 = 1000毫秒），如果省略此参数，则表示立即执行；
+- arg1、arg2、...、argN：要传递给函数的参数。
+
+> 提示：通过 setInterval() 函数定义的定时器不会自动停止，除非调用 clearInterval() 函数来手动停止或着关闭浏览器窗口。
+
+### JS 取消定时器
+当使用 setTimeout() 或 setInterval() 设置定时器时，这两个方法都会产生一个定时器的唯一 ID，ID 为一个正整数值，也被称为“定时器标识符”，通过这个 ID，我们可以清除 ID 所对应的定时器。
+
+我们可以借助 clearTimeout() 或 clearInterval() 函数来分别清除由 setTimeout() 或 setInterval() 函数创建的定时器。调用 clearTimeout() 或 clearInterval() 函数需要提供定时器的唯一 ID 作为参数
 
 
 typeof b：检查类型；
