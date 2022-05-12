@@ -95,8 +95,11 @@ typeof(x);      // 获取变量 x 的数据类型
 ### js基本数据类型
 
 1. String类型
+
   字符串（String）类型是一段以单引号`''`或双引号`""`包裹起来的文本，例如 '123'、"abc"。需要注意的是，单引号和双引号是定义字符串的不同方式，并不是字符串的一部分。
+
 2. Number类型
+
   数值（Number）类型用来定义数值，JavaScript 中不区分整数和小数（浮点数），统一使用 Number 类型表示
 
   > 注意：Number 类型所能定义的数值并不是无限的，JavaScript 中的 Number 类型只能表示 -(253 - 1) 到 (253 -1) 之间的数值。
@@ -108,10 +111,13 @@ typeof(x);      // 获取变量 x 的数据类型
   ```
 
   另外，Number 类型中还有一些比较特殊的值，分别为 Infinity、-Infinity 和 NaN，其中
+
   - Infinity：用来表示正无穷大的数值，一般指大于 1.7976931348623157e+308 的数；
   - -Infinity：用来表示负无穷大的数值，一般指小于 5e-324 的数；
   - NaN：即非数值（Not a Number 的缩写），用来表示无效或未定义的数学运算结构，例如 0 除以 0。
+
 3. Boolean类型
+
   布尔（Boolean）类型只有两个值，true（真）或者 false（假），在做条件判断时使用的比较多，除了可以直接使用 true 或 false 来定义布尔类型的变量外，还可以通过一些表达式来得到布尔类型的值，例如：
   ```javascript
   var a = true;   // 定义一个布尔值 true
@@ -119,23 +125,30 @@ typeof(x);      // 获取变量 x 的数据类型
   var c = 2 > 1;  // 表达式 2 > 1 成立，其结果为“真（true）”，所以 c 的值为布尔类型的 true
   var d = 2 < 1;  // 表达式 2 < 1 不成立，其结果为“假（false）”，所以 c 的值为布尔类型的 false
   ```
+
 4. Null类型
+
   Null 是一个只有一个值的特殊数据类型，表示一个“空”值，即不存在任何值，什么都没有，用来定义空对象指针。
 
   使用 typeof 操作符来查看 Null 的类型，会发现 Null 的类型为 Object，说明 Null 其实使用属于 Object（对象）的一个特殊值。因此通过将变量赋值为 Null 我们可以创建一个空的对象。
+
 5. Undefined 类型
+
   Undefined 也是一个只有一个值的特殊数据类型，表示未定义。当我们声明一个变量但未给变量赋值时，这个变量的默认值就是 Undefined。例如：
   ```javascript
   var num;
   console.log(num);  // 输出 undefined
   ```
+
   在使用 typeof 操作符查看未赋值的变量类型时，会发现它们的类型也是 undefined。对于未声明的变量，使用 typeof 操作符查看其类型会发现，未声明的变量也是 undefined，示例代码如下
   ```javascript
   var message;
   console.log(typeof message);  // 输出 undefined
   console.log(typeof name);     // 输出 undefined
   ```
+
 6. Symbol 类型
+
   Symbol 是 ECMAScript6 中引入的一种新的数据类型，表示独一无二的值，Symbol 类型的值需要使用 Symbol() 函数来生成，如下例所示：
   ```javascript
   var str = "123";
@@ -148,10 +161,12 @@ typeof(x);      // 获取变量 x 的数据类型
 ### js引用数据类型
 
 1. Object 类型
+
   JavaScript 中的对象（Object）类型是一组由键、值组成的无序集合，定义对象类型需要使用花括号{ }，语法格式如下：
   ```javascript
   {name1: value1, name2: value2, name3: value3, ..., nameN: valueN}
   ```
+
   在 JavaScript 中，对象类型的键都是字符串类型的，值则可以是任意数据类型。要获取对象中的某个值，可以使用对象名.键的形式，如下例所示：
   ```javascript
   var person = {
@@ -165,16 +180,20 @@ typeof(x);      // 获取变量 x 的数据类型
   console.log(person.name);       // 输出 Bob
   console.log(person.age);        // 输出 20
   ```
+
 2. Array 类型
+
   数组（Array）是一组按顺序排列的数据的集合，数组中的每个值都称为元素，而且数组中可以包含任意类型的数据。在 JavaScript 中定义数组需要使用方括号[ ]，数组中的每个元素使用逗号进行分隔，例如：
   ```javascript
   [1, 2, 3, 'hello', true, null]
   ```
+
   另外，也可以使用 Array() 函数来创建数组，如下例所示：
   ```javascript
   var arr = new Array(1, 2, 3, 4);
   console.log(arr);       // 输出 [1, 2, 3, 4]
   ```
+
   数组中的元素可以通过索引来访问。数组中的索引从 0 开始，并依次递增，也就是说数组第一个元素的索引为 0，第二个元素的索引为 1，第三个元素的索引为 2，以此类推。如下例所示：
   ```javascript
   var arr = [1, 2, 3.14, 'Hello', null, true];
@@ -182,7 +201,9 @@ typeof(x);      // 获取变量 x 的数据类型
   console.log(arr[5]);  // 输出索引为 5 的元素，即 true
   console.log(arr[6]);  // 索引超出了范围，返回 undefined
   ```
+
 3. Function 类型
+
   函数（Function）是一段具有特定功能的代码块，函数并不会自动运行，需要通过函数名调用才能运行，如下例所示：
   ```javascript
   function sayHello(name){
@@ -191,6 +212,7 @@ typeof(x);      // 获取变量 x 的数据类型
   var res = sayHello("Peter");
   console.log(res);  // 输出 Hello, Peter
   ```
+
   此外，函数还可以存储在变量、对象、数组中，而且函数还可以作为参数传递给其它函数，或则从其它函数返回，如下例所示：
   ```javascript
   var fun = function(){
@@ -231,6 +253,7 @@ typeof(x);      // 获取变量 x 的数据类型
 ### 字符串运算符
 
 JavaScript 中的+和+=运算符除了可以进行数学运算外，还可以用来拼接字符串，其中：
+
 - +运算符表示将运算符左右两侧的字符串拼接到一起；
 - +=运算符表示先将字符串进行拼接，然后再将结果赋值给运算符左侧的变量。
 
@@ -279,31 +302,42 @@ JavaScript 中的+和+=运算符除了可以进行数学运算外，还可以用
 > 0&&2 结果为0
 
 - 对象被转换为布尔值时为 true。例如，一个空对象与一个布尔值进行逻辑与运算。
+
   ```javascript
   console.log(typeof ({} && true));  //返回第二个操作数的值  true的类型：布尔型
   console.log(typeof (true && {}));  //返回第二个操作数的值  {}的类型：对象
   ```
+
 - 如果操作数中包含 null，则返回值总是 null。例如，字符串 "null" 与 null 类型值进行逻辑与运算，不管位置如何，始终都返回 null。
+
   ```javascript
   console.log(typeof ("null" && null));  //返回null的类型：对象
   console.log(typeof (null && "null"));  //返回null的类型：对象
   ```
+
 - 如果操作数中包含 NaN，则返回值总是 NaN。例如，字符串 "NaN" 与 NaN 类型值进行逻辑与运算，不管位置如何，始终都返回 NaN。
+
   ```javascript
   console.log(typeof ("NaN" && NaN));  //返回NaN的类型：数值
   console.log(typeof (NaN && "NaN"));  //返回NaN的类型：数值
   ```
+
 - 对于 Infinity 来说，将被转换为 true，与普通数值一样参与逻辑与运算。
+
   ```javascript
   console.log(typeof ("Infinity" && Infinity));  //返回第二个操作数Infinity的类型：数值
   console.log(typeof (Infinity && "Infinity"));  //返回第二个操作数"Infinity"的类型：字符串
   ```
+
 - 如果操作数中包含 undefined，则返回 undefined。例如，字符串 "undefined" 与 undefined 类型值进行逻辑与运算，不管位置如何，始终都返回 undefined。
+
   ```javascript
   console.log(typeof ("undefined" && undefined));  //返回undefined
   console.log(typeof (undefined && "undefined"));  //返回undefined
   ```
+
 逻辑或也是一种短路逻辑，如果左侧表达式为 true，则直接短路返回结果，不再运算右侧表达式。运算逻辑如下：
+
 - 第 1 步：计算第一个操作数（左侧表达式）的值。
 - 第 2 步：检测第一个操作数的值。如果左侧表达式的值可转换为 true，那么就会结束运算，直接返回第一个操作数的值。
 - 第 3 步：如果第一个操作数可以转换为 false，则计算第二个操作数（右侧表达式）的值。
@@ -373,7 +407,9 @@ var myfunction = function name(parameter_list){
     // 函数中的代码
 };
 ```
+
 参数说明如下：
+
 - myfunction：变量名，可以通过它来调用等号之后的函数；
 - name：函数名，可以省略（一般情况下我们也会将其省略），如果省略那么该函数就会成为一个匿名函数；
 - parameter_list：为参数列表，一个函数最多可以有 255 个参数。
@@ -408,6 +444,7 @@ var expression = function() {
 ## JS对象的创建和使用
 
 ### JS 创建对象
+
 您可以使用花括号{ }来创建对象，{ }中用来定义对象中的属性。属性是一个个键:值对的组合，其中键（属性名称）始终是字符串类型的，而值（属性值）则可以是任意类型，例如字符串、数组、函数或其它对象等。不同的属性之间使用逗号进行分隔。示例代码如下：
 ```javascript
 var person = {
@@ -421,6 +458,7 @@ var person = {
 ```
 
 ### 访问对象的属性
+
 要访问或获取属性的值，您可以使用对象名.属性名或者对象名["属性名"]的形式，如下例所示：
 ```javascript
 var person = {
@@ -434,6 +472,7 @@ var person = {
 document.write("姓名：" + person.name + "<br>");   // 输出：姓名：Peter
 document.write("年龄：" + person["age"]);          // 输出：年龄：28
 ```
+
 在访问对象属性时，使用对象名.属性名的形式更易于代码的编写，但并不是所有情况下都可以使用。如果属性名中包含空格或者特殊字符，则不能使用对象名.属性名的形式来访问对象属性，必须使用对象名["属性名"]的形式才行
 
 使用对象名["属性名"]的形式访问对象属性相对比较灵活，您除了可以直接通过属性名访问属性外，还可以将属性名称赋值给变量，然后再通过这个变量来访问属性的值，如下所示：
@@ -448,9 +487,11 @@ document.write(person[key]); // 输出：28
 ```
 
 ### 设置修改对象的属性
+
 使用对象名.属性名或者对象名["属性名"]的形式除了可以获取对象的属性值外，也可以用来设置或修改对象的属性值
 
 ### JS 删除对象的属性
+
 您可以使用 delete 语句来删除对象中的属性，如下例所示：
 ```javascript
 var person = {
@@ -466,6 +507,7 @@ delete person["phone"];
 > 提示：delete 语句是从对象中删除指定属性的唯一方式，而将属性值设置为 undefined 或 null 仅会更改属性的值，并不会将其从对象中删除。
 
 ### JS 调用对象的方法
+
 您可以像访问对象中属性那样来调用对象中的方法，如下例所示：
 ```javascript
 var person = {
@@ -481,21 +523,26 @@ person["displayName"]();    // 输出：Peter
 ```
 
 ## Number（数字）对象
+
 在 JavaScript 中您可以使用十进制、十六进制或八进制表示法来表示整数或浮点数。与其它编程语言不同，JavaScript 中的数字并不区分整数和浮点数，统一使用 IEEE754 标准（二进制浮点数算术标准）的 64 位浮点格式表示数字，能表示的最大值（Number.MAX_VALUE）为 ±1.7976931348623157e+308，最小值（Number.MIN_VALUE）为 ±5e-324。
 
 ### ±Infinity（无穷）
+
 Infinity 是一个特殊的值，表示无穷大。当一个表达式的运算结果超过了 JavaScript 所能表示的数字上限或下限时，JavaScript 就会使用 Infinity 或 -Infinity 表示这个结果，其中 Infinity 表示正无穷大，-Infinity 表示负无穷大。
 
 ### NaN（非数字）
+
 NaN 同样是 JavaScript 中的一个特殊值，用来表示某个值不是数字。NaN 不等于（通过 ==、!=、===、!=== 比较）其它任何值（包括另外一个 NaN 值），使用 isNaN() 函数可以判断一个数是否为 NaN。
 
 以下几种操作会返回 NaN：
+
 - 使用函数无法将参数转换为数字时会返回 NaN，例如 parseInt("abc")、new Number("abc")；
 - 结果不是实数的数学运算，例如 Math.sqrt(-1)；
 - 任何操作数中包含 NaN 的表达式，例如 5 * NaN；
 - 涉及字符串的非加法运算，且字符串无法自动转换为数字，例如 "foo" / 5。
 
 ### Number 对象
+
 Number 对象是原始数值的包装对象，创建 Number 对象的语法格式如下：
 ```javascript
 var myNum = new Number(value);
@@ -516,6 +563,7 @@ document.write(d + "<br>");             // 输出：NaN
 ```
 
 ### Number 属性
+
 |属性|	描述|
 |---|---|
 |Number.MAX_VALUE	|JavaScript 中所能表示的最大值|
@@ -528,6 +576,7 @@ document.write(d + "<br>");             // 输出：NaN
 |Number.MAX_SAFE_INTEGER|	最大安全整数，即 9007199254740991|
 
 ### Number 方法
+
 |方法|	描述|
 |---|---|
 |Number.parseFloat()|	将字符串转换成浮点数，和全局方法 parseFloat() 作用相同|
@@ -553,6 +602,7 @@ var val = String(value);
 JavaScript 中，字符串和字符串对象之间能够自由转换，因此不论是创建字符串对象还是直接声明字符串类型的变量，都可以直接使用字符串对象中提供的方法和属性。
 
 ### String 对象中的属性
+
 |属性|	描述|
 |---|---|
 |constructor|	获取创建此对象的 String() 函数的引用|
@@ -575,7 +625,9 @@ document.write(str.name);                       // 输出：Hello World!
 var arr = new Array(values);
 var arr = Array(values);
 ```
+
 其中，values 为数组中各个元素组成的列表，多个元素之间使用逗号分隔。
+
 > 提示：在使用 new Array() 来定义数组时，如果只提供一个数值参数，那么这个数值将用来表示数组的初始长度，例如new Array(5)表示定义一个长度为 5 的数组。JavaScript 中，数组允许的最大长度为 2³²-1，即 4294967295。
 
 除了可以使用 Array() 函数来定义数组外，您也可以直接使用方括号[ ]来定义数组，[ ]中为数组中的各个元素，多个元素之间使用逗号,进行分隔。示例代码如下：
@@ -585,6 +637,7 @@ console.log(fruits);        // 输出：(3) ["apple", "orange", "mango"]
 ```
 
 ## 定时器：setTimeout和setInterval
+
 JavaScript 中提供了两种方式来设置定时器，分别是 setTimeout() 和 setInterval()，它们之间的区别如下：
 
 |方法	|说明|
@@ -593,6 +646,7 @@ JavaScript 中提供了两种方式来设置定时器，分别是 setTimeout() �
 |setInterval()	|按照指定的周期（单位为毫秒）来重复执行某些代码，定时器不会自动停止，除非调用 clearInterval() 函数来手动停止或着关闭浏览器窗口|
 
 ### setTimeout()
+
 JS setTimeout() 函数的语法格式如下：
 ```javascript
 setTimeout(function[, delay, arg1, arg2, ...]);
@@ -601,18 +655,21 @@ setTimeout(code[, delay]);
 ```
 
 参数说明如下：
+
 - function：一个函数（通常使用匿名函数），其中定义了定时器中要执行的代码；
 - code：字符串类型的代码，这些代码会在定时器到期后被编译执行，出于安全考虑不建议使用；
 - delay：可选参数，定时器在执行的其中代码之前，要等待的时间，单位为毫秒（1秒 = 1000毫秒），如果省略此参数，则表示立即执行；
 - arg1、arg2、...、argN：要传递给函数的参数。
 
 ### setInterval()
+
 JS setInterval() 函数的语法格式如下：
 ```javascript
 setInterval(function, delay, [arg1, arg2, ...]);
 setInterval(code, delay);
 ```
 参数说明如下：
+
 - function：一个函数（通常使用匿名函数），其中定义了定时器中要执行的代码；
 - code：字符串类型的代码，这些代码会在定时器到期后被编译执行，出于安全考虑不建议使用；
 - delay：可选参数，定时器在执行的其中代码之前，要等待的时间，单位为毫秒（1秒 = 1000毫秒），如果省略此参数，则表示立即执行；
@@ -621,6 +678,7 @@ setInterval(code, delay);
 > 提示：通过 setInterval() 函数定义的定时器不会自动停止，除非调用 clearInterval() 函数来手动停止或着关闭浏览器窗口。
 
 ### JS 取消定时器
+
 当使用 setTimeout() 或 setInterval() 设置定时器时，这两个方法都会产生一个定时器的唯一 ID，ID 为一个正整数值，也被称为“定时器标识符”，通过这个 ID，我们可以清除 ID 所对应的定时器。
 
 我们可以借助 clearTimeout() 或 clearInterval() 函数来分别清除由 setTimeout() 或 setInterval() 函数创建的定时器。调用 clearTimeout() 或 clearInterval() 函数需要提供定时器的唯一 ID 作为参数
@@ -628,6 +686,7 @@ setInterval(code, delay);
 ## JS闭包的原理和作用
 
 ### 什么是闭包
+
 所谓闭包，指的就是一个函数。当两个函数彼此嵌套时，内部的函数就是闭包。
 
 因为在 JavaScript 中，函数属于对象，对象又是属性的集合，而属性的值又可以是对象，所以我们可以在函数内部再定义函数。例如在函数 A 中定义了函数 B，然后在函数外部调用函数 B，这个过程就是闭包。
@@ -646,6 +705,7 @@ var fun = funOne();             // 返回函数 funTwo
 ```
 
 ### 闭包的用途
+
 在介绍闭包的作用之前，我们先来了解一下 JavaScript 中的 GC（垃圾回收）机制。
 
 在 JavaScript 中，如果一个对象不再被引用，那么这个对象就会被 GC 回收，否则这个对象会一直保存在内存中。在上面的例子中，内部函数 funTwo() 定义在外部函数 funOne() 中，因此 funTwo() 依赖于 funOne()，而全局变量 fun 又引用了 funTwo()，所以 funOne() 间接的被 fun 引用。因此 funOne() 不会被 GC 回收，会一直保存在内存中，如下例所示：
@@ -670,6 +730,7 @@ num 是外部函数 funOne() 中的一个变量，它的值在内部函数 funTw
 当我们需要在函数中定义一些变量，并且希望这些变量能够一直保存在内存中，同时不影响函数外的全局变量时，就可以使用闭包。
 
 ### 闭包的高级用法
+
 上面介绍的是闭包最原始的写法，在实际开发中，通常会将闭包与匿名函数结合使用，如下例所示：
 ```javascript
 var funOne = (function(){
@@ -683,6 +744,7 @@ console.log(funOne());      // 输出：1
 console.log(funOne());      // 输出：2
 console.log(funOne());      // 输出：3
 ```
+
 此外，同一个闭包机制可以创建多个闭包函数出来，它们彼此没有联系，都是独立的，如下例所示：
 ```javascript
 function funOne(i){
@@ -701,15 +763,18 @@ fc();       // 输出：数字：112
 
 ## JS严格模式（use strict）详解
 ### 什么是严格模式
+
 严格模式是在 ECMAScript5（ES5）中引入的，在严格模式下，JavaScript 对语法的要求会更加严格，一些在正常模式下能够运行的代码，在严格模式下将不能运行。
 
 添加严格模式，主要有以下几个目的：
+
 - 消除 JavaScript 语法中一些不合理、不严谨的地方；
 - 消除代码中一些不安全的地方，保证代码的安全运行；
 - 提高 JavaScript 程序的运行效率；
 - 为以后新版本的 JavaScript 做好铺垫。
 
 ### 启用严格模式
+
 要启用严格模式，您只需要在 JavaScript 脚本的开头添加"use strict";或'use strict';指令即可。
 
 如果将"use strict";指令添加到 JavaScript 程序的第一行，则表示整个脚本都会处于严格模式。如果在函数的第一行代码中添加"use strict";，则表示只在该函数中启用严格模式。
@@ -718,15 +783,19 @@ fc();       // 输出：数字：112
 
 ### 严格模式中的变化
 1. 不允许使用未声明的变量
+
   普通模式下，如果一个变量还没有声明，就直接拿来赋值，JavaScript 解释器会自动为您创建这个变量。而在严格模式下，则不允许这么做，所有变量在使用前必须显式的声明，否则将会抛出一个 ReferenceError 错误。
 
 2. 不允许删除变量或函数
+
   在严格模式下，如果您尝试删除一个变量或函数，则会抛出语法错误。而在普通模式下，虽然不会成功，但并不报错。
 
 3. 函数中不允许有同名的参数
+
   在严格模式下，如果函数中有两个或多个同名参数，则会抛出语法错误，而在普通模式下则不会。
 
 4. eval 语句的作用域是独立的
+
   普通模式下，eval 语句的作用域取决于它所在的位置，而在严格模式下，eval 语句本身就是一个局部作用域，通过 eval 语句生成的变量只能在 eval 语句内使用。
   ```javascript
   "use strict";
@@ -737,6 +806,7 @@ fc();       // 输出：数字：112
 5. 不允许使用 with 语句
 
 6. 不允许写入只读属性
+
   在严格模式下，不允许为只读或不存在的属性赋值，否则会造成语法错误，而在普通模式下，虽然不会成功，但并不会报错。
 
 7. 不允许使用八进制数
@@ -797,6 +867,7 @@ document.write(obj["book"]["price"]["hardcover"]);      // 输出: $20.32
 ```
 
 ### 将数据转换为 JSON
+
 在开发过程中，有时我们需要将数据转换为 JSON 格式，方便客户端与服务器端进行数据交互。JavaScript 中提供了JSON.stringify()方法来将 JavaScript 值转换为 JSON 格式，如下例所示：
 ```javascript
 var obj = {
@@ -813,20 +884,26 @@ document.write(json);
 ## JS类型转换（强制类型转换+隐式类型转换）
 
 ### JS 隐式类型转换
+
 JavaScript 中，表达式中包含以下运算符时，会发生隐式类型转换：
+
 - 算术运算符：加（+）、减（-）、乘（*）、除（/）、取模（%）；
 - 逻辑运算符：逻辑与（&&）、逻辑或（||）、逻辑非（!）；
 - 字符串运算符：+、+=。
 
 隐式转换规则
+
 - 字符串加数字，数字会转换为字符串；
 - 数字减字符串，字符串会转换为数字，如果字符串无法转换为数字（例如"abc"、"JavaScript"），则会转换为 NaN；
 - 字符串减数字，字符串会转换为数字，如果字符串无法转换为数字，则会转换为 NaN；
 - 乘、除运算时，也会先将字符串转换为数字。
 
 ### JS 强制类型转换
+
 与隐式类型转换相反，强制类型转换需要手动进行，在 JavaScript 中，强制类型转换主要是通过调用全局函数来实现的，例如 Number()、Boolean()、parseInt()、parseFloat() 等。
+
 1. 使用 Number() 函数
+
   Number() 函数的语法格式如下：
   ```javascript
   Number(value);
@@ -848,6 +925,7 @@ JavaScript 中，表达式中包含以下运算符时，会发生隐式类型转
   - 如果在参数前面包含了除空格、+和-以外的其他特殊符号或非数字字符，或在参数中间包含了包括空格、+和-的特殊符号或非数字字符，将转换为 NaN。
 
 2. 使用 parseInt() 函数
+
   parseInt() 函数的语法格式如下：
   ```javascript
   parseInt(string, radix);
@@ -861,6 +939,7 @@ JavaScript 中，表达式中包含以下运算符时，会发生隐式类型转
   - 如果字符串是空字符串，返回结果为 NaN。
 
 3. 使用 parseFloat() 函数
+
   parseFloat() 函数的语法格式如下：
   ```javascript
   parseFloat(string);
@@ -873,8 +952,8 @@ JavaScript 中，表达式中包含以下运算符时，会发生隐式类型转
   - 解析过程中会忽略参数开头或末尾的空白字符；
   - 如果参数的第一个字符不能被解析为数字，则会返回 NaN。
 
-
 ## JS事件冒泡与事件捕获
+
 在 JavaScript 中，我们将事件发生的顺序称为“事件流”，当我们触发某个事件时，会发生一些列的连锁反应，例如有如下所示的一段代码：
 ```javascript
 <body>
@@ -887,12 +966,14 @@ JavaScript 中，表达式中包含以下运算符时，会发生隐式类型转
 ```
 
 如果给每个标签都定义事件，当我们点击其中的<a>标签时，会发现绑定在<div>和<p>标签上的事件也被触发了，这到底是为什么呢？为了解答这一问题，微软和网景两公司提出了两种不同的概念，事件捕获与事件冒泡：
+
 - 事件捕获：由微软公司提出，事件从文档根节点（Document 对象）流向目标节点，途中会经过目标节点的各个父级节点，并在这些节点上触发捕获事件，直至到达事件的目标节点；
 - 事件冒泡：由网景公司提出，与事件捕获相反，事件会从目标节点流向文档根节点，途中会经过目标节点的各个父级节点，并在这些节点上触发捕获事件，直至到达文档的根节点。整个过程就像水中的气泡一样，从水底向上运动。
 
 后来，W3C 为了统一标准，采用了一个折中的方式，即将事件捕获与事件冒泡合并，也就是现在的“先捕获后冒泡”
 
 ### 事件捕获
+
 在事件捕获阶段，事件会从 DOM 树的最外层开始，依次经过目标节点的各个父节点，并触发父节点上的事件，直至到达事件的目标节点。以上图中的代码为例，如果单击其中的<a>标签，则该事件将通过document -> div -> p -> a的顺序传递到<a>标签。
 ```javascript
 <!DOCTYPE html>
@@ -958,6 +1039,7 @@ JavaScript 中，表达式中包含以下运算符时，会发生隐式类型转
 ```
 
 ### 阻止事件捕获和冒泡
+
 JavaScript 中提供了 stopPropagation() 方法来阻止事件捕获和事件冒泡的发生，语法格式如下：
 ```javascript
 event.stopPropagation();
@@ -977,14 +1059,19 @@ event.preventDefault();
 事件委托就是把原本需要绑定在子元素上的事件（onclick、onkeydown 等）委托给它的父元素，让父元素来监听子元素的冒泡事件，并在子元素发生事件冒泡时找到这个子元素。
 
 事件委托是利用事件的冒泡原理来实现的，大致可以分为三个步骤：
+
 - 确定要添加事件元素的父级元素；
 - 给父元素定义事件，监听子元素的冒泡事件；
 - 使用 event.target 来定位触发事件冒泡的子元素。
 
 事件委托的优点
+
 - 减小内存消耗
+
   使用事件委托可以大量节省内存，减少事件的定义，通过上面的示例可以看出，要为 ul 标签下的所有 li 标签添加点击事件，如果分别为每个 li 标签绑定事件，不仅写起来比较繁琐，而且对内存的消耗也非常大。而使用事件委托的方式将点击事件绑定到 ul 标签上，就可以实现监听所有 li 标签，简洁、高效。
+
 - 动态绑定事件
+
   在网页中，有时我们需要动态增加或移除页面中的元素，比如上面示例中动态的在 ul 标签中添加 li 标签，如果不使用事件委托，则需要手动为新增的元素绑定事件，同时为删除的元素解绑事件。而使用事件委托就没有这么麻烦了，无论是增加还是减少 ul 标签中的 li 标签，即不需要再为新增的元素绑定事件，也不需要为删除的元素解绑事件。
 
 要使用事件委托，需要保证事件能够发生冒泡，适合使用事件委托的事件有 click、mousedown、mouseup、keydown、keyup、keypress 等。需要注意的是，虽然 mouseover 和 mouseout 事件也会发生事件冒泡，但处理起来非常麻烦，所以不推荐在 mouseover 和 mouseout 事件中使用事件委托。
