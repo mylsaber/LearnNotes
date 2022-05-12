@@ -657,6 +657,375 @@ setInterval(code, delay);
 
 我们可以借助 clearTimeout() 或 clearInterval() 函数来分别清除由 setTimeout() 或 setInterval() 函数创建的定时器。调用 clearTimeout() 或 clearInterval() 函数需要提供定时器的唯一 ID 作为参数
 
+## JS闭包的原理和作用
+
+### 什么是闭包
+所谓闭包，指的就是一个函数。当两个函数彼此嵌套时，内部的函数就是闭包。
+
+因为在 JavaScript 中，函数属于对象，对象又是属性的集合，而属性的值又可以是对象，所以我们可以在函数内部再定义函数。例如在函数 A 中定义了函数 B，然后在函数外部调用函数 B，这个过程就是闭包。
+
+闭包的形成条件是内部函数需要通过外部函数 return 给返回出来，如下例所示：
+```javascript
+function funOne(){    // 外部函数
+    var num = 0;      // 局部变量
+    function funTwo(){   // 内部函数
+        num++;                 
+        return num;
+    }
+    return funTwo;
+}
+var fun = funOne();             // 返回函数 funTwo
+```
+
+### 闭包的用途
+在介绍闭包的作用之前，我们先来了解一下 JavaScript 中的 GC（垃圾回收）机制。
+
+在 JavaScript 中，如果一个对象不再被引用，那么这个对象就会被 GC 回收，否则这个对象会一直保存在内存中。在上面的例子中，内部函数 funTwo() 定义在外部函数 funOne() 中，因此 funTwo() 依赖于 funOne()，而全局变量 fun 又引用了 funTwo()，所以 funOne() 间接的被 fun 引用。因此 funOne() 不会被 GC 回收，会一直保存在内存中，如下例所示：
+```javascript
+function funOne(){
+    var num = 0;
+    function funTwo(){
+        num++;
+        console.log(num);
+    }
+    return funTwo;
+}
+var fun = funOne();
+fun();      // 输出：1
+fun();      // 输出：2
+fun();      // 输出：3
+fun();      // 输出：4
+```
+
+num 是外部函数 funOne() 中的一个变量，它的值在内部函数 funTwo() 中被修改，函数 funTwo() 每执行一次就会将 num 加 1。根据闭包的特点，函数 funOne() 中的变量 num 会一直保存在内存中。
+
+当我们需要在函数中定义一些变量，并且希望这些变量能够一直保存在内存中，同时不影响函数外的全局变量时，就可以使用闭包。
+
+### 闭包的高级用法
+上面介绍的是闭包最原始的写法，在实际开发中，通常会将闭包与匿名函数结合使用，如下例所示：
+```javascript
+var funOne = (function(){
+    var num = 0;
+    return function(){
+        num++;
+        return num;
+    }
+})();
+console.log(funOne());      // 输出：1
+console.log(funOne());      // 输出：2
+console.log(funOne());      // 输出：3
+```
+此外，同一个闭包机制可以创建多个闭包函数出来，它们彼此没有联系，都是独立的，如下例所示：
+```javascript
+function funOne(i){
+    function funTwo(){
+        console.log('数字：' + i);
+    }
+    return funTwo;
+};
+var fa = funOne(110);
+var fb = funOne(111);
+var fc = funOne(112);
+fa();       // 输出：数字：110
+fb();       // 输出：数字：111
+fc();       // 输出：数字：112
+```
+
+## JS严格模式（use strict）详解
+### 什么是严格模式
+严格模式是在 ECMAScript5（ES5）中引入的，在严格模式下，JavaScript 对语法的要求会更加严格，一些在正常模式下能够运行的代码，在严格模式下将不能运行。
+
+添加严格模式，主要有以下几个目的：
+- 消除 JavaScript 语法中一些不合理、不严谨的地方；
+- 消除代码中一些不安全的地方，保证代码的安全运行；
+- 提高 JavaScript 程序的运行效率；
+- 为以后新版本的 JavaScript 做好铺垫。
+
+### 启用严格模式
+要启用严格模式，您只需要在 JavaScript 脚本的开头添加"use strict";或'use strict';指令即可。
+
+如果将"use strict";指令添加到 JavaScript 程序的第一行，则表示整个脚本都会处于严格模式。如果在函数的第一行代码中添加"use strict";，则表示只在该函数中启用严格模式。
+
+> 注意："use strict";或'use strict';指令只有在整个脚本第一行或者函数第一行时才能被识别
+
+### 严格模式中的变化
+1. 不允许使用未声明的变量
+  普通模式下，如果一个变量还没有声明，就直接拿来赋值，JavaScript 解释器会自动为您创建这个变量。而在严格模式下，则不允许这么做，所有变量在使用前必须显式的声明，否则将会抛出一个 ReferenceError 错误。
+
+2. 不允许删除变量或函数
+  在严格模式下，如果您尝试删除一个变量或函数，则会抛出语法错误。而在普通模式下，虽然不会成功，但并不报错。
+
+3. 函数中不允许有同名的参数
+  在严格模式下，如果函数中有两个或多个同名参数，则会抛出语法错误，而在普通模式下则不会。
+
+4. eval 语句的作用域是独立的
+  普通模式下，eval 语句的作用域取决于它所在的位置，而在严格模式下，eval 语句本身就是一个局部作用域，通过 eval 语句生成的变量只能在 eval 语句内使用。
+  ```javascript
+  "use strict";
+  eval("var x = 5; console.log(x);");
+  console.log(x);     // 此处报错：Uncaught ReferenceError: x is not defined
+  ```
+
+5. 不允许使用 with 语句
+
+6. 不允许写入只读属性
+  在严格模式下，不允许为只读或不存在的属性赋值，否则会造成语法错误，而在普通模式下，虽然不会成功，但并不会报错。
+
+7. 不允许使用八进制数
+
+8. 不能在 if 语句中声明函数
+
+9. 禁止使用 this 表示全局对象
+
+## JS解析JSON
+### 在 JavaScript 中解析 JSON 数据
+在 JavaScript 中，您可以使用 JSON.parse() 方法来解析 JSON 数据，示例代码如下：
+```javascript
+var json = '{"course": {"name": "JavaScript","author": "http://c.biancheng.net/","year": 2021,"genre": "Getting Started tutorial","bestseller": true},"fruits": ["Apple","Banana","Strawberry","Mango"]}';
+var obj = JSON.parse(json);
+console.log(obj.course);
+console.log(obj.fruits);
+``` 
+
+### 解析嵌套的 JSON 数据
+JSON 数据中的对象和数组可以相互嵌套，一个 JSON 对象中可以包含任意类型的数据（例如数组、嵌套数组、其它 JSON 对象等）。对于相互嵌套的 JSON 数据我们要如何获取呢？示例代码如下：
+```javascript
+var json = `{
+    "book": {
+        "name": "Harry Potter and the Goblet of Fire",
+        "author": "J. K. Rowling",
+        "year": 2000,
+        "characters": ["Harry Potter", "Hermione Granger", "Ron Weasley"],
+        "genre": "Fantasy Fiction",
+        "price": {
+            "paperback": "$10.40", "hardcover": "$20.32", "kindle": "$4.11"
+        }
+    }
+}`;
+
+// 将 JSON 数据转换为 JSON 对象
+var obj = JSON.parse(json);
+
+// 打印嵌套的 JSON 数据
+function printValues(obj) {
+    for (var k in obj) {
+        if (obj[k] instanceof Object) {
+            printValues(obj[k]);
+        } else {
+            document.write(obj[k] + "<br>");
+        };
+    }
+};
+
+// 调用 printValues() 函数
+printValues(obj);
+
+document.write("<hr>");
+
+// 打印 JSON 数据中的单个值
+document.write(obj["book"]["author"] + "<br>");         // 输出: J. K. Rowling
+document.write(obj["book"]["characters"][0] + "<br>");  // 输出: Harry Potter
+document.write(obj["book"]["price"]["hardcover"]);      // 输出: $20.32
+```
+
+### 将数据转换为 JSON
+在开发过程中，有时我们需要将数据转换为 JSON 格式，方便客户端与服务器端进行数据交互。JavaScript 中提供了JSON.stringify()方法来将 JavaScript 值转换为 JSON 格式，如下例所示：
+```javascript
+var obj = {
+    "name": "JavaScript",
+    "author": "http://c.biancheng.net/",
+    "year": 2021,
+    "genre": "Getting Started tutorial",
+    "bestseller": true
+};
+var json = JSON.stringify(obj);
+document.write(json);
+```
+
+## JS类型转换（强制类型转换+隐式类型转换）
+
+### JS 隐式类型转换
+JavaScript 中，表达式中包含以下运算符时，会发生隐式类型转换：
+- 算术运算符：加（+）、减（-）、乘（*）、除（/）、取模（%）；
+- 逻辑运算符：逻辑与（&&）、逻辑或（||）、逻辑非（!）；
+- 字符串运算符：+、+=。
+
+隐式转换规则
+- 字符串加数字，数字会转换为字符串；
+- 数字减字符串，字符串会转换为数字，如果字符串无法转换为数字（例如"abc"、"JavaScript"），则会转换为 NaN；
+- 字符串减数字，字符串会转换为数字，如果字符串无法转换为数字，则会转换为 NaN；
+- 乘、除运算时，也会先将字符串转换为数字。
+
+### JS 强制类型转换
+与隐式类型转换相反，强制类型转换需要手动进行，在 JavaScript 中，强制类型转换主要是通过调用全局函数来实现的，例如 Number()、Boolean()、parseInt()、parseFloat() 等。
+1. 使用 Number() 函数
+  Number() 函数的语法格式如下：
+  ```javascript
+  Number(value);
+  document.write(Number("10.5"));  // 输出：10.5
+  document.write(Number(true));    // 输出：1
+  document.write(Number(false));   // 输出：0
+  document.write(Number(null));    // 输出：0
+  ```
+  在使用 Number() 函数时，有以下几点需要注意：
+  - 如果参数中只包含数字，将转换为十进制数字，忽略前导 0 以及前导空格，如果数字前面有负（-）号，那么-会保留在转换结果中，如果数字前面有加（+）号，转换后会删掉+号；
+  - 如果参数中包含有效浮点数字，将转换为对应的浮点数字，忽略前导 0 以及前导空格，同样对于数字前的正负号，会保留负号忽略正号；
+  - 如果参数中包含有效的十六进制数字，将转换为对应大小的十进制数字；
+  - 如果参数为空字符串，将转换为 0；
+  - 如果参数为布尔值，则将 true 转换为 1，将 false 转换为 0；
+  - 如果参数为 null，将转换为 0；
+  - 如果参数为 undefined，将转换为 NaN；
+  - 如果参数为 Date 对象，将转换为从 1970 年 1 月 1 日到执行转换时的毫秒数；
+  - 如果参数为函数、包含两个元素以上的数组对象以及除 Date 对象以外的其他对象，将转换为 NaN；
+  - 如果在参数前面包含了除空格、+和-以外的其他特殊符号或非数字字符，或在参数中间包含了包括空格、+和-的特殊符号或非数字字符，将转换为 NaN。
+
+2. 使用 parseInt() 函数
+  parseInt() 函数的语法格式如下：
+  ```javascript
+  parseInt(string, radix);
+  ```
+  其中 string 为要转换的值，如果参数不是一个字符串，则会先将其转换为字符串，字符串开头的空白将会忽略；radix 为一个可选参数，表示字符串的基数，取值范围在 2 到 36 之间，例如将 radix 参数设置为 16，则表示将 string 转换为一个十六进制数。
+
+  在使用 parseInt() 函数时，有以下几点需要注意：
+  - 解析字符串时，会忽略字符串前后的空格，如果字符串第一个字符为负号（-），那么负号会保留在转换结果中，如果字符串第一个字符为正号（+），那么转换后将忽略正号；
+  - 如果字符串前面为除空格、正号（+）、负号（-）以外的特殊符号或者除 a～f（或 A～F）之外的非数字字符，那么字符串将不会被解析，返回结果为 NaN；
+  - 在字符串中包含空格、小数点（.）等特殊符号或非数字的字符时，解析将在遇到这些字符时停止，并返回已解析的结果；
+  - 如果字符串是空字符串，返回结果为 NaN。
+
+3. 使用 parseFloat() 函数
+  parseFloat() 函数的语法格式如下：
+  ```javascript
+  parseFloat(string);
+  ```
+  其中 string 为要被转换为浮点数的值，如果转换失败，则会返回 NaN。
+
+  在使用 parseFloat() 函数时，有以下几点需要注意：
+  - 如果在解析的过程中遇到了正号（+）、负号（-）、数字（0-9）、小数点（.）、或科学计数法中的指数（e 或 E）以外的字符，则会忽略该字符以及之后的所有字符，并返回解析到的浮点数；
+  - 解析过程中若遇到多个小数点，则会在解析到第二个小数点时停止，并返回第二个小数点之前的解析结果；
+  - 解析过程中会忽略参数开头或末尾的空白字符；
+  - 如果参数的第一个字符不能被解析为数字，则会返回 NaN。
+
+
+## JS事件冒泡与事件捕获
+在 JavaScript 中，我们将事件发生的顺序称为“事件流”，当我们触发某个事件时，会发生一些列的连锁反应，例如有如下所示的一段代码：
+```javascript
+<body>
+    <div id="wrap">
+        <p class="hint">
+            <a href="#">Click Me</a>
+        </p>
+    </div>
+</body>
+```
+
+如果给每个标签都定义事件，当我们点击其中的<a>标签时，会发现绑定在<div>和<p>标签上的事件也被触发了，这到底是为什么呢？为了解答这一问题，微软和网景两公司提出了两种不同的概念，事件捕获与事件冒泡：
+- 事件捕获：由微软公司提出，事件从文档根节点（Document 对象）流向目标节点，途中会经过目标节点的各个父级节点，并在这些节点上触发捕获事件，直至到达事件的目标节点；
+- 事件冒泡：由网景公司提出，与事件捕获相反，事件会从目标节点流向文档根节点，途中会经过目标节点的各个父级节点，并在这些节点上触发捕获事件，直至到达文档的根节点。整个过程就像水中的气泡一样，从水底向上运动。
+
+后来，W3C 为了统一标准，采用了一个折中的方式，即将事件捕获与事件冒泡合并，也就是现在的“先捕获后冒泡”
+
+### 事件捕获
+在事件捕获阶段，事件会从 DOM 树的最外层开始，依次经过目标节点的各个父节点，并触发父节点上的事件，直至到达事件的目标节点。以上图中的代码为例，如果单击其中的<a>标签，则该事件将通过document -> div -> p -> a的顺序传递到<a>标签。
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript</title>
+    <style type="text/css">
+        div, p, a {
+            padding: 15px 30px;
+            display: block;
+            border: 2px solid #000;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">DIV
+        <p class="hint">P
+            <a href="#">A</a>
+        </p>
+    </div>
+    <script>
+        function showTagName() {
+            alert("事件捕获: " + this.tagName);
+        }
+
+        var elems = document.querySelectorAll("div, p, a");
+        for (let elem of elems) {
+            elem.addEventListener("click", showTagName, true);
+        }
+    </script>
+</body>
+</html>
+```
+
+### 事件冒泡
+
+事件冒泡正好与事件捕获相反，事件冒泡是从目标节点开始，沿父节点依次向上，并触发父节点上的事件，直至文档根节点，就像水底的气泡一样，会一直向上。
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript</title>
+    <style type="text/css">
+        div, p, a {
+            padding: 15px 30px;
+            display: block;
+            border: 2px solid #000;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div onclick="alert('事件冒泡: ' + this.tagName)">DIV
+        <p onclick="alert('事件冒泡: ' + this.tagName)">P
+            <a href="#" onclick="alert('事件冒泡: ' + this.tagName)">A</a>
+        </p>
+    </div>
+</body>
+</html>
+```
+
+### 阻止事件捕获和冒泡
+JavaScript 中提供了 stopPropagation() 方法来阻止事件捕获和事件冒泡的发生，语法格式如下：
+```javascript
+event.stopPropagation();
+```
+> 注意：stopPropagation() 会阻止事件捕获和事件冒泡，但是无法阻止标签的默认行为，例如点击链接任然可以打开对应网页。
+
+此外，您也可以使用 stopImmediatePropagation() 方法来阻止同一节点的同一事件的其它事件处理程序，例如为某个节点定义了多个点击事件，当事件触发时，这些事件会按定义顺序依次执行，如果其中一个事件处理程序中使用了 stopImmediatePropagation() 方法，那么剩下的事件处理程序将不再执行。
+
+### 阻止默认操作
+
+某些事件具有与之关联的默认操作，例如当您单击某个链接时，会自动跳转到指定的页面，当您单击提交按钮时，会将数据提交到服务器等。如果不想这样的默认操作发生，可以使用 preventDefault() 方法来阻止，其语法格式如下：
+```javascript
+event.preventDefault();
+```
+
+## JS事件委托（事件代理）
+事件委托就是把原本需要绑定在子元素上的事件（onclick、onkeydown 等）委托给它的父元素，让父元素来监听子元素的冒泡事件，并在子元素发生事件冒泡时找到这个子元素。
+
+事件委托是利用事件的冒泡原理来实现的，大致可以分为三个步骤：
+- 确定要添加事件元素的父级元素；
+- 给父元素定义事件，监听子元素的冒泡事件；
+- 使用 event.target 来定位触发事件冒泡的子元素。
+
+事件委托的优点
+- 减小内存消耗
+  使用事件委托可以大量节省内存，减少事件的定义，通过上面的示例可以看出，要为 ul 标签下的所有 li 标签添加点击事件，如果分别为每个 li 标签绑定事件，不仅写起来比较繁琐，而且对内存的消耗也非常大。而使用事件委托的方式将点击事件绑定到 ul 标签上，就可以实现监听所有 li 标签，简洁、高效。
+- 动态绑定事件
+  在网页中，有时我们需要动态增加或移除页面中的元素，比如上面示例中动态的在 ul 标签中添加 li 标签，如果不使用事件委托，则需要手动为新增的元素绑定事件，同时为删除的元素解绑事件。而使用事件委托就没有这么麻烦了，无论是增加还是减少 ul 标签中的 li 标签，即不需要再为新增的元素绑定事件，也不需要为删除的元素解绑事件。
+
+要使用事件委托，需要保证事件能够发生冒泡，适合使用事件委托的事件有 click、mousedown、mouseup、keydown、keyup、keypress 等。需要注意的是，虽然 mouseover 和 mouseout 事件也会发生事件冒泡，但处理起来非常麻烦，所以不推荐在 mouseover 和 mouseout 事件中使用事件委托。
+
+另外，对于不会发生事件冒泡的事件（例如 load、unload、abort、focus、blur 等），则无法使用事件委托。
+
+
+
+
 
 typeof b：检查类型；
 
