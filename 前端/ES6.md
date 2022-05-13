@@ -918,3 +918,621 @@ Array.prototype.copyWithin(target, start = 0, end = this.length)
 // [4, 5, 3, 4, 5]
 ```
 上面代码表示将从 3 号位直到数组结束的成员（4 和 5），复制到从 0 号位开始的位置，结果覆盖了原来的 1 和 2。
+
+## 实例方法：find() 和 findIndex()
+
+数组实例的find方法，用于找出第一个符合条件的数组成员。它的参数是一个回调函数，所有数组成员依次执行该回调函数，直到找出第一个返回值为true的成员，然后返回该成员。如果没有符合条件的成员，则返回undefined。
+
+```javascript
+[1, 4, -5, 10].find((n) => n < 0)
+// -5
+```
+
+上面代码找出数组中第一个小于 0 的成员。
+
+```javascript
+[1, 5, 10, 15].find(function(value, index, arr) {
+  return value > 9;
+}) // 10
+```
+
+上面代码中，find方法的回调函数可以接受三个参数，依次为当前的值、当前的位置和原数组。
+
+数组实例的findIndex方法的用法与find方法非常类似，返回第一个符合条件的数组成员的位置，如果所有成员都不符合条件，则返回-1。
+
+这两个方法都可以接受第二个参数，用来绑定回调函数的this对象。
+```javascript
+function f(v){
+  return v > this.age;
+}
+let person = {name: 'John', age: 20};
+[10, 12, 26, 15].find(f, person);    // 26
+```
+
+另外，这两个方法都可以发现NaN，弥补了数组的indexOf方法的不足。
+```javascript
+[NaN].indexOf(NaN)
+// -1
+
+[NaN].findIndex(y => Object.is(NaN, y))
+// 0
+```
+
+上面代码中，indexOf方法无法识别数组的NaN成员，但是findIndex方法可以借助Object.is方法做到。
+
+## 实例方法：fill()
+
+fill方法使用给定值，填充一个数组。
+```javascript
+['a', 'b', 'c'].fill(7)
+// [7, 7, 7]
+
+new Array(3).fill(7)
+// [7, 7, 7]
+```
+上面代码表明，fill方法用于空数组的初始化非常方便。数组中已有的元素，会被全部抹去。
+
+fill方法还可以接受第二个和第三个参数，用于指定填充的起始位置和结束位置。
+
+```javascript
+['a', 'b', 'c'].fill(7, 1, 2)
+// ['a', 7, 'c']
+```
+
+注意，如果填充的类型为对象，那么被赋值的是同一个内存地址的对象，而不是深拷贝对象。
+
+## 实例方法：entries()，keys() 和 values()
+
+ES6 提供三个新的方法——entries()，keys()和values()——用于遍历数组。它们都返回一个遍历器对象（详见《Iterator》一章），可以用for...of循环进行遍历，唯一的区别是keys()是对键名的遍历、values()是对键值的遍历，entries()是对键值对的遍历。
+```javascript
+for (let index of ['a', 'b'].keys()) {
+  console.log(index);
+}
+// 0
+// 1
+
+for (let elem of ['a', 'b'].values()) {
+  console.log(elem);
+}
+// 'a'
+// 'b'
+
+for (let [index, elem] of ['a', 'b'].entries()) {
+  console.log(index, elem);
+}
+// 0 "a"
+// 1 "b"
+```
+
+如果不使用for...of循环，可以手动调用遍历器对象的next方法，进行遍历。
+```javascript
+let letter = ['a', 'b', 'c'];
+let entries = letter.entries();
+console.log(entries.next().value); // [0, 'a']
+console.log(entries.next().value); // [1, 'b']
+console.log(entries.next().value); // [2, 'c']
+```
+
+## 实例方法：includes()
+
+Array.prototype.includes方法返回一个布尔值，表示某个数组是否包含给定的值，与字符串的includes方法类似。ES2016 引入了该方法。
+```javascript
+[1, 2, 3].includes(2)     // true
+[1, 2, 3].includes(4)     // false
+[1, 2, NaN].includes(NaN) // true
+```
+该方法的第二个参数表示搜索的起始位置，默认为0。如果第二个参数为负数，则表示倒数的位置，如果这时它大于数组长度（比如第二个参数为-4，但数组长度为3），则会重置为从0开始。
+
+另外，Map 和 Set 数据结构有一个has方法，需要注意与includes区分。
+- Map 结构的has方法，是用来查找键名的，比如Map.prototype.has(key)、WeakMap.prototype.has(key)、Reflect.has(target, propertyKey)。
+- Set 结构的has方法，是用来查找值的，比如Set.prototype.has(value)、WeakSet.prototype.has(value)。
+
+## 实例方法：flat()，flatMap()
+
+数组的成员有时还是数组，Array.prototype.flat()用于将嵌套的数组“拉平”，变成一维的数组。该方法返回一个新数组，对原数据没有影响。
+
+```javascript
+[1, 2, [3, 4]].flat()
+// [1, 2, 3, 4]
+```
+flat()默认只会“拉平”一层，如果想要“拉平”多层的嵌套数组，可以将flat()方法的参数写成一个整数，表示想要拉平的层数，默认为1。如果不管有多少层嵌套，都要转成一维数组，可以用Infinity关键字作为参数。
+
+如果原数组有空位，flat()方法会跳过空位。
+```javascript
+[1, 2, , 4, 5].flat()
+// [1, 2, 4, 5]
+```
+
+flatMap()方法对原数组的每个成员执行一个函数（相当于执行Array.prototype.map()），然后对返回值组成的数组执行flat()方法。该方法返回一个新数组，不改变原数组。
+```javascript
+// 相当于 [[2, 4], [3, 6], [4, 8]].flat()
+[2, 3, 4].flatMap((x) => [x, x * 2])
+// [2, 4, 3, 6, 4, 8]
+```
+flatMap()只能展开一层数组。
+
+flatMap()方法的参数是一个遍历函数，该函数可以接受三个参数，分别是当前数组成员、当前数组成员的位置（从零开始）、原数组。
+
+flatMap()方法还可以有第二个参数，用来绑定遍历函数里面的this。
+
+## 实例方法：at()
+接受一个整数作为参数，返回对应位置的成员，支持负索引。这个方法不仅可用于数组，也可用于字符串和类型数组（TypedArray）。
+```javascript
+const arr = [5, 12, 8, 130, 44];
+arr.at(2) // 8
+arr.at(-2) // 130
+```
+如果参数位置超出了数组范围，at()返回undefined。
+
+## 数组的空位
+数组的空位指的是，数组的某一个位置没有任何值，比如Array()构造函数返回的数组都是空位。
+```javascript
+Array(3) // [, , ,]
+```
+注意，空位不是undefined，某一个位置的值等于undefined，依然是有值的。空位是没有任何值，in运算符可以说明这一点。
+
+```javascript
+0 in [undefined, undefined, undefined] // true
+0 in [, , ,] // false
+```
+
+上面代码说明，第一个数组的 0 号位置是有值的，第二个数组的 0 号位置没有值。
+
+ES6 是明确将空位转为undefined。
+- Array.from()方法会将数组的空位，转为undefined，也就是说，这个方法不会忽略空位。
+- 扩展运算符（...）也会将空位转为undefined。
+- copyWithin()会连空位一起拷贝。
+- fill()会将空位视为正常的数组位置。
+- for...of循环也会遍历空位。
+- entries()、keys()、values()、find()和findIndex()会将空位处理成undefined。
+
+由于空位的处理规则非常不统一，所以建议避免出现空位。
+
+## Array.prototype.sort() 的排序稳定性
+排序稳定性（stable sorting）是排序算法的重要属性，指的是排序关键字相同的项目，排序前后的顺序不变。
+
+```javascript
+const arr = [
+  'peach',
+  'straw',
+  'apple',
+  'spork'
+];
+
+const stableSorting = (s1, s2) => {
+  if (s1[0] < s2[0]) return -1;
+  return 1;
+};
+
+arr.sort(stableSorting)
+// ["apple", "peach", "straw", "spork"]
+```
+
+# 对象的扩展
+
+## 属性的简洁表示法
+ES6 允许在大括号里面，直接写入变量和函数，作为对象的属性和方法。这样的书写更加简洁。
+
+```javascript
+const foo = 'bar';
+const baz = {foo};
+baz // {foo: "bar"}
+
+// 等同于
+const baz = {foo: foo};
+```
+
+除了属性简写，方法也可以简写。
+
+```javascript
+const o = {
+  method() {
+    return "Hello!";
+  }
+};
+
+// 等同于
+
+const o = {
+  method: function() {
+    return "Hello!";
+  }
+};
+```
+
+## 属性名表达式
+
+JavaScript 定义对象的属性，有两种方法。
+
+```javascript
+// 方法一
+obj.foo = true;
+
+// 方法二
+obj['a' + 'bc'] = 123;
+```
+
+## 方法的 name 属性
+函数的name属性，返回函数名。对象方法也是函数，因此也有name属性。
+
+如果对象的方法是一个 Symbol 值，那么name属性返回的是这个 Symbol 值的描述。
+
+```javascript
+const key1 = Symbol('description');
+const key2 = Symbol();
+let obj = {
+  [key1]() {},
+  [key2]() {},
+};
+obj[key1].name // "[description]"
+obj[key2].name // ""
+```
+上面代码中，key1对应的 Symbol 值有描述，key2没有。
+
+## 属性的可枚举性和遍历
+### 可枚举性
+对象的每个属性都有一个描述对象（Descriptor），用来控制该属性的行为。Object.getOwnPropertyDescriptor方法可以获取该属性的描述对象。
+
+```javascript
+let obj = { foo: 123 };
+Object.getOwnPropertyDescriptor(obj, 'foo')
+//  {
+//    value: 123,
+//    writable: true,
+//    enumerable: true,
+//    configurable: true
+//  }
+```
+
+描述对象的enumerable属性，称为“可枚举性”，如果该属性为false，就表示某些操作会忽略当前属性。
+
+目前，有四个操作会忽略enumerable为false的属性。
+
+- for...in循环：只遍历对象自身的和继承的可枚举的属性。
+- Object.keys()：返回对象自身的所有可枚举的属性的键名。
+- JSON.stringify()：只串行化对象自身的可枚举的属性。
+- Object.assign()： 忽略enumerable为false的属性，只拷贝对象自身的可枚举的属性。
+
+这四个操作之中，前三个是 ES5 就有的，最后一个Object.assign()是 ES6 新增的。其中，只有for...in会返回继承的属性，其他三个方法都会忽略继承的属性，只处理对象自身的属性。实际上，引入“可枚举”（enumerable）这个概念的最初目的，就是让某些属性可以规避掉for...in操作，不然所有内部属性和方法都会被遍历到。比如，对象原型的toString方法，以及数组的length属性，就通过“可枚举性”，从而避免被for...in遍历到。
+
+另外，ES6 规定，所有 Class 的原型的方法都是不可枚举的。
+
+总的来说，操作中引入继承的属性会让问题复杂化，大多数时候，我们只关心对象自身的属性。所以，尽量不要用for...in循环，而用Object.keys()代替。
+
+### 属性的遍历
+
+ES6 一共有 5 种方法可以遍历对象的属性。
+
+1. for...in
+
+  for...in循环遍历对象自身的和继承的可枚举属性（不含 Symbol 属性）。
+
+2. Object.keys(obj)
+
+  Object.keys返回一个数组，包括对象自身的（不含继承的）所有可枚举属性（不含 Symbol 属性）的键名。
+
+3. Object.getOwnPropertyNames(obj)
+
+  Object.getOwnPropertyNames返回一个数组，包含对象自身的所有属性（不含 Symbol 属性，但是包括不可枚举属性）的键名。
+
+4. Object.getOwnPropertySymbols(obj)
+
+  Object.getOwnPropertySymbols返回一个数组，包含对象自身的所有 Symbol 属性的键名。
+
+5. Reflect.ownKeys(obj)
+
+  Reflect.ownKeys返回一个数组，包含对象自身的（不含继承的）所有键名，不管键名是 Symbol 或字符串，也不管是否可枚举。
+
+以上的 5 种方法遍历对象的键名，都遵守同样的属性遍历的次序规则。
+
+- 首先遍历所有数值键，按照数值升序排列。
+- 其次遍历所有字符串键，按照加入时间升序排列。
+- 最后遍历所有 Symbol 键，按照加入时间升序排列。
+
+## super 关键字
+
+我们知道，this关键字总是指向函数所在的当前对象，ES6 又新增了另一个类似的关键字super，指向当前对象的原型对象。
+
+```javascript
+const proto = {
+  foo: 'hello'
+};
+
+const obj = {
+  foo: 'world',
+  find() {
+    return super.foo;
+  }
+};
+
+Object.setPrototypeOf(obj, proto);
+obj.find() // "hello"
+```
+
+注意，super关键字表示原型对象时，只能用在对象的方法之中，用在其他地方都会报错。
+
+## 对象的扩展运算符
+
+### 解构赋值
+
+对象的解构赋值用于从一个对象取值，相当于将目标对象自身的所有可遍历的（enumerable）、但尚未被读取的属性，分配到指定的对象上面。所有的键和它们的值，都会拷贝到新对象上面。
+
+```javascript
+let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
+x // 1
+y // 2
+z // { a: 3, b: 4 }
+```
+由于解构赋值要求等号右边是一个对象，所以如果等号右边是undefined或null，就会报错，因为它们无法转为对象。
+
+注意，解构赋值的拷贝是浅拷贝，即如果一个键的值是复合类型的值（数组、对象、函数）、那么解构赋值拷贝的是这个值的引用，而不是这个值的副本。
+
+另外，扩展运算符的解构赋值，不能复制继承自原型对象的属性。
+
+```javascript
+const o = Object.create({ x: 1, y: 2 });
+o.z = 3;
+
+let { x, ...newObj } = o;
+let { y, z } = newObj;
+x // 1
+y // undefined
+z // 3
+```
+上面代码中，变量x是单纯的解构赋值，所以可以读取对象o继承的属性；变量y和z是扩展运算符的解构赋值，只能读取对象o自身的属性，所以变量z可以赋值成功，变量y取不到值。ES6 规定，变量声明语句之中，如果使用解构赋值，扩展运算符后面必须是一个变量名，而不能是一个解构赋值表达式，所以上面代码引入了中间变量newObj，如果写成下面这样会报错。
+
+```javascript
+let { x, ...{ y, z } } = o;
+// SyntaxError: ... must be followed by an identifier in declaration contexts
+```
+
+解构赋值的一个用处，是扩展某个函数的参数，引入其他操作。
+
+```javascript
+function baseFunction({ a, b }) {
+  // ...
+}
+function wrapperFunction({ x, y, ...restConfig }) {
+  // 使用 x 和 y 参数进行操作
+  // 其余参数传给原始函数
+  return baseFunction(restConfig);
+}
+```
+
+### 扩展运算符
+对象的扩展运算符（...）用于取出参数对象的所有可遍历属性，拷贝到当前对象之中。
+
+由于数组是特殊的对象，所以对象的扩展运算符也可以用于数组。
+
+```javascript
+let foo = { ...['a', 'b', 'c'] };
+foo
+// {0: "a", 1: "b", 2: "c"}
+```
+
+如果扩展运算符后面是字符串，它会自动转成一个类似数组的对象，因此返回的不是空对象。
+
+```javascript
+{...'hello'}
+// {0: "h", 1: "e", 2: "l", 3: "l", 4: "o"}
+```
+
+对象的扩展运算符，只会返回参数对象自身的、可枚举的属性，这一点要特别小心，尤其是用于类的实例对象时。
+```javascript
+class C {
+  p = 12;
+  m() {}
+}
+
+let c = new C();
+let clone = { ...c };
+
+clone.p; // ok
+clone.m(); // 报错
+```
+
+上面示例中，c是C类的实例对象，对其进行扩展运算时，只会返回c自身的属性c.p，而不会返回c的方法c.m()，因为这个方法定义在C的原型对象上（详见 Class 的章节）。
+
+对象的扩展运算符等同于使用Object.assign()方法。
+```javascript
+let aClone = { ...a };
+// 等同于
+let aClone = Object.assign({}, a);
+```
+
+上面的例子只是拷贝了对象实例的属性，如果想完整克隆一个对象，还拷贝对象原型的属性，可以采用下面的写法。
+
+```javascript
+// 写法一
+const clone1 = {
+  __proto__: Object.getPrototypeOf(obj),
+  ...obj
+};
+
+// 写法二
+const clone2 = Object.assign(
+  Object.create(Object.getPrototypeOf(obj)),
+  obj
+);
+
+// 写法三
+const clone3 = Object.create(
+  Object.getPrototypeOf(obj),
+  Object.getOwnPropertyDescriptors(obj)
+)
+```
+
+扩展运算符可以用于合并两个对象。
+
+如果用户自定义的属性，放在扩展运算符后面，则扩展运算符内部的同名属性会被覆盖掉。这用来修改现有对象部分的属性就很方便了。
+
+如果把自定义属性放在扩展运算符前面，就变成了设置新对象的默认属性值。
+
+与数组的扩展运算符一样，对象的扩展运算符后面可以跟表达式。
+
+扩展运算符的参数对象之中，如果有取值函数get，这个函数是会执行的。
+
+```javascript
+let a = {
+  get x() {
+    throw new Error('not throw yet');
+  }
+}
+
+let aWithXGetter = { ...a }; // 报错
+```
+
+## AggregateError 错误对象
+
+ES2021 标准之中，为了配合新增的Promise.any()方法（详见《Promise 对象》一章），还引入一个新的错误对象AggregateError，也放在这一章介绍。
+
+AggregateError 在一个错误对象里面，封装了多个错误。如果某个单一操作，同时引发了多个错误，需要同时抛出这些错误，那么就可以抛出一个 AggregateError 错误对象，把各种错误都放在这个对象里面。
+
+AggregateError 本身是一个构造函数，用来生成 AggregateError 实例对象。
+
+```javascript
+AggregateError(errors[, message])
+```
+
+AggregateError()构造函数可以接受两个参数。
+
+- errors：数组，它的每个成员都是一个错误对象。该参数是必须的。
+- message：字符串，表示 AggregateError 抛出时的提示信息。该参数是可选的。
+
+AggregateError的实例对象有三个属性。
+
+- name：错误名称，默认为“AggregateError”。
+- message：错误的提示信息。
+- errors：数组，每个成员都是一个错误对象。
+
+# 对象的新增方法
+
+## Object.is()
+
+ES5 比较两个值是否相等，只有两个运算符：相等运算符（==）和严格相等运算符（===）。它们都有缺点，前者会自动转换数据类型，后者的NaN不等于自身，以及+0等于-0。JavaScript 缺乏一种运算，在所有环境中，只要两个值是一样的，它们就应该相等。
+
+ES6 提出“Same-value equality”（同值相等）算法，用来解决这个问题。Object.is就是部署这个算法的新方法。它用来比较两个值是否严格相等，与严格比较运算符（===）的行为基本一致。
+
+```javascript
+Object.is('foo', 'foo')
+// true
+Object.is({}, {})
+// false
+```
+不同之处只有两个：一是+0不等于-0，二是NaN等于自身。
+
+```javascript
++0 === -0 //true
+NaN === NaN // false
+
+Object.is(+0, -0) // false
+Object.is(NaN, NaN) // true
+```
+
+## Object.assign()
+
+### 基本用法
+
+Object.assign()方法用于对象的合并，将源对象（source）的所有可枚举属性，复制到目标对象（target）。
+
+Object.assign()方法的第一个参数是目标对象，后面的参数都是源对象。
+
+注意，如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性。
+
+如果该参数不是对象，则会先转成对象，然后返回。由于undefined和null无法转成对象，所以如果它们作为参数，就会报错。
+
+### 常见用途
+
+Object.assign()方法有很多用处。
+
+1. 为对象添加属性
+  
+  ```javascropt
+  class Point {
+    constructor(x, y) {
+      Object.assign(this, {x, y});
+    }
+  }
+  ```
+
+2. 为对象添加方法
+
+  ```javascript
+  Object.assign(SomeClass.prototype, {
+    someMethod(arg1, arg2) {
+      ···
+    },
+    anotherMethod() {
+      ···
+    }
+  }); 
+
+  // 等同于下面的写法
+  SomeClass.prototype.someMethod = function (arg1, arg2) {
+    ···
+  };
+  SomeClass.prototype.anotherMethod = function () {
+    ···
+  };
+  ```
+
+3. 克隆对象
+
+  ```javascript
+  function clone(origin) {
+    return Object.assign({}, origin);
+  }
+  ```
+
+  不过，采用这种方法克隆，只能克隆原始对象自身的值，不能克隆它继承的值。如果想要保持继承链，可以采用下面的代码。
+  ```javascript
+  function clone(origin) {
+    let originProto = Object.getPrototypeOf(origin);
+    return Object.assign(Object.create(originProto), origin);
+  }
+  ```
+
+4. 合并多个对象
+
+5. 为属性指定默认值
+
+  ```javascript
+  const DEFAULTS = {
+    logLevel: 0,
+    outputFormat: 'html'
+  };
+
+  function processContent(options) {
+    options = Object.assign({}, DEFAULTS, options);
+    console.log(options);
+    // ...
+  }
+  ```
+
+上面代码中，DEFAULTS对象是默认值，options对象是用户提供的参数。Object.assign()方法将DEFAULTS和options合并成一个新对象，如果两者有同名属性，则options的属性值会覆盖DEFAULTS的属性值。
+
+注意，由于存在浅拷贝的问题，DEFAULTS对象和options对象的所有属性的值，最好都是简单类型，不要指向另一个对象。否则，DEFAULTS对象的该属性很可能不起作用。
+
+## Object.getOwnPropertyDescriptors()
+
+ES5 的Object.getOwnPropertyDescriptor()方法会返回某个对象属性的描述对象（descriptor）。ES2017 引入了Object.getOwnPropertyDescriptors()方法，返回指定对象所有自身属性（非继承属性）的描述对象。
+
+```javascript
+const obj = {
+  foo: 123,
+  get bar() { return 'abc' }
+};
+
+Object.getOwnPropertyDescriptors(obj)
+// { foo:
+//    { value: 123,
+//      writable: true,
+//      enumerable: true,
+//      configurable: true },
+//   bar:
+//    { get: [Function: get bar],
+//      set: undefined,
+//      enumerable: true,
+//      configurable: true } }
+```
+
