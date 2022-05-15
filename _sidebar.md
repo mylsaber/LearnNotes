@@ -24,6 +24,7 @@
   * [Dubbo](dubbo/dubbo)
 * 前端
   * [JavaScript](前端/javaScript)
+  * [ES6](前端/ES6)
   * [Css](前端/css)
   * [Vue](前端/Vue)
   * [Vuex](前端/Vuex)
