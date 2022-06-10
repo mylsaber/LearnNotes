@@ -814,3 +814,315 @@ test 能做到的，[[ ]] 也能做到，而且 [[ ]] 做的更好；test 做不
 ```
 
 当 [[ ]] 判断 expression 成立时，退出状态为 0，否则为非 0 值。注意`[[ ]]`和`expression`之间的空格，这两个空格是必须的，否则会导致语法错误。
+
+# case in语句
+
+```shell
+case expression in
+    pattern1)
+        statement1
+        ;;
+    pattern2)
+        statement2
+        ;;
+    pattern3)
+        statement3
+        ;;
+    ……
+    *)
+        statementn
+esac
+```
+
+case、in和esac都是shell关键字，expression表示表达式，pattern表示匹配模式。
+
+- expression既可以是一个变量，一个数字，一个字符串，还可以是一个数学计算表达式，或者是命令的执行结果，只要能够得到expression的值就可以。
+- pattern可以是一个数字，一个字符串，甚至是一个简单的正则表达式。
+
+## case in和正则表达式
+
+case in的pattern部分支持简单的正则表达式，具体来说，可以使用一下几种格式：
+
+| 格式  | 说明                                                         |
+| ----- | ------------------------------------------------------------ |
+| *     | 表示任意字符串。                                             |
+| [abc] | 表示 a、b、c 三个字符中的任意一个。比如，[15ZH] 表示 1、5、Z、H 四个字符中的任意一个。 |
+| [m-n] | 表示从 m 到 n 的任意一个字符。比如，[0-9] 表示任意一个数字，[0-9a-zA-Z] 表示字母或数字。 |
+| \|    | 表示多重选择，类似逻辑运算中的或运算。比如，abc \| xyz 表示匹配字符串 "abc" 或者 "xyz"。 |
+
+如果不加以说明，Shell的值都是字符串，expression和pattern也是按照字符串的方式来匹配的。
+
+# while循环
+
+```shell
+while condition
+do
+    statements
+done
+```
+
+condition表示判断条件，statements表示要执行的语句，do，done都是Shell中的关键字。
+
+while语句和if else语句中的condition用法都是一样的，可以使用test或者[]命令，也可以使用(())或者[[]]。
+
+# until循环
+
+until循环和while循环恰好相反，当判断条件不成立时才进行循环，一旦判断条件成立，就终止循环
+
+```shell
+until condition
+do
+    statements
+done
+```
+
+# for循环
+
+Shell脚本提供了for循环，更加灵活易用，Shell for循环有两种使用形式。
+
+## for形式
+
+```shell
+for((exp1; exp2; exp3))
+do
+    statements
+done
+```
+
+- exp1，exp2，exp3是三个表达式，其中exp2是判断条件，for循环根据exp2的结果来决定是否继续下一次循环；
+- statements是循环体语句
+- do，done是Shell中的关键字
+
+## for in循环
+
+```shell
+for variable in value_list
+do
+    statements
+done
+```
+
+variable表示变量，value_list表示取值列表，in是shell中的关键字。
+
+> in value_list部分可以省略，省略后的效果相当于in $@
+
+每次循环都会从value_list中取出一个值赋给变量variable，然后进入循环体，执行循环体中的statements，直到取完value_list中的所有值，循环结束。
+
+取值列表value_list的形式有多种，可以直接给出具体的值，也可以给出一个范围，还可以使用命令产生结果，甚至使用通配符
+
+- 给出具体的值，比如`1 2 3 4 5`、`"abc" "390" "tom"`等
+
+- 给出一个取值范围
+
+  ```shell
+  {start..end}
+  ```
+
+  start表示起始值，end表示终止值；中间用两个点号相连。这种新式只支持数字和字母。顺序根据ASCII码表输出
+
+- 使用命令的执行结果
+
+  使用反引号` `` `或者`$()`都可以取得命令的执行结果
+
+- 使用Shell通配符
+
+  Shell通配符可以认为是一种精简化的正则表达式，通常用来匹配目录或者文件。而不是文本。
+
+- 使用特殊变量
+
+  Shell中有多个特殊的变量，例如$#、$*、$@、$?、$$等，省略value_list和使用`$@`效果一样。
+
+# select in循环
+
+select in循环用来增强交互性，他可以显示出带编号的菜单，用户输入不同的编号就可以选择不同的菜单，并执行不同的功能。
+
+select in是Shell独有的一种循环，非常适合终端这样的交互场景。
+
+```shell
+select variable in value_list
+do
+    statements
+done
+```
+
+variable表示变量，value_list表示取值列表，in是Shell中的关键字。
+
+我们先来看一个 select in 循环的例子：
+
+```shell
+#!/bin/bash
+echo "What is your favourite OS?"
+select name in "Linux" "Windows" "Mac OS" "UNIX" "Android"
+do
+    echo $name
+done
+echo "You have selected $name"
+```
+
+执行结果
+
+```shell
+jiangfangwei@la-jiangfangwei ~ % jfw/test.sh 
+What is your favourite OS?
+1) Linux
+2) Windows
+3) Mac OS
+4) UNIX
+5) Android
+#? 3
+Mac OS
+#? 4
+UNIX
+#? 3
+Mac OS
+#? ^D
+You have selected Mac OS
+```
+
+`#?`用来提示用户输入菜单编号，`^D`表示按下Ctrl+D组合键，它的作用是结束select in循环。
+
+运行到select语句后，取值列表value_list中的内容会以菜单的形式显示出来，用户输入菜单编号，就表示选中了某个值，这个值就会赋给变量variable，然后再执行循环体中的statements。如果用户输入的菜单编号不在范围之内，那么就会给variable赋一个空值，如果用户输入一个空值（什么也不输入，直接回车），会重新显示一遍菜单。
+
+> select是无限循环，输入空值或者输入的值无效，都不会结束循环，只有遇到break语句，或者按下Ctrl+D组合键才能结束循环。
+
+# break和continue
+
+使用while、until、for、select循环时，如果想提前结束循环，可以使用break或者continue关键字。
+
+在大多数编程语言中，break和continue只能跳出当前层次的循环，内层循环中的break和continue对外层循环不起作用；但是Shell中的break和continue却能够跳出多层循环，也就是说，内层循环中的break和continue能够跳出外层循环。
+
+## break关键字
+
+```shell
+break n
+```
+
+n表示跳出循环的层数，如果省略n，则表示跳出当前的整个循环，
+
+## continue关键字
+
+```shell
+continue n
+```
+
+n表示循环的层数：
+
+- 如果省略n，则表示continue只对当前层次的循环语句有效，遇到continue会跳过本次循环，
+- 如果带上n，比如n的值为2，那么continue对内层和外层循环语句都有效，不但会跳过本次循环，外层也会跳过本次循环。
+
+# Shell函数
+
+shell函数的本质是一段可以重复使用的脚本代码，这段代码被提前编写好了，放在指定位置，使用时直接调取即可。
+
+```shell
+function name() {
+    statements
+    [return value]
+}
+```
+
+`function`定义函数关键字，`name`函数名，`statements`函数执行代码，`return value`表示函数的返回值。
+
+简化写法
+
+```shell
+name(){
+	statements
+	[return value]
+}
+```
+
+或者
+
+```shell
+function name{
+	statements
+	[return value]
+}
+```
+
+## 函数调用
+
+调用函数可以给它传递参数，也可以不传递，如果不传递参数，直接给出函数名字即可。如果传递参数，那么多个参数之间以空格分隔：
+
+```shell
+name param1 param2 param3
+```
+
+## 参数
+
+Shell中的函数在定义时不能指明参数，但是调用时却可以传递参数。在函数内部可以使用`$n`来接收参数，`$#`可以获取传递的参数个数，`$@`或者`$*`可以一次获取所有的参数。
+
+# Shell重定向
+
+Linux Shell重定向分为两种，一种输入重定向，一种是输出重定向
+
+一般情况下，我们都是从键盘读取用户输入的数据，然后再把数据拿到程序中使用，这就是标准的输入方向，也就是从键盘到程序。
+
+反过来说，程序中也会产生数据，这些数据一般都是直接呈现到显示器上，这就是标准的输出方向，也就是从程序到显示器。
+
+把观点提炼一下，其实输入输出方向就是数据的流动方向：
+
+- 输入方向就是数据从哪里流向程序。数据默认从键盘流向程序，如果改变了它的方向，数据就从其它地方流入，这就是输入重定向。
+- 输出方向就是数据从程序流向哪里。数据默认从程序流向显示器，如果改变了它的方向，数据就流向其它地方，这就是输出重定向。
+
+## 硬件设备和文件描述
+
+计算机的硬件设备有很多，常见的输入设备有键盘、鼠标、麦克风、手写板等，输出设备有显示器、投影仪、打印机等。不过在Linux中，标准输入设备指的是键盘，标准输出设备指的是显示器。
+
+Linux中一切皆是文件，包括标准输入设备和标准输出设备在内的所有计算机硬件都是文件。
+
+为了表示和区分已经打开的文件，Linux会给每个文件分配一个ID，这个ID就是一个整数，被称为文件描述符。
+
+输入输出相关文件描述符
+
+| 文件描述符 | 文件名 | 类型             | 硬件   |
+| ---------- | ------ | ---------------- | ------ |
+| 0          | stdin  | 标准输入文件     | 键盘   |
+| 1          | stdout | 标准输出文件     | 显示器 |
+| 2          | stderr | 标准错误输出文件 | 显示器 |
+
+Linux程序在执行任何形式的I/O操作时，都是在读取或者写入一个文件描述符，一个文件描述符只是一个和打开的文件相关的整数，他的背后可能是一个硬盘上的普通文件、FIFO、管道、终端、键盘、显示器、甚至一个网络连接。
+
+stdin、stdout、stderr默认都是打开的，在重定向的过程中，0、1、2这三个文件描述符可以直接使用。
+
+## Linux Shell输出重定向
+
+输出重定向是指命令的结果不再输出到显示器上，而是输出到其他地方，一般是文件中。这样做的最大好处就是把命令的结果保存起来，当我们需要的时候可以随时查询。Bash支持的输出重定向符号如下表所示。
+
+| 类型                       | 符号                     | 作用                                                         |
+| -------------------------- | ------------------------ | ------------------------------------------------------------ |
+| 标准输出重定向             | command >file            | 以覆盖的方式，把command的正确输出结果输出到file文件中        |
+| 标准输出重定向             | command >>file           | 以追加的方式，把command的正确输出结果输出到file文件中        |
+| \标准错误输出重定向        | command 2>file           | 以覆盖的方式，把 command 的错误信息输出到 file 文件中。      |
+| 标准错误输出重定向         | command 2>>file          | 以追加的方式，把 command 的错误信息输出到 file 文件中。      |
+| 正确输出和错误信息同时保存 | command >file 2>&1       | 以覆盖的方式，把正确输出和错误信息同时保存到同一个文件（file）中。 |
+| 正确输出和错误信息同时保存 | command >>file 2>&1      | 以追加的方式，把正确输出和错误信息同时保存到同一个文件（file）中。 |
+| 正确输出和错误信息同时保存 | command >file1 2>file2   | 以覆盖的方式，把正确的输出结果输出到 file1 文件中，把错误信息输出到 file2 文件中。 |
+| 正确输出和错误信息同时保存 | command >>file1 2>>file2 | 以追加的方式，把正确的输出结果输出到 file1 文件中，把错误信息输出到 file2 文件中。 |
+
+在输出重定向中,`>`代表的是覆盖，`>>`代表的是追加
+
+输出重定向的完整写法其实是`fd>file`或者`fd>>file`，其中fd表示文件描述符，如果不写，默认为1，也就是标准输出文件。
+
+`fd`和`>`之间不能有空格，否者Shell会解析失败；`>`和`file`之间的空格可有可无。
+
+如果既不想把命令的输出结果保存到文件，也不想输出到屏幕，那么可以把命令的所有结果重定向到`/dev/null`中
+
+```shell
+ls -l &>/dev/null
+```
+
+可以把`/dev/null`当成Linux系统的垃圾箱，任何放入垃圾箱的数据都会被丢弃，不能恢复。
+
+## LInux Shell输入重定向
+
+输入重定向就是改变输入的方向，不再使用键盘作为命令的输入来源，而是使用文件作为命令的输入。
+
+| 符号                    | 说明                                                         |
+| ----------------------- | ------------------------------------------------------------ |
+| command <file           | 将 file 文件中的内容作为 command 的输入。                    |
+| command <<END           | 从标准输入（键盘）中读取数据，直到遇见分界符 END 才停止（分界符可以是任意的字符串，用户自己定义）。 |
+| command \<file1 \>file2 | 将 file1 作为 command 的输入，并将 command 的处理结果输出到 file2。 |
+
+和输出重定向类似，输入重定向的完整写法是`fd<file`，其中fd表示文件描述符，如果不写，默认为0，也就是标准输入文件。
