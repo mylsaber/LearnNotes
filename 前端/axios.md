@@ -2,7 +2,83 @@
 ```
 npm install axios --save
 ```
+### axios基本使用
+
+```javascript
+axios({
+    method: 'GET',
+    url: 'http://localhost:3000/posts/2'
+}).then(response=>{
+    console.log(response)
+})
+```
+
+```javascript
+axios({
+    method: 'POST',
+    url: 'http://localhost:3000/posts',
+    data: {
+        title: '天气',
+        author: '张三'
+    }
+}).then(response=>{
+    console.log(response)
+})
+```
+
+```javascript
+axios({
+    method: 'PUT',
+    url: 'http://localhost:3000/posts/3',
+    data: {
+        title: '天气',
+        author: '李四'
+    }
+}).then(response=>{
+    console.log(response)
+})
+```
+
+```javascript
+axios({
+    method: 'DELETE',
+    url: 'http://localhost:3000/posts/3'
+}).then(response=>{
+    console.log(response)
+})
+```
+
+### axios其他方式
+
+```javascript
+axios.request({
+    method: 'GET',
+    url: 'http://localhost:3000/posts/3'
+}).then(response => {
+    console.log(response)
+})
+```
+
+```javascript
+axios.post(
+    url: 'http://localhost:3000/posts',
+    {title: '天气', author: '李四'}
+).then(response => {
+    console.log(response)
+})
+```
+
+### axios请求结果
+
+1. config：配置对象，包含请求url，请求体等
+2. data：响应结果
+3. headers：响应头
+4. request：原生XMLHttpRequest请求对象
+5. status：状态码
+6. statusText：状态文本
+
 ### axios API
+
 发送 POST 请求
 ```JavaScript
 axios({
