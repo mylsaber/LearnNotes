@@ -1047,3 +1047,156 @@ class Demo extends React.Component{
 //渲染组件到页面
 ReactDOM.render(<Demo a="1" b="2"/>,document.getElementById('test'))
 ```
+
+# 2 Hook API
+
+## 2.1 基础Hook
+
+### 2.1.1 useState
+
+```js
+const [state, setState] = useState(initialState);
+```
+
+返回一个state，以及更新state的函数。
+
+在初始渲染期间，返回的状态 (`state`) 与传入的第一个参数 (`initialState`) 值相同。
+
+`setState` 函数用于更新 state。它接收一个新的 state 值并将组件的一次重新渲染加入队列。
+
+### 2.1.2 useEffect
+
+```js
+useEffect(didUpdate);
+```
+
+该 Hook 接收一个包含命令式、且可能有副作用代码的函数。
+
+useEffect需要传递两个参数，第一个是逻辑处理函数，第二个是数组。
+
+1. 第二个参数存放变量，当数组存放变量发生改变时，第一个参数，逻辑处理函数会被执行。
+2. 第二参数可以不传，不会报错，但是浏览器会无限循环执行逻辑处理函数。
+
+使用时有4种情况
+
+1. 不传递第二个参数，会导致每次渲染都会运行useEffect。当他运行时，它获取数据更新状态，一旦更新状态，又会再次触发useEffect。
+
+   ```js
+   useEffect(()=>{
+     setNumber(props.number)
+   })
+   //所有更新都执行
+   ```
+
+2. 传递空数组，仅在挂载和卸载的时候执行
+
+   ```js
+   useEffect(()=>{
+     console.log(props)
+   },[])
+   ```
+
+3. 传递一个值，在这个值更新的时候执行
+
+   ```js
+   useEffect(()=>{
+     console.log(props)
+   },[count])
+   //count更新时执行
+   ```
+
+4. 传递多个值
+
+   ```js
+   const Asynchronous : React.FC=({number})=>{
+     const [number2,setNumber2] = useState(number);
+     useEffect(()=>{
+       console.log(number)
+       setNumber2(number)
+     },[number,setNumber2])
+   } 
+   //监听props对象number的更改
+   //setNumber2是useState返回的setter，所以不会在每次渲染时重新创建它，因此effect只会运行一次
+   ```
+
+## 2.2 额外的Hook
+
+### 2.2.1 useReducer
+
+```js
+const [state, dispatch] = useReducer(reducer, initialArg, init);
+```
+
+[`useState`](https://react.docschina.org/docs/hooks-reference.html#usestate) 的替代方案。它接收一个形如 `(state, action) => newState` 的 reducer，并返回当前的 state 以及与其配套的 `dispatch` 方法。（如果你熟悉 Redux 的话，就已经知道它如何工作了。）
+
+**示例**
+
+```js
+const initialState = {count: 0};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return {count: state.count + 1};
+    case 'decrement':
+      return {count: state.count - 1};
+    default:
+      throw new Error();
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  return (
+    <>
+      Count: {state.count}
+      <button onClick={() => dispatch({type: 'decrement'})}>-</button>
+      <button onClick={() => dispatch({type: 'increment'})}>+</button>
+    </>
+  );
+}
+```
+
+#### 指定state
+
+有两种不同初始化 `useReducer` state 的方式，你可以根据使用场景选择其中的一种。将初始 state 作为第二个参数传入 `useReducer` 是最简单的方法：
+
+```js
+  const [state, dispatch] = useReducer(
+    reducer,
+    {count: initialCount} 
+  );
+```
+
+#### 惰性初始化
+
+你可以选择惰性地创建初始 state。为此，需要将 `init` 函数作为 `useReducer` 的第三个参数传入，这样初始 state 将被设置为 `init(initialArg)`。
+
+这么做可以将用于计算 state 的逻辑提取到 reducer 外部，这也为将来对重置 state 的 action 做处理提供了便利：
+
+```js
+function init(initialCount) {  return {count: initialCount};}
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return {count: state.count + 1};
+    case 'decrement':
+      return {count: state.count - 1};
+    case 'reset':      return init(action.payload);    default:
+      throw new Error();
+  }
+}
+
+function Counter({initialCount}) {
+  const [state, dispatch] = useReducer(reducer, initialCount, init);  return (
+    <>
+      Count: {state.count}
+      <button
+        onClick={() => dispatch({type: 'reset', payload: initialCount})}>        Reset
+      </button>
+      <button onClick={() => dispatch({type: 'decrement'})}>-</button>
+      <button onClick={() => dispatch({type: 'increment'})}>+</button>
+    </>
+  );
+}
+```
