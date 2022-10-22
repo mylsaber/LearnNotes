@@ -1,0 +1,156 @@
+# JavaScript原型，继承
+
+## [[Prototype]]
+
+在JavaScript中，对象有一个特殊的隐藏属性`[[Prototype]]`，它要么为`null`，要么就是对另一个对象的引用。该对象被称为“原型”
+
+当我们从`object`中读取一个缺失的属性时，JavaScript会自动从原型中获取该属性。这被称为“原型继承”。
+
+属性`[[Prototype]]`是内部的而且是隐藏的，但是有很多设置它的方式，`__proto__`就是其中之一
+
+```javascript
+let animal = {
+  eats: true
+};
+let rabbit = {
+  jumps: true
+};
+
+rabbit.__proto__ = animal; // (*)
+
+// 现在这两个属性我们都能在 rabbit 中找到：
+alert( rabbit.eats ); // true (**)
+alert( rabbit.jumps ); // true
+```
+
+这里的 `(*)` 行将 `animal` 设置为 `rabbit` 的原型。当 `alert` 试图读取 `rabbit.eats` `(**)` 时，因为它不存在于 `rabbit` 中，所以 JavaScript 会顺着 `[[Prototype]]` 引用，在 `animal` 中查找（自下而上）
+
+**原型仅用于读取**
+
+对于写入/删除操作可以直接在对象上进行，不会对原型造成影响
+
+```javascript
+let animal = {
+  eats: true,
+  walk() {
+    /* rabbit 不会使用此方法 */
+  }
+};
+
+let rabbit = {
+  __proto__: animal
+};
+
+rabbit.walk = function() {
+  alert("Rabbit! Bounce-bounce!");
+};
+
+rabbit.walk(); // Rabbit! Bounce-bounce!
+```
+
+**this的值**
+
+`this`不受原型影响，无论在哪里找到的方法，`this`始终是点符号`.`前面的对象。所以，方法时共享的，但是对象状态不是。
+
+```javascript
+// animal 有一些方法
+let animal = {
+  walk() {
+    if (!this.isSleeping) {
+      alert(`I walk`);
+    }
+  },
+  sleep() {
+    this.isSleeping = true;
+  }
+};
+
+let rabbit = {
+  name: "White Rabbit",
+  __proto__: animal
+};
+
+// 修改 rabbit.isSleeping
+rabbit.sleep();
+
+alert(rabbit.isSleeping); // true
+alert(animal.isSleeping); // undefined（原型中没有此属性）
+```
+
+**for...in循环**
+
+`for...in`循环也会迭代继承的属性
+
+```javascript
+let animal = {
+  eats: true
+};
+
+let rabbit = {
+  jumps: true,
+  __proto__: animal
+};
+
+// Object.keys 只返回自己的 key
+alert(Object.keys(rabbit)); // jumps
+
+// for..in 会遍历自己以及继承的键
+for(let prop in rabbit) alert(prop); // jumps，然后是 eats
+```
+
+如果我们想排除继承的属性，可以使用内建方法`obj.hasOwnProperty(key)`：如果`obj`具有自己的名为`key`的属性，返回`true`
+
+## F.prototype
+
+我们可以使用诸如`new F()`这样的构造函数来创建一个新对象。如果`F.prototype`是一个对象。那么`new`操作符会为使用它为新对象设置[[Prototype]]
+
+```javascript
+let animal = {
+  eats: true
+};
+
+function Rabbit(name) {
+  this.name = name;
+}
+
+Rabbit.prototype = animal;
+
+let rabbit = new Rabbit("White Rabbit"); //  rabbit.__proto__ == animal
+
+alert( rabbit.eats ); // true
+```
+
+当创建一个`new Rabit`时，会把它的`[[Prototype]]`赋值为`animal`。
+
+**默认的F.prototype**
+
+每个函数都有`prototype`属性，默认是一个只有属性`constructor`的对象，属性`contructor`指向函数自身。
+
+```javascript
+function Rabbit() {}
+
+/* 默认的 prototype
+Rabbit.prototype = { constructor: Rabbit };
+*/
+```
+
+## Object.prototype
+
+当我们使用表达式`obj = {}`和`obj = new Object`时，其实他们是一个意思，`Object`就是一个内建的对象构造函数，其自身的`prototype`指向一个带有`toString`等其他方法的巨大对象。
+
+```javascript
+let obj = {};
+
+alert(obj.__proto__ === Object.prototype); // true
+
+alert(obj.toString === obj.__proto__.toString); //true
+alert(obj.toString === Object.prototype.toString); //true
+```
+
+## 原型方法
+
+使用`obj.__proto__`设置或者读取原型被认为已经过时且不推荐使用了。现代的获取/设置原型的方法有：
+
+- `Object.getPrototypeOf(obj)`：返回对象`obj`的`[[Prototype]]`
+- `Object.setPrototypeOf(obj.proto)`：将对象`obj`的`[[Prototype]]`设置为`proto`
+- `Object.create(proto,[descriptors])`：利用给定的`proto`作为`[[Prototype]]`和可选的属性描述来创建一个空对象。
