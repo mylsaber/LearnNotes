@@ -1,0 +1,264 @@
+# JavaScript函数
+
+## 函数声明
+
+```javascript
+function name(parameter1, parameter2, ... parameterN) {
+  ...body...
+}
+```
+
+- 作为参数传递给函数的值，会被复制到函数的局部变量。
+- 函数可以访问外部变量，但它只能从内到外起作用。函数外部的代码看不到函数内的局部变量。
+- 函数可以返回值，如果没有返回值，则其返回的结果是`undefined`。
+
+## Rest参数...
+
+在函数定义中声明一个数组来收集不定数目的参数，可以使用`...变量名`语法。这会声明一个数组并指定其名称，收集所有剩余的参数到数组中。
+
+```javascript
+function showName(firstName, lastName, ...titles) {
+  alert( firstName + ' ' + lastName ); // Julius Caesar
+
+  // 剩余的参数被放入 titles 数组中
+  // i.e. titles = ["Consul", "Imperator"]
+  alert( titles[0] ); // Consul
+  alert( titles[1] ); // Imperator
+  alert( titles.length ); // 2
+}
+
+showName("Julius", "Caesar", "Consul", "Imperator");
+```
+
+> Rest参数必须放到参数列表的末尾。
+
+## arguments变量
+
+有一个名为`aruments`的特殊类数组对象可以在函数中被访问，该对象以参数在参数列表中的索引为键，存储所有参数。
+
+```javascript
+function showName() {
+  alert( arguments.length );
+  alert( arguments[0] );
+  alert( arguments[1] );
+
+  // 它是可遍历的
+  // for(let arg of arguments) alert(arg);
+}
+
+// 依次显示：2，Julius，Caesar
+showName("Julius", "Caesar");
+
+// 依次显示：1，Ilya，undefined（没有第二个参数）
+showName("Ilya");
+```
+
+`arguments`是一个类数组，也是可迭代对象，但它不是数组，不支持数组方法。此外，它始终包含所有参数。所以一般使用rest参数。
+
+## 属性“length”
+
+函数有内建属性`length`，它返回函数入参的个数，rest参数不参与计数。比如：
+
+```javascript
+function f1(a) {}
+function f2(a, b) {}
+function many(a, b, ...more) {}
+
+alert(f1.length); // 1
+alert(f2.length); // 2
+alert(many.length); // 2
+```
+
+## 调度：setTimeout
+
+`setTimeout`允许我们将函数推迟到一段时间间隔后再执行。
+
+- 语法：`let timerId = setTimeout(func, [delay], [arg1], [arg2], ...)`
+
+- ```javascript
+  function sayHi(phrase, who) {
+    alert( phrase + ', ' + who );
+  }
+  
+  setTimeout(sayHi, 1000, "Hello", "John"); // Hello, John
+  ```
+
+**用clearTimeout来取消调度**
+
+`setTimeout`在调用时会返回一个“定时器标识符（timer identifier），我们可以使用它来取消执行。
+
+```javascript
+let timerId = setTimeout(() => alert("never happens"), 1000);
+alert(timerId); // 定时器标识符
+
+clearTimeout(timerId);
+alert(timerId); // 还是这个标识符（并没有因为调度被取消了而变成 null）
+```
+
+**嵌套的setTimeout**
+
+可以使用嵌套的`setTimeout`实现周期调度。
+
+```javascript
+/** instead of:
+let timerId = setInterval(() => alert('tick'), 2000);
+*/
+
+let timerId = setTimeout(function tick() {
+  alert('tick');
+  timerId = setTimeout(tick, 2000); // (*)
+}, 2000);
+```
+
+## 调度：setInterval
+
+允许我们重复允许一个函数，从一段时间间隔之后开始运行，之后以改时间间隔连续重复运行该函数。
+
+`let timerId = setInterval(func, [delay], [arg1], [arg2], ...)`
+
+想要阻止后续调用，我们需要调用`clearInterval(timerId)`。
+
+```javascript
+// 每 2 秒重复一次
+let timerId = setInterval(() => alert('tick'), 2000);
+
+// 5 秒之后停止
+setTimeout(() => { clearInterval(timerId); alert('stop'); }, 5000);
+```
+
+在实际情况中，JavaScript引擎会等待`func`执行完成，然后检查调度程序，如果时间到了，则**立即**再次指定调度。极端情况下，如果每次函数执行的时间都超过`delay`设置的时间，那么每次调用之间将完全没有停顿。使用嵌套`setTimeout`没有这个问题，每次在func执行完后，才设置的新的`setTimeout`调度。
+
+## “func.call”设定上下文
+
+函数中的`this`是根据调用者来确定的，当我们把一个类中的方法单独提取出来时，可能会丢失`this`。我们有一个特殊的内建函数方法`func.call(context, ...args)`，它允许调用一个显示设置`this`的函数。
+
+`func.call(context, arg1, arg2, ...)`
+
+```javascript
+function sayHi() {
+  alert(this.name);
+}
+
+let user = { name: "John" };
+let admin = { name: "Admin" };
+
+// 使用 call 将不同的对象传递为 "this"
+sayHi.call( user ); // John
+sayHi.call( admin ); // Admin
+```
+
+## func.apply
+
+`func.apply(context, args)`
+
+它运行`func`设置`this=context`，并使用类数组对象`args`作为参数列表（arguments）。`call`与`apply`之间唯一的语法区别就是，`call`期望一个参数列表，而`apply`期望一个包含这些参数的类数组对象。
+
+## 函数绑定
+
+当将对象方法作为回调进行传递，例如传递给`setTimeout`，这儿会存在一个常见的问题：“丢失`this`”。
+
+### 包装器
+
+使用函数包装一层，可以正确获取上下文，但是如果在定时器出发前，我们的`user`改变了，可能会发生错误调用。
+
+```javascript
+setTimeout(() => user.sayHi(), 1000); // Hello, John!
+```
+
+### bind
+
+JavaScript函数提供了一个内建方法`bind`，它可以绑定`this`。
+
+```javascript
+let user = {
+  firstName: "John"
+};
+
+function func() {
+  alert(this.firstName);
+}
+
+let funcUser = func.bind(user);
+funcUser(); // John
+```
+
+这里的`func.bind(user)`作为`func`的绑定`this`。对象方法也是一样可以绑定`this`.
+
+```javascript
+let user = {
+  firstName: "John",
+  sayHi() {
+    alert(`Hello, ${this.firstName}!`);
+  }
+};
+
+let sayHi = user.sayHi.bind(user); // (*)
+
+// 可以在没有对象（译注：与对象分离）的情况下运行它
+sayHi(); // Hello, John!
+
+setTimeout(sayHi, 1000); // Hello, John!
+
+// 即使 user 的值在不到 1 秒内发生了改变
+// sayHi 还是会使用预先绑定（pre-bound）的值，该值是对旧的 user 对象的引用
+user = {
+  sayHi() { alert("Another user in setTimeout!"); }
+};
+```
+
+如果一个对象有很多方法，并且我们都打算将它们都传递出去，那么我们可以在一个循环中完成所有方法的绑定：
+
+```javascript
+for (let key in user) {
+  if (typeof user[key] == 'function') {
+    user[key] = user[key].bind(user);
+  }
+}
+```
+
+JavaScript库还提供了方便批量绑定的函数，例如lodsh中的`_.bindAll(object,methodNames)`。
+
+### 偏函数
+
+我们不仅可以绑定`this`，还可以绑定参数（arguments）。`bind`的完整语法如下：
+
+`let bound = func.bind(context, [arg1], [arg2], ...)`
+
+```javascript
+function mul(a, b) {
+  return a * b;
+}
+
+let double = mul.bind(null, 2);
+
+alert( double(3) ); // = mul(2, 3) = 6
+alert( double(4) ); // = mul(2, 4) = 8
+alert( double(5) ); // = mul(2, 5) = 10
+```
+
+### 没有上下文的偏函数
+
+当我们想绑定一些参数，但是没有上下文`this`。
+
+```javascript
+function partial(func, ...argsBound) {
+  return function(...args) { // (*)
+    return func.call(this, ...argsBound, ...args);
+  }
+}
+
+// 用法：
+let user = {
+  firstName: "John",
+  say(time, phrase) {
+    alert(`[${time}] ${this.firstName}: ${phrase}!`);
+  }
+};
+
+// 添加一个带有绑定时间的 partial 方法
+user.sayNow = partial(user.say, new Date().getHours() + ':' + new Date().getMinutes());
+
+user.sayNow("Hello");
+// 类似于这样的一些内容：
+// [10:00] John: Hello!
+```
