@@ -708,3 +708,167 @@ firewall-cmd --reload
 ```shell
 firewall-cmd --query-port=端口/协议
 ```
+# 13 动态和网络监控
+## 13.1 top动态监控
+top与ps命令很相似，它们都用来显示正在执行的进程。最大的不同之处在于top在执行一段时间可以更新正在运行的进程。
+```shell
+top [选项]
+```
+| 选项 | 功能 |
+| --- | --- |
+| -d n | 指定top命令每隔几秒更新，默认3秒 |
+| -i | 使top不显示任何闲置或者僵死进程 |
+| -p | 通过指定监控进程ID来仅仅监控某个进程的状态。 |
+
+交互操作：
+
+| 操作 | 功能 |
+| --- | --- |
+| P | 以CPU使用率排序，默认 |
+| M | 以内存的使用率排序 |
+| N | 以PID排序 |
+| q | 退出top |
+
+案例1：监视特定用户
+输入top命令，回车键，然后输入u，回车键，再输入用户名。
+案例2：终止指定的进程
+输入top命令，回车键，然后输入k，回车键，再输入要结束的进程ID号。
+案例3：指定系统状态更新的时间（10秒）
+```shell
+top -d 10
+```
+## 13.1 netstat网络监控
+```shell
+netstat [选项]
+```
+
+- -an：按一定顺序排列输出
+- -p：显示那个进程在调用
+
+案例1：查看服务名为sshd的服务信息
+```shell
+netstat -anp | grep sshd
+```
+## 13.2 ping
+一种网络检测工具，主要是用来检查本机和远程主机是否网络正常。
+```shell
+ping 对方ip
+```
+# 14 软件安装
+## 14.1 rpm
+rpm用户互联网下载包的打包及安装工具，它包含在某些Linux分发版中，它生成具有.rpm扩展名的文件，rpm是RedHat Package Manager的缩写，类似Windows的setup.exe。
+### 14.1.1 查询指令
+查询所有安装的rpm软件包：
+```shell
+rpm -qa
+```
+查询软件包是否安装：
+```shell
+rpm -q 软件名称
+```
+查询软件包信息：
+```shell
+rpm -qi 软件名称
+```
+查询软件包中的文件：
+```shell
+rpm -ql 软件名称
+```
+查询文件所属的软件包：
+```shell
+rpm -qf 文件名
+```
+### 14.1.2 卸载rpm包
+```shell
+rpm -e 软件名称
+```
+### 14.1.3 安装rpm包
+```shell
+rpm -ivh rpm包全路径
+```
+
+- i=install：安装
+- v=verbose：提示
+- h=hash：进度条
+## 14.2 Yum包管理
+Yum是RedHat、CentOS软件包管理，使用Python编写，它是基于RPM包进行管理，能够从指定服务器（源）自动下载RPM包并安装，可以自动处理依赖关系，并且一次安装所有依赖软件包。
+### 14.2.1 Yum源配置
+Yum仓库包含软件包以及对应的元数据（软件包的信息以及包与包的依赖关系）。Linux系统Yum配置文件有两类
+
+1.  /etc/yum.conf
+主动配置文件，一般不需要改动，主要配置RPM包缓存目录，日志文件路径等。 
+2.  /etc/yum.repos.d/*.repo
+例如：CentOS-Base.repo，一个系统中需要的基础源，base源和epel源（扩展安装包） 
+
+由于都是国外镜像，可以配置成国内的镜像源（[阿里云镜像站](https://developer.aliyun.com/mirror/)；[网易镜像站](http://mirrors.163.com/)；[清华源](https://mirrors.tuna.tsinghua.edu.cn/)；[中科大源](https://mirrors.ustc.edu.cn/)）
+配置完成后需要生成新的缓存：
+```shell
+yum clean all #清理缓存
+yum makecache #更新缓存
+```
+### 14.2.2 语法
+```shell
+yum [options] [command] [package ...]
+```
+其中的option是可选的：
+
+- -h：帮助
+- -y：安装过程提示自动选择yes
+- -q：不显示安装过程
+### 14.2.3 常用命令
+```shell
+yum list |grep xxx
+yum install xxx # 安装xxx软件
+yum info xxx # 查看xxx软件的信息
+yum remove xxx # 删除xxx软件
+yum list # 列出软件包
+yum clean # 清除缓存和旧的包
+yum provides xxx # 以xxx为关键字搜索包（提供的信息为关键字）
+yum search xxx # 搜索软件包（以名字为关键字）
+
+yum groupupdate xxx # 更新xxx软件分组
+yum grouplist xxx # 列出xxx软件分组 
+yum groupremove xxx # 移除xxx软件分组
+yum groupinfo xxx # 查看xxx软件分组信息
+
+yum update # 系统升级
+yum list available # 列出所有升级源上的包
+yum list updates # 列出所有升级源上可以更新的包
+yum list installed # 列出已经安装的包
+yum update kernel # 升级内核
+```
+### 14.2.4 更新
+```shell
+yum check-update # 检查可更新的包
+yum update # 更新所有包
+yum update xxx #更新指定包xxx
+yum groupupdate xxx # 升级程序组xxx
+yum upgrade # 大规模的版本升级，连旧的淘汰的包也升级
+yum upgrade xxx # 升级程序组xxx
+```
+### 14.2.5 安装与删除
+```shell
+yum install xxx # 安装指定包
+yum groupinstall xxx # 安装程序组xxx
+yum remove xxx # 删除指定包包括依赖。
+yum groupremove xxx # 删除程序组xxx
+yum deplist xxx # 查看xxx依赖情况
+```
+### 14.2.6 缓存相关
+```shell
+yum clean packages # 清除缓存目录的包
+yum clearn headers # 清除缓存目录下的headers
+yum clean oldheaders # 清除缓存目录下旧的headers
+yum clean # 相当于yum clean all，相当于yum clean packages和yum clean oldheaders
+```
+### 14.2.7 列出包
+```shell
+yum list # 列出资源库中所有看着或更新的包
+yum list xxx # 列出指定包，可以使用通配符，例如firefox*
+yum list updates # 列出所有可以更新的包
+yum list installed # 列出已经安装的包
+yum list extras # 通过其他网站下载安装的包
+yum search xxx #根据关键字xxx查找安装包
+yum info xxx #显示xxx包信息
+yum groupinfo xxx #显示xxx程序组信息
+```
