@@ -18,6 +18,6 @@ npm install -g typescript
 以上命令会在全局环境下安装`tsc`命令，安装完成后，我们就可以在任何地方执行`tsc`命令了。
 编译一个TypeScript文件：
 ```shell
-tsc hello.ts
+tsc hello.ts 
 ```
 约定使用TypeScript编写的文件以`.ts`为后缀，用TypeScript编写React时，以`.tsx`为后缀。
