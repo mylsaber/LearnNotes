@@ -1,44 +1,25 @@
-# 三 资源管理
-
-## 资源管理介绍
-
+# 1 概述
 在Kubernetes中，所有的内容都抽象为资源，用户需要通过操作资源来管理Kubernetes。
-
-> ​	Kubernetes的本质上就是一个集群系统，用户可以子啊集群中部署各种服务，实际就是在Kubernetes集群中运行一个个容器，并将指定的程序跑在容器中。
->
-> ​	Kubernetes的最小管理单元式pod而不是容器，所以只能将容器放在pod中，而Kubernetes一般也不会直接管理pod，而是通过`Pod控制器`来管理pod。
->
-> ​	pod可以提供服务之后，就要考虑如何访问pod中的服务，Kubernetes提供了`Service`资源来实现这个功能。
->
-> ​	pod中程序数据需要持久化，Kubernetes提供了各种**存储**系统
+> Kubernetes的本质上就是一个集群系统，用户可以在集群中部署各种服务，实际就是在Kubernetes集群中运行一个个容器，并将指定的程序跑在容器中。
+> Kubernetes的最小管理单元式pod而不是容器，所以只能将容器放在pod中，而Kubernetes一般也不会直接管理pod，而是通过`Pod控制器`来管理pod。
+> pod可以提供服务之后，就要考虑如何访问pod中的服务，Kubernetes提供了`Service`资源来实现这个功能。
+> pod中程序数据需要持久化，Kubernetes提供了各种**存储**系统
 
 学习Kubernetes，就是学习如何对集群上的`Pod、Pod控制器、Service、存储`等各种资源进行操作。
+# 2 资源管理方式
+## 2.1 概述
 
-## 资源管理方式
-
-### 概述
-
-- 命令式对象管理：直接使用命令操作Kubernetes资源
-
-  `kubectl run nginx-pod --image=ngixn:1.17.1 --port=80`
-
-- 命令式对象配置：通过命令配置和配置文件去操作Kubernetes资源
-
-  `kubectl create/patch/delete -f nginx-pod.yaml`
-
-- 声明式对象配置：通过apply命令和配置文件去操作Kubernetes资源
-
-  `kubectl apply -f nginx-pod.yaml`
-
-### 命令式对象管理
-
-#### kubectl命令
-
+-  命令式对象管理：直接使用命令操作Kubernetes资源
+`kubectl run nginx-pod --image=ngixn:1.17.1 --port=80` 
+-  命令式对象配置：通过命令配置和配置文件去操作Kubernetes资源
+`kubectl create/patch/delete -f nginx-pod.yaml` 
+-  声明式对象配置：通过apply命令和配置文件去操作Kubernetes资源
+`kubectl apply -f nginx-pod.yaml` 
+## 2.2 命令式对象管理
+### 2.2.1 kubectl命令
 kubectl是Kubernetes集群的命令行工具，通过它能够对集群本身进行管理，并能够在集群上进行容器化应用的安装、部署。
-
 kubectl命令语法如下：
-
-```sh
+```shell
 kubectl [command] [type] [name] [flags]
 ```
 
@@ -46,15 +27,12 @@ kubectl [command] [type] [name] [flags]
 - `type`：指定资源类型：如：deployment、pod、service等
 - `name`：指定资源名称，大小写敏感
 - `flags`：指定额外可选参数
-
-```sh
+```shell
 kubectl get pod # 查看所有pod
 kubectl get pod pod_name # 查看某个pod
 kubectl get pod pod_name -o yaml # 查看某个pod以yaml格式展示
 ```
-
-#### 资源类型
-
+### 2.2.2 资源类型
 Kubernetes中所有的内容都为抽象资源，可以通过`kubectl api-resource`命令查看。
 
 <table>
@@ -162,15 +140,12 @@ Kubernetes中所有的内容都为抽象资源，可以通过`kubectl api-resour
   </tr>
 </table>
 
-#### 操作
-
+### 2.2.3 操作
 Kubernetes允许对资源进行多种操作，可以通过`--help`查看详细的操作命令，例如：
-
-```sh
+```shell
 kubectl --help
 kubectl get --help
 ```
-
 常用操作命令：
 
 <table>
@@ -286,9 +261,8 @@ kubectl get --help
   </tr>
 </table>
 
-#### 示例
-
-```sh
+### 2.2.4 示例
+```shell
 # 创建一个namespace
 kubectl create namespace dev
 # 获取namespace
@@ -302,5 +276,55 @@ kubectl delete pod pod-2935js34r234-iji32
 # 删除指定namespace
 kubectl delete ns dev
 ```
+## 2.3 命令式对象配置
+命令式对象配置就是使用命令配合配置文件一起来操作Kubernetes资源。命令式对象配置的方式操作资源，可以简单的认为：命令+yaml配置文件。
 
-### 命令式对象配置
+1. 创建一个ngixnpod.yaml文件： 
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginxpod
+  namespace: dev
+spec:
+  containers:
+    - name: nginx-containers
+      image: nginx:1.17.1
+```
+
+2. 执行create命令，创建资源： 
+```shell
+kubectl create -f nginxpod.yaml
+```
+
+3. 执行get命令，查看创建的资源： 
+```shell
+kubectl get -f nginxpod.yaml
+```
+
+4. 执行delete命令，删除资源 
+```shell
+kubectl delete -f nginxpod.yaml
+```
+## 2.4 声明式对象配置
+声明式对象配置通过apply命令和配置文件去操作Kubernetes的资源。它与命令式对象配置类似，不过它只有一个apply命令。
+```shell
+# 第一次执行kubectl apply -f yaml文件，创建资源
+[root@master ~]# kubectl apply -f nginxpod.yaml
+namespace/dev created
+pod/nginxpod creted
+
+# 再次执行一次，相当于跟新操作
+[root@master ~]# kubectl apply -f nginxpod.yaml
+namespace/dev unchanged
+pod/nginxpod unchanged
+```
+其实声明式对象配置就是使用apply描述一个资源最终的状态（在yaml中定义状态）
+
+- 如果资源不存在，就创建，相当于`kubectl create`
+- 如果资源已经存在，就更新，相当于`kubectl patch`
