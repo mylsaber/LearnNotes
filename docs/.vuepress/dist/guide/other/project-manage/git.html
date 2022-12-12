@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>git基本操作 | 迪</title>
+    <meta name="generator" content="VuePress 1.9.7">
+    <link rel="icon" href="/logo.jpg">
+    <meta name="description" content="迪的文档">
+    
+    <link rel="preload" href="/assets/css/0.styles.2b9f1a15.css" as="style"><link rel="preload" href="/assets/js/app.2f25c357.js" as="script"><link rel="preload" href="/assets/js/2.63c13255.js" as="script"><link rel="preload" href="/assets/js/53.18dbb2da.js" as="script"><link rel="prefetch" href="/assets/js/10.c7b7d24d.js"><link rel="prefetch" href="/assets/js/11.06f80eba.js"><link rel="prefetch" href="/assets/js/12.6f810a00.js"><link rel="prefetch" href="/assets/js/13.25833528.js"><link rel="prefetch" href="/assets/js/14.4b786116.js"><link rel="prefetch" href="/assets/js/15.abfc377c.js"><link rel="prefetch" href="/assets/js/16.c75b4166.js"><link rel="prefetch" href="/assets/js/17.453f868d.js"><link rel="prefetch" href="/assets/js/18.a490508f.js"><link rel="prefetch" href="/assets/js/19.80524214.js"><link rel="prefetch" href="/assets/js/20.a97ffa51.js"><link rel="prefetch" href="/assets/js/21.547ddc23.js"><link rel="prefetch" href="/assets/js/22.45e85bde.js"><link rel="prefetch" href="/assets/js/23.0dbcaa21.js"><link rel="prefetch" href="/assets/js/24.131b5686.js"><link rel="prefetch" href="/assets/js/25.3d4c262a.js"><link rel="prefetch" href="/assets/js/26.9cbfd763.js"><link rel="prefetch" href="/assets/js/27.542a2792.js"><link rel="prefetch" href="/assets/js/28.fbca4c4d.js"><link rel="prefetch" href="/assets/js/29.9eff63d9.js"><link rel="prefetch" href="/assets/js/3.174213b6.js"><link rel="prefetch" href="/assets/js/30.a6823283.js"><link rel="prefetch" href="/assets/js/31.6a4a92c8.js"><link rel="prefetch" href="/assets/js/32.ce935036.js"><link rel="prefetch" href="/assets/js/33.8771b5d9.js"><link rel="prefetch" href="/assets/js/34.6ef7ae0f.js"><link rel="prefetch" href="/assets/js/35.08fc79cf.js"><link rel="prefetch" href="/assets/js/36.181bec7a.js"><link rel="prefetch" href="/assets/js/37.4e5cdaf9.js"><link rel="prefetch" href="/assets/js/38.f6abaf38.js"><link rel="prefetch" href="/assets/js/39.bc91b61a.js"><link rel="prefetch" href="/assets/js/4.13c31685.js"><link rel="prefetch" href="/assets/js/40.0c43ce82.js"><link rel="prefetch" href="/assets/js/41.4eeb5771.js"><link rel="prefetch" href="/assets/js/42.13baee4d.js"><link rel="prefetch" href="/assets/js/43.2812f396.js"><link rel="prefetch" href="/assets/js/44.87333552.js"><link rel="prefetch" href="/assets/js/45.79925286.js"><link rel="prefetch" href="/assets/js/46.63ec06c7.js"><link rel="prefetch" href="/assets/js/47.31484b65.js"><link rel="prefetch" href="/assets/js/48.61c835fb.js"><link rel="prefetch" href="/assets/js/49.b420b13c.js"><link rel="prefetch" href="/assets/js/5.cbba45ac.js"><link rel="prefetch" href="/assets/js/50.53f11d2b.js"><link rel="prefetch" href="/assets/js/51.1eced69f.js"><link rel="prefetch" href="/assets/js/52.cdb811f6.js"><link rel="prefetch" href="/assets/js/54.2f8c7ead.js"><link rel="prefetch" href="/assets/js/55.c17da82b.js"><link rel="prefetch" href="/assets/js/56.ec36758b.js"><link rel="prefetch" href="/assets/js/57.639cf8a7.js"><link rel="prefetch" href="/assets/js/58.848e0216.js"><link rel="prefetch" href="/assets/js/59.89a629cb.js"><link rel="prefetch" href="/assets/js/6.8d81f0ec.js"><link rel="prefetch" href="/assets/js/60.6ee5bb23.js"><link rel="prefetch" href="/assets/js/61.778f8894.js"><link rel="prefetch" href="/assets/js/62.5b79d674.js"><link rel="prefetch" href="/assets/js/63.1f7ab42c.js"><link rel="prefetch" href="/assets/js/64.06670e46.js"><link rel="prefetch" href="/assets/js/65.d55a0cb5.js"><link rel="prefetch" href="/assets/js/66.c0d943d5.js"><link rel="prefetch" href="/assets/js/67.191b831c.js"><link rel="prefetch" href="/assets/js/68.30a1580e.js"><link rel="prefetch" href="/assets/js/69.8a91a673.js"><link rel="prefetch" href="/assets/js/7.2259505f.js"><link rel="prefetch" href="/assets/js/70.8ef61250.js"><link rel="prefetch" href="/assets/js/71.52f9a69a.js"><link rel="prefetch" href="/assets/js/72.4af68aa5.js"><link rel="prefetch" href="/assets/js/73.804ce09d.js"><link rel="prefetch" href="/assets/js/74.0dcbb650.js"><link rel="prefetch" href="/assets/js/75.ce1dff6f.js"><link rel="prefetch" href="/assets/js/76.1c3e5a54.js"><link rel="prefetch" href="/assets/js/77.f0d66982.js"><link rel="prefetch" href="/assets/js/78.436e7214.js"><link rel="prefetch" href="/assets/js/79.900d03e3.js"><link rel="prefetch" href="/assets/js/8.6b054f16.js"><link rel="prefetch" href="/assets/js/80.de0bd2c2.js"><link rel="prefetch" href="/assets/js/9.eeae1cb6.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.2b9f1a15.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/logo.jpg" alt="迪" class="logo"> <span class="site-name can-hide">迪</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">
+  Home
+</a></div><div class="nav-item"><a href="/guide/back-end/java/java集合.html" class="nav-link">
+  后端
+</a></div><div class="nav-item"><a href="/guide/前端/JavaScript/ES6.html" class="nav-link">
+  前端
+</a></div><div class="nav-item"><a href="/guide/other/docker/Docker.html" class="nav-link">
+  其他
+</a></div><div class="nav-item"><a href="https://www.baidu.com" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  百度
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Language Menu" class="dropdown-title"><span class="title">语言</span> <span class="arrow down"></span></button> <button type="button" aria-label="Language Menu" class="mobile-dropdown-title"><span class="title">语言</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/language/chinese.html" class="nav-link">
+  中文
+</a></li><li class="dropdown-item"><!----> <a href="/language/english.html" class="nav-link">
+  English
+</a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">
+  Home
+</a></div><div class="nav-item"><a href="/guide/back-end/java/java集合.html" class="nav-link">
+  后端
+</a></div><div class="nav-item"><a href="/guide/前端/JavaScript/ES6.html" class="nav-link">
+  前端
+</a></div><div class="nav-item"><a href="/guide/other/docker/Docker.html" class="nav-link">
+  其他
+</a></div><div class="nav-item"><a href="https://www.baidu.com" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  百度
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Language Menu" class="dropdown-title"><span class="title">语言</span> <span class="arrow down"></span></button> <button type="button" aria-label="Language Menu" class="mobile-dropdown-title"><span class="title">语言</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/language/chinese.html" class="nav-link">
+  中文
+</a></li><li class="dropdown-item"><!----> <a href="/language/english.html" class="nav-link">
+  English
+</a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>后端</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/back-end/java/java集合.html" class="sidebar-link">java集合</a></li><li><a href="/guide/back-end/java/多线程.html" class="sidebar-link">多线程</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>其他</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>Docker</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group is-sub-group depth-1"><p class="sidebar-heading"><span>Kubernetes</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/Kubernetes/1.Kubernetes部署.html" class="sidebar-link">1.Kubernetes部署</a></li><li><a href="/guide/other/Kubernetes/2-Kubernetes资源管理方式.html" class="sidebar-link">2.Kubernetes资源管理方式</a></li><li><a href="/guide/other/Kubernetes/3-Kubernetes的对象.html" class="sidebar-link">3.Kubernetes的对象</a></li><li><a href="/guide/other/Kubernetes/4-Kubernetes的Pod.html" class="sidebar-link">4.Kubernetes的Pod</a></li><li><a href="/guide/other/Kubernetes/5-Kubernetes的控制器.html" class="sidebar-link">5.Kubernetes的控制器</a></li><li><a href="/guide/other/Kubernetes/6-Kubernetes的Service.html" class="sidebar-link">6.Kubernetes的Service</a></li><li><a href="/guide/other/Kubernetes/7-Kubernetes的数据存储.html" class="sidebar-link">7.Kubernetes的数据存储</a></li></ul></section></li><li><section class="sidebar-group is-sub-group depth-1"><p class="sidebar-heading"><span>Linux</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/Linux/Linux.html" class="sidebar-link">Linux</a></li><li><a href="/guide/other/Linux/Linux基础.html" class="sidebar-link">Linux基础</a></li><li><a href="/guide/other/Linux/Shell脚本.html" class="sidebar-link">Shell脚本</a></li></ul></section></li><li><section class="sidebar-group is-sub-group depth-1"><p class="sidebar-heading open"><span>项目管理</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/project-manage/git.html" aria-current="page" class="active sidebar-link">Git</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/guide/other/project-manage/git.html#git基本操作" class="sidebar-link">git基本操作</a></li><li class="sidebar-sub-header"><a href="/guide/other/project-manage/git.html#git分支管理" class="sidebar-link">git分支管理</a></li><li class="sidebar-sub-header"><a href="/guide/other/project-manage/git.html#git查看提交历史" class="sidebar-link">Git查看提交历史</a></li><li class="sidebar-sub-header"><a href="/guide/other/project-manage/git.html#git标签" class="sidebar-link">git标签</a></li><li class="sidebar-sub-header"><a href="/guide/other/project-manage/git.html#git远程仓库" class="sidebar-link">git远程仓库</a></li></ul></li><li><a href="/guide/other/project-manage/maven.html" class="sidebar-link">Maven</a></li></ul></section></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="git基本操作"><a href="#git基本操作" class="header-anchor">#</a> git基本操作</h2> <p>说明：</p> <ul><li>workspace：工作区</li> <li>staging area：缓存区</li> <li>local repository：本地仓库</li> <li>remote repository：远程仓库</li></ul> <p>一个简单的操作步骤</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> init <span class="token comment">#初始化仓库</span>
+<span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>  <span class="token comment">#添加文件到缓存区</span>
+<span class="token function">git</span> commit  <span class="token comment">#将缓存区内容添加到仓库</span>
+</code></pre></div><h3 id="创建仓库命令"><a href="#创建仓库命令" class="header-anchor">#</a> 创建仓库命令</h3> <table><thead><tr><th>命令</th> <th>说明</th></tr></thead> <tbody><tr><td>git init</td> <td>初始化仓库</td></tr> <tr><td>git clone</td> <td>拷贝远程仓库，也就是下载项目</td></tr></tbody></table> <h3 id="提交与修改"><a href="#提交与修改" class="header-anchor">#</a> 提交与修改</h3> <p>Git 的工作就是创建和保存你的项目的快照及与之后的快照进行对比。</p> <p>下表列出了有关创建与提交你的项目的快照的命令：</p> <table><thead><tr><th>命令</th> <th>说明</th></tr></thead> <tbody><tr><td>git add</td> <td>添加文件到缓存区/暂存区</td></tr> <tr><td>git status</td> <td>查看仓库当前的状态，显示有变更的文件。</td></tr> <tr><td>git diff</td> <td>比较文件的不同，即暂存区和工作区的差异。</td></tr> <tr><td>git commit</td> <td>提交暂存区到本地仓库。</td></tr> <tr><td>git reset</td> <td>回退版本</td></tr> <tr><td>git rm</td> <td>删除工作区文件</td></tr> <tr><td>git mv</td> <td>移动或者重命名工作区文件</td></tr></tbody></table> <h3 id="提交日志"><a href="#提交日志" class="header-anchor">#</a> 提交日志</h3> <table><thead><tr><th>命令</th> <th>说明</th></tr></thead> <tbody><tr><td>git log</td> <td>查看历史提交记录</td></tr> <tr><td>git blame &lt;/file/&gt;</td> <td>以列表形式查看指定文件的历史修改记录</td></tr></tbody></table> <h3 id="远程操作"><a href="#远程操作" class="header-anchor">#</a> 远程操作</h3> <table><thead><tr><th>命令</th> <th>说明</th></tr></thead> <tbody><tr><td>git remote</td> <td>远程仓库操作</td></tr> <tr><td>git fetch</td> <td>从远程获取代码库</td></tr> <tr><td>git pull</td> <td>下载远程代码并合并</td></tr> <tr><td>git push</td> <td>上传远程代码并合并</td></tr></tbody></table> <h2 id="git分支管理"><a href="#git分支管理" class="header-anchor">#</a> git分支管理</h2> <p>几乎每一种版本控制系统都以某种形式支持分支。使用分支意味着你可以从开发主线上分离开来，然后在不影响主线的同时继续工作。</p> <p>有人把 Git 的分支模型称为<strong>必杀技特性</strong>，而正是因为它，将 <strong>Git</strong> 从版本控制系统家族里区分出来。</p> <p>创建分支命令：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> branch （branchname）
+</code></pre></div><p>切换分支命令：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> checkout（branchename）
+</code></pre></div><p>当你切换分支的时候，Git 会用该分支的最后提交的快照替换你的工作目录的内容， 所以多个分支不需要多个目录。</p> <p>合并分支命令:</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> merge
+</code></pre></div><p>你可以多次合并到统一分支， 也可以选择在合并之后直接删除被并入的分支。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">mkdir</span> gitdomo
+$ <span class="token builtin class-name">cd</span> gitdemo/
+$ <span class="token function">git</span> init
+$ <span class="token function">touch</span> README.md
+$ <span class="token function">git</span> <span class="token function">add</span> README.md
+$ <span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">'初始化提交'</span>
+</code></pre></div><h3 id="列出分支"><a href="#列出分支" class="header-anchor">#</a> 列出分支</h3> <p>列出分支基本命令：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> branch
+</code></pre></div><p>没有参数时，<strong>git branch</strong> 会列出你在本地的分支。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> branch
+* master
+</code></pre></div><p>此例的意思就是，我们有一个叫做 <strong>master</strong> 的分支，并且该分支是当前分支。</p> <p>当你执行 <strong>git init</strong> 的时候，默认情况下 Git 就会为你创建 <strong>master</strong> 分支。</p> <p>如果我们要手动创建一个分支。执行 <strong>git branch (branchname)</strong> 即可。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> branch testing
+$ <span class="token function">git</span> branch
+* master
+  testing
+</code></pre></div><p>现在我们可以看到，有了一个新分支 <strong>testing</strong>。</p> <p>当你以此方式在上次提交更新之后创建了新分支，如果后来又有更新提交， 然后又切换到了 <strong>testing</strong> 分支，Git 将还原你的工作目录到你创建分支时候的样子。</p> <p>接下来我们将演示如何切换分支，我们用 git checkout (branch) 切换到我们要修改的分支。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">ls</span>
+README
+$ <span class="token builtin class-name">echo</span> <span class="token string">'runoob.com'</span> <span class="token operator">&gt;</span> test.txt
+$ <span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
+$ <span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">'add test.txt'</span>
+<span class="token punctuation">[</span>master 3e92c19<span class="token punctuation">]</span> <span class="token function">add</span> test.txt
+ <span class="token number">1</span> <span class="token function">file</span> changed, <span class="token number">1</span> insertion<span class="token punctuation">(</span>+<span class="token punctuation">)</span>
+ create mode <span class="token number">100644</span> test.txt
+$ <span class="token function">ls</span>
+README        test.txt
+$ <span class="token function">git</span> checkout testing
+Switched to branch <span class="token string">'testing'</span>
+$ <span class="token function">ls</span>
+README
+</code></pre></div><p>当我们切换到 <strong>testing</strong> 分支的时候，我们添加的新文件 test.txt 被移除了。切换回 <strong>master</strong> 分支的时候，它们又重新出现了。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> checkout master
+Switched to branch <span class="token string">'master'</span>
+$ <span class="token function">ls</span>
+README        test.txt
+</code></pre></div><p>我们也可以使用 git checkout -b (branchname) 命令来创建新分支并立即切换到该分支下，从而在该分支中操作。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> checkout <span class="token parameter variable">-b</span> newtest
+Switched to a new branch <span class="token string">'newtest'</span>
+$ <span class="token function">git</span> <span class="token function">rm</span> test.txt 
+<span class="token function">rm</span> <span class="token string">'test.txt'</span>
+$ <span class="token function">ls</span>
+README
+$ <span class="token function">touch</span> runoob.php
+$ <span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
+$ <span class="token function">git</span> commit <span class="token parameter variable">-am</span> <span class="token string">'removed test.txt、add runoob.php'</span>
+<span class="token punctuation">[</span>newtest c1501a2<span class="token punctuation">]</span> removed test.txt、add runoob.php
+ <span class="token number">2</span> files changed, <span class="token number">1</span> deletion<span class="token punctuation">(</span>-<span class="token punctuation">)</span>
+ create mode <span class="token number">100644</span> runoob.php
+ delete mode <span class="token number">100644</span> test.txt
+$ <span class="token function">ls</span>
+README        runoob.php
+$ <span class="token function">git</span> checkout master
+Switched to branch <span class="token string">'master'</span>
+$ <span class="token function">ls</span>
+README        test.txt
+</code></pre></div><p>如你所见，我们创建了一个分支，在该分支上移除了一些文件 test.txt，并添加了 runoob.php 文件，然后切换回我们的主分支，删除的 test.txt 文件又回来了，且新增加的 runoob.php 不存在主分支中。</p> <p>使用分支将工作切分开来，从而让我们能够在不同开发环境中做事，并来回切换。</p> <h3 id="删除分支"><a href="#删除分支" class="header-anchor">#</a> 删除分支</h3> <p>删除分支命令：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> branch <span class="token parameter variable">-d</span> <span class="token punctuation">(</span>branchname<span class="token punctuation">)</span>
+</code></pre></div><p>例如我们要删除 testing 分支：</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> branch
+* master
+  testing
+$ <span class="token function">git</span> branch <span class="token parameter variable">-d</span> testing
+Deleted branch testing <span class="token punctuation">(</span>was 85fc7e7<span class="token punctuation">)</span>.
+$ <span class="token function">git</span> branch
+* master
+</code></pre></div><p>一旦某分支有了独立内容，你终究会希望将它合并回到你的主分支。 你可以使用以下命令将任何分支合并到当前分支中去：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> merge
+$ <span class="token function">git</span> branch
+* master
+  newtest
+$ <span class="token function">ls</span>
+README        test.txt
+$ <span class="token function">git</span> merge newtest
+Updating 3e92c19<span class="token punctuation">..</span>c1501a2
+Fast-forward
+ runoob.php <span class="token operator">|</span> <span class="token number">0</span>
+ test.txt   <span class="token operator">|</span> <span class="token number">1</span> -
+ <span class="token number">2</span> files changed, <span class="token number">1</span> deletion<span class="token punctuation">(</span>-<span class="token punctuation">)</span>
+ create mode <span class="token number">100644</span> runoob.php
+ delete mode <span class="token number">100644</span> test.txt
+$ <span class="token function">ls</span>
+README        runoob.php
+</code></pre></div><p>以上实例中我们将 newtest 分支合并到主分支去，test.txt 文件被删除。</p> <p>合并完后就可以删除分支:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> branch <span class="token parameter variable">-d</span> newtest
+Deleted branch newtest <span class="token punctuation">(</span>was c1501a2<span class="token punctuation">)</span>.
+</code></pre></div><p>删除后， 就只剩下 master 分支了：</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> branch
+* master
+</code></pre></div><h3 id="合并冲突"><a href="#合并冲突" class="header-anchor">#</a> 合并冲突</h3> <p>合并并不仅仅是简单的文件添加、移除的操作，Git 也会合并修改。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> branch
+* master
+$ <span class="token function">cat</span> runoob.php
+</code></pre></div><p>首先，我们创建一个叫做 change_site 的分支，切换过去，我们将 runoob.php 内容改为:</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token operator">&lt;</span>?php
+<span class="token builtin class-name">echo</span> <span class="token string">'runoob'</span><span class="token punctuation">;</span>
+?<span class="token operator">&gt;</span>
+</code></pre></div><p>创建 change_site 分支：</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> checkout <span class="token parameter variable">-b</span> change_site
+Switched to a new branch <span class="token string">'change_site'</span>
+$ <span class="token function">vim</span> runoob.php
+$ <span class="token function">head</span> <span class="token parameter variable">-3</span> runoob.php
+<span class="token operator">&lt;</span>?php
+<span class="token builtin class-name">echo</span> <span class="token string">'runoob'</span><span class="token punctuation">;</span>
+?<span class="token operator">&gt;</span>
+$ <span class="token function">git</span> commit <span class="token parameter variable">-am</span> <span class="token string">'changed the runoob.php'</span>
+<span class="token punctuation">[</span>change_site <span class="token number">7774248</span><span class="token punctuation">]</span> changed the runoob.php
+ <span class="token number">1</span> <span class="token function">file</span> changed, <span class="token number">3</span> insertions<span class="token punctuation">(</span>+<span class="token punctuation">)</span>
+ 
+</code></pre></div><p>将修改的内容提交到 change_site 分支中。 现在，假如切换回 master 分支我们可以看内容恢复到我们修改前的(空文件，没有代码)，我们再次修改 runoob.php 文件。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> checkout master
+Switched to branch <span class="token string">'master'</span>
+$ <span class="token function">cat</span> runoob.php
+$ <span class="token function">vim</span> runoob.php    <span class="token comment"># 修改内容如下</span>
+$ <span class="token function">cat</span> runoob.php
+<span class="token operator">&lt;</span>?php
+<span class="token builtin class-name">echo</span> <span class="token number">1</span><span class="token punctuation">;</span>
+?<span class="token operator">&gt;</span>
+$ <span class="token function">git</span> <span class="token function">diff</span>
+<span class="token function">diff</span> <span class="token parameter variable">--git</span> a/runoob.php b/runoob.php
+index e69de29<span class="token punctuation">..</span>ac60739 <span class="token number">100644</span>
+--- a/runoob.php
++++ b/runoob.php
+@@ -0,0 +1,3 @@
++<span class="token operator">&lt;</span>?php
++echo <span class="token number">1</span><span class="token punctuation">;</span>
++?<span class="token operator">&gt;</span>
+$ <span class="token function">git</span> commit <span class="token parameter variable">-am</span> <span class="token string">'修改代码'</span>
+<span class="token punctuation">[</span>master c68142b<span class="token punctuation">]</span> 修改代码
+ <span class="token number">1</span> <span class="token function">file</span> changed, <span class="token number">3</span> insertions<span class="token punctuation">(</span>+<span class="token punctuation">)</span>
+</code></pre></div><p>现在这些改变已经记录到我的 &quot;master&quot; 分支了。接下来我们将 &quot;change_site&quot; 分支合并过来。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> merge change_site
+Auto-merging runoob.php
+CONFLICT <span class="token punctuation">(</span>content<span class="token punctuation">)</span>: Merge conflict <span class="token keyword">in</span> runoob.php
+Automatic merge failed<span class="token punctuation">;</span> fix conflicts and <span class="token keyword">then</span> commit the result.
+
+$ <span class="token function">cat</span> runoob.php     <span class="token comment"># 打开文件，看到冲突内容</span>
+<span class="token operator">&lt;</span>?php
+<span class="token operator">&lt;&lt;&lt;</span><span class="token operator">&lt;&lt;&lt;</span><span class="token operator">&lt;</span> HEAD
+<span class="token builtin class-name">echo</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">=</span>
+<span class="token builtin class-name">echo</span> <span class="token string">'runoob'</span><span class="token punctuation">;</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> change_site
+?<span class="token operator">&gt;</span>
+</code></pre></div><p>我们将前一个分支合并到 master 分支，一个合并冲突就出现了，接下来我们需要手动去修改它。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">vim</span> runoob.php 
+$ <span class="token function">cat</span> runoob.php
+<span class="token operator">&lt;</span>?php
+<span class="token builtin class-name">echo</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token builtin class-name">echo</span> <span class="token string">'runoob'</span><span class="token punctuation">;</span>
+?<span class="token operator">&gt;</span>
+$ <span class="token function">git</span> <span class="token function">diff</span>
+<span class="token function">diff</span> <span class="token parameter variable">--cc</span> runoob.php
+index ac60739,b63d7d7<span class="token punctuation">..</span>0000000
+--- a/runoob.php
++++ b/runoob.php
+@@@ -1,3 -1,3 +1,4 @@@
+  <span class="token operator">&lt;</span>?php
+ +echo <span class="token number">1</span><span class="token punctuation">;</span>
++ <span class="token builtin class-name">echo</span> <span class="token string">'runoob'</span><span class="token punctuation">;</span>
+  ?<span class="token operator">&gt;</span>
+</code></pre></div><p>在 Git 中，我们可以用 git add 要告诉 Git 文件冲突已经解决</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> status <span class="token parameter variable">-s</span>
+UU runoob.php
+$ <span class="token function">git</span> <span class="token function">add</span> runoob.php
+$ <span class="token function">git</span> status <span class="token parameter variable">-s</span>
+M  runoob.php
+$ <span class="token function">git</span> commit
+<span class="token punctuation">[</span>master 88afe0e<span class="token punctuation">]</span> Merge branch <span class="token string">'change_site'</span>
+</code></pre></div><p>现在我们成功解决了合并中的冲突，并提交了结果。</p> <h2 id="git查看提交历史"><a href="#git查看提交历史" class="header-anchor">#</a> Git查看提交历史</h2> <p>Git 提交历史一般常用两个命令：</p> <ul><li><strong>git log</strong> - 查看历史提交记录。</li> <li><strong>git blame <file></file></strong> - 以列表形式查看指定文件的历史修改记录。</li></ul> <h3 id="git-log"><a href="#git-log" class="header-anchor">#</a> git log</h3> <p>在使用 Git 提交了若干更新之后，又或者克隆了某个项目，想回顾下提交历史，我们可以使用 <strong>git log</strong> 命令查看。</p> <p>针对我们前一章节的操作，使用 <strong>git log</strong> 命令列出历史提交记录如下：</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> log
+commit d5e9fc2c811e0ca2b2d28506ef7dc14171a207d9 <span class="token punctuation">(</span>HEAD -<span class="token operator">&gt;</span> master<span class="token punctuation">)</span>
+Merge: c68142b <span class="token number">7774248</span>
+Author: runoob <span class="token operator">&lt;</span>test@runoob.com<span class="token operator">&gt;</span>
+Date:   Fri May <span class="token number">3</span> <span class="token number">15</span>:55:58 <span class="token number">2019</span> +0800
+
+    Merge branch <span class="token string">'change_site'</span>
+
+commit c68142b562c260c3071754623b08e2657b4c6d5b
+Author: runoob <span class="token operator">&lt;</span>test@runoob.com<span class="token operator">&gt;</span>
+Date:   Fri May <span class="token number">3</span> <span class="token number">15</span>:52:12 <span class="token number">2019</span> +0800
+
+    修改代码
+
+commit 777424832e714cf65d3be79b50a4717aea51ab69 <span class="token punctuation">(</span>change_site<span class="token punctuation">)</span>
+Author: runoob <span class="token operator">&lt;</span>test@runoob.com<span class="token operator">&gt;</span>
+Date:   Fri May <span class="token number">3</span> <span class="token number">15</span>:49:26 <span class="token number">2019</span> +0800
+
+    changed the runoob.php
+
+commit c1501a244676ff55e7cccac1ecac0e18cbf6cb00
+Author: runoob <span class="token operator">&lt;</span>test@runoob.com<span class="token operator">&gt;</span>
+Date:   Fri May <span class="token number">3</span> <span class="token number">15</span>:35:32 <span class="token number">2019</span> +0800
+</code></pre></div><p>我们可以用 --oneline 选项来查看历史记录的简洁的版本。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>  $ <span class="token function">git</span> log <span class="token parameter variable">--oneline</span>
+  $ <span class="token function">git</span> log <span class="token parameter variable">--oneline</span>
+  d5e9fc2 <span class="token punctuation">(</span>HEAD -<span class="token operator">&gt;</span> master<span class="token punctuation">)</span> Merge branch <span class="token string">'change_site'</span>
+  c68142b 修改代码
+  <span class="token number">7774248</span> <span class="token punctuation">(</span>change_site<span class="token punctuation">)</span> changed the runoob.php
+  c1501a2 removed test.txt、add runoob.php
+  3e92c19 <span class="token function">add</span> test.txt
+  3b58100 第一次版本提交
+</code></pre></div><p>这告诉我们的是，此项目的开发历史。</p> <p>我们还可以用 --graph 选项，查看历史中什么时候出现了分支、合并。以下为相同的命令，开启了拓扑图选项：</p> <div class="language-shell extra-class"><pre class="language-shell"><code>*   d5e9fc2 <span class="token punctuation">(</span>HEAD -<span class="token operator">&gt;</span> master<span class="token punctuation">)</span> Merge branch <span class="token string">'change_site'</span>
+<span class="token operator">|</span><span class="token punctuation">\</span>  
+<span class="token operator">|</span> * <span class="token number">7774248</span> <span class="token punctuation">(</span>change_site<span class="token punctuation">)</span> changed the runoob.php
+* <span class="token operator">|</span> c68142b 修改代码
+<span class="token operator">|</span>/  
+* c1501a2 removed test.txt、add runoob.php
+* 3e92c19 <span class="token function">add</span> test.txt
+* 3b58100 第一次版本提交
+</code></pre></div><p>现在我们可以更清楚明了地看到何时工作分叉、又何时归并。</p> <p>你也可以用 --reverse 参数来逆向显示所有日志。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> log <span class="token parameter variable">--reverse</span> <span class="token parameter variable">--oneline</span>
+3b58100 第一次版本提交
+3e92c19 <span class="token function">add</span> test.txt
+c1501a2 removed test.txt、add runoob.php
+<span class="token number">7774248</span> <span class="token punctuation">(</span>change_site<span class="token punctuation">)</span> changed the runoob.php
+c68142b 修改代码
+d5e9fc2 <span class="token punctuation">(</span>HEAD -<span class="token operator">&gt;</span> master<span class="token punctuation">)</span> Merge branch <span class="token string">'change_site'</span>
+</code></pre></div><p>如果只想查找指定用户的提交日志可以使用命令：git log --author , 例如，比方说我们要找 Git 源码中 Linus 提交的部分：</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> log <span class="token parameter variable">--author</span><span class="token operator">=</span>Linus <span class="token parameter variable">--oneline</span> <span class="token parameter variable">-5</span>
+81b50f3 Move <span class="token string">'builtin-*'</span> into a <span class="token string">'builtin/'</span> subdirectory
+3bb7256 <span class="token function">make</span> <span class="token string">&quot;index-pack&quot;</span> a built-in
+377d027 <span class="token function">make</span> <span class="token string">&quot;git pack-redundant&quot;</span> a built-in
+b532581 <span class="token function">make</span> <span class="token string">&quot;git unpack-file&quot;</span> a built-in
+112dd51 <span class="token function">make</span> <span class="token string">&quot;mktag&quot;</span> a built-in
+</code></pre></div><p>如果你要指定日期，可以执行几个选项：--since 和 --before，但是你也可以用 --until 和 --after。</p> <p>例如，如果我要看 Git 项目中三周前且在四月十八日之后的所有提交，我可以执行这个（我还用了 --no-merges 选项以隐藏合并提交）：</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> log <span class="token parameter variable">--oneline</span> <span class="token parameter variable">--before</span><span class="token operator">=</span><span class="token punctuation">{</span><span class="token number">3</span>.weeks.ago<span class="token punctuation">}</span> <span class="token parameter variable">--after</span><span class="token operator">=</span><span class="token punctuation">{</span><span class="token number">2010</span>-04-18<span class="token punctuation">}</span> --no-merges
+5469e2d Git <span class="token number">1.7</span>.1-rc2
+d43427d Documentation/remote-helpers: Fix typos and improve language
+272a36b Fixup: Second argument may be any arbitrary string
+b6c8d2d Documentation/remote-helpers: Add invocation section
+5ce4f4e Documentation/urls: Rewrite to accomodate transport::address
+00b84e9 Documentation/remote-helpers: Rewrite description
+03aa87e Documentation: Describe other situations where <span class="token parameter variable">-z</span> affects <span class="token function">git</span> <span class="token function">diff</span>
+77bc694 rebase-interactive: silence warning when no commits rewritten
+636db2c t3301: <span class="token function">add</span> tests to use <span class="token parameter variable">--format</span><span class="token operator">=</span><span class="token string">&quot;%N&quot;</span>
+</code></pre></div><h3 id="git-blame"><a href="#git-blame" class="header-anchor">#</a> git blame</h3> <p>如果要查看指定文件的修改记录可以使用 git blame 命令，格式如下：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> blame <span class="token operator">&lt;</span>file<span class="token operator">&gt;</span>
+</code></pre></div><p>git blame 命令是以列表形式显示修改记录，如下实例：</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> blame README 
+^d2097aa <span class="token punctuation">(</span>tianqixin <span class="token number">2020</span>-08-25 <span class="token number">14</span>:59:25 +0800 <span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment"># Runoob Git 测试</span>
+db9315b0 <span class="token punctuation">(</span>runoob    <span class="token number">2020</span>-08-25 <span class="token number">16</span>:00:23 +0800 <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment"># 菜鸟教程 </span>
+</code></pre></div><h2 id="git标签"><a href="#git标签" class="header-anchor">#</a> git标签</h2> <p>如果你达到一个重要的阶段，并希望永远记住那个特别的提交快照，你可以使用 git tag 给它打上标签。</p> <p>比如说，我们想为我们的 runoob 项目发布一个&quot;1.0&quot;版本。 我们可以用 git tag -a v1.0 命令给最新一次提交打上（HEAD）&quot;v1.0&quot;的标签。</p> <p>-a 选项意为&quot;创建一个带注解的标签&quot;。 不用 -a 选项也可以执行的，但它不会记录这标签是啥时候打的，谁打的，也不会让你添加个标签的注解。 我推荐一直创建带注解的标签。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> tag <span class="token parameter variable">-a</span> v1.0
+</code></pre></div><p>当你执行 git tag -a 命令时，Git 会打开你的编辑器，让你写一句标签注解，就像你给提交写注解一样。</p> <p>现在，注意当我们执行 git log --decorate 时，我们可以看到我们的标签了：</p> <div class="language-shell extra-class"><pre class="language-shell"><code>*   d5e9fc2 <span class="token punctuation">(</span>HEAD -<span class="token operator">&gt;</span> master<span class="token punctuation">)</span> Merge branch <span class="token string">'change_site'</span>
+<span class="token operator">|</span><span class="token punctuation">\</span>  
+<span class="token operator">|</span> * <span class="token number">7774248</span> <span class="token punctuation">(</span>change_site<span class="token punctuation">)</span> changed the runoob.php
+* <span class="token operator">|</span> c68142b 修改代码
+<span class="token operator">|</span>/  
+* c1501a2 removed test.txt、add runoob.php
+* 3e92c19 <span class="token function">add</span> test.txt
+* 3b58100 第一次版本提交
+</code></pre></div><p>如果我们忘了给某个提交打标签，又将它发布了，我们可以给它追加标签。</p> <p>例如，假设我们发布了提交 85fc7e7(上面实例最后一行)，但是那时候忘了给它打标签。 我们现在也可以：</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> tag <span class="token parameter variable">-a</span> v0.9 85fc7e7
+$ <span class="token function">git</span> log <span class="token parameter variable">--oneline</span> <span class="token parameter variable">--decorate</span> <span class="token parameter variable">--graph</span>
+*   d5e9fc2 <span class="token punctuation">(</span>HEAD -<span class="token operator">&gt;</span> master<span class="token punctuation">)</span> Merge branch <span class="token string">'change_site'</span>
+<span class="token operator">|</span><span class="token punctuation">\</span>  
+<span class="token operator">|</span> * <span class="token number">7774248</span> <span class="token punctuation">(</span>change_site<span class="token punctuation">)</span> changed the runoob.php
+* <span class="token operator">|</span> c68142b 修改代码
+<span class="token operator">|</span>/  
+* c1501a2 removed test.txt、add runoob.php
+* 3e92c19 <span class="token function">add</span> test.txt
+* 3b58100 <span class="token punctuation">(</span>tag: v0.9<span class="token punctuation">)</span> 第一次版本提交
+</code></pre></div><p>如果我们要查看所有标签可以使用以下命令：</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> tag
+v0.9
+v1.0
+</code></pre></div><p>指定标签信息命令：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> tag <span class="token parameter variable">-a</span> <span class="token operator">&lt;</span>tagname<span class="token operator">&gt;</span> <span class="token parameter variable">-m</span> <span class="token string">&quot;runoob.com标签&quot;</span>
+</code></pre></div><p>PGP签名标签命令：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> tag <span class="token parameter variable">-s</span> <span class="token operator">&lt;</span>tagname<span class="token operator">&gt;</span> <span class="token parameter variable">-m</span> <span class="token string">&quot;runoob.com标签&quot;</span>
+</code></pre></div><h2 id="git远程仓库"><a href="#git远程仓库" class="header-anchor">#</a> git远程仓库</h2> <p>Git 并不像 SVN 那样有个中心服务器。</p> <p>目前我们使用到的 Git 命令都是在本地执行，如果你想通过 Git 分享你的代码或者与其他开发人员合作。 你就需要将数据放到一台其他开发人员能够连接的服务器上。</p> <h3 id="添加远程仓库"><a href="#添加远程仓库" class="header-anchor">#</a> 添加远程仓库</h3> <p>要添加一个新的远程仓库，可以指定一个简单的名字，以便将来引用,命令格式如下：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> remote <span class="token function">add</span> <span class="token punctuation">[</span>shortname<span class="token punctuation">]</span> <span class="token punctuation">[</span>url<span class="token punctuation">]</span>
+</code></pre></div><h3 id="查看当前远程库"><a href="#查看当前远程库" class="header-anchor">#</a> 查看当前远程库</h3> <p>要查看当前配置有哪些远程仓库，可以用命令：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> remote
+</code></pre></div><p>实例</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> remote
+origin
+$ <span class="token function">git</span> remote <span class="token parameter variable">-v</span>
+origin    git@github.com:tianqixin/runoob-git-test.git <span class="token punctuation">(</span>fetch<span class="token punctuation">)</span>
+origin    git@github.com:tianqixin/runoob-git-test.git <span class="token punctuation">(</span>push<span class="token punctuation">)</span>
+</code></pre></div><p>执行时加上 -v 参数，你还可以看到每个别名的实际链接地址。</p> <h3 id="提取远程仓库"><a href="#提取远程仓库" class="header-anchor">#</a> 提取远程仓库</h3> <p>Git 有两个命令用来提取远程仓库的更新。</p> <p>1、从远程仓库下载新分支与数据：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> fetch
+</code></pre></div><p>该命令执行完后需要执行 git merge 远程分支到你所在的分支。</p> <p>2、从远端仓库提取数据并尝试合并到当前分支：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> merge
+</code></pre></div><p>该命令就是在执行 git fetch 之后紧接着执行 git merge 远程分支到你所在的任意分支。</p> <p>假设你配置好了一个远程仓库，并且你想要提取更新的数据，你可以首先执行 git fetch [alias] 告诉 Git 去获取它有你没有的数据，然后你可以执行 git merge [alias]/[branch] 以将服务器上的任何更新（假设有人这时候推送到服务器了）合并到你的当前分支。</p> <h3 id="推送到远程仓库"><a href="#推送到远程仓库" class="header-anchor">#</a> 推送到远程仓库</h3> <p>推送你的新分支与数据到某个远端仓库命令:</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> push <span class="token punctuation">[</span>alias<span class="token punctuation">]</span> <span class="token punctuation">[</span>branch<span class="token punctuation">]</span>
+</code></pre></div><p>以上命令将你的 [branch] 分支推送成为 [alias] 远程仓库上的 [branch] 分支，实例如下。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">touch</span> runoob-test.txt      <span class="token comment"># 添加文件</span>
+$ <span class="token function">git</span> <span class="token function">add</span> runoob-test.txt 
+$ <span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">&quot;添加到远程&quot;</span>
+master 69e702d<span class="token punctuation">]</span> 添加到远程
+ <span class="token number">1</span> <span class="token function">file</span> changed, <span class="token number">0</span> insertions<span class="token punctuation">(</span>+<span class="token punctuation">)</span>, <span class="token number">0</span> deletions<span class="token punctuation">(</span>-<span class="token punctuation">)</span>
+ create mode <span class="token number">100644</span> runoob-test.txt
+
+$ <span class="token function">git</span> push origin master    <span class="token comment"># 推送到 Github</span>
+</code></pre></div><h3 id="删除远程仓库"><a href="#删除远程仓库" class="header-anchor">#</a> 删除远程仓库</h3> <p>删除远程仓库你可以使用命令：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> remote <span class="token function">rm</span> <span class="token punctuation">[</span>别名<span class="token punctuation">]</span>
+</code></pre></div><h3 id="实例"><a href="#实例" class="header-anchor">#</a> 实例</h3> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">git</span> remote <span class="token parameter variable">-v</span>
+origin    git@github.com:tianqixin/runoob-git-test.git <span class="token punctuation">(</span>fetch<span class="token punctuation">)</span>
+origin    git@github.com:tianqixin/runoob-git-test.git <span class="token punctuation">(</span>push<span class="token punctuation">)</span>
+
+<span class="token comment"># 添加仓库 origin2</span>
+$ <span class="token function">git</span> remote <span class="token function">add</span> origin2 git@github.com:tianqixin/runoob-git-test.git
+
+$ <span class="token function">git</span> remote <span class="token parameter variable">-v</span>
+origin    git@github.com:tianqixin/runoob-git-test.git <span class="token punctuation">(</span>fetch<span class="token punctuation">)</span>
+origin    git@github.com:tianqixin/runoob-git-test.git <span class="token punctuation">(</span>push<span class="token punctuation">)</span>
+origin2    git@github.com:tianqixin/runoob-git-test.git <span class="token punctuation">(</span>fetch<span class="token punctuation">)</span>
+origin2    git@github.com:tianqixin/runoob-git-test.git <span class="token punctuation">(</span>push<span class="token punctuation">)</span>
+
+<span class="token comment"># 删除仓库 origin2</span>
+$ <span class="token function">git</span> remote <span class="token function">rm</span> origin2
+$ <span class="token function">git</span> remote <span class="token parameter variable">-v</span>
+origin    git@github.com:tianqixin/runoob-git-test.git <span class="token punctuation">(</span>fetch<span class="token punctuation">)</span>
+origin    git@github.com:tianqixin/runoob-git-test.git <span class="token punctuation">(</span>push<span class="token punctuation">)</span>
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/guide/other/Linux/Shell脚本.html" class="prev">
+        Shell脚本
+      </a></span> <span class="next"><a href="/guide/other/project-manage/maven.html">
+        Maven
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.2f25c357.js" defer></script><script src="/assets/js/2.63c13255.js" defer></script><script src="/assets/js/53.18dbb2da.js" defer></script>
+  </body>
+</html>

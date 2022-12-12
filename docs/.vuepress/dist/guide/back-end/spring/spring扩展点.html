@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>BeanDefinition与BeanFactory扩展 | 迪</title>
+    <meta name="generator" content="VuePress 1.9.7">
+    <link rel="icon" href="/logo.jpg">
+    <meta name="description" content="迪的文档">
+    
+    <link rel="preload" href="/assets/css/0.styles.2b9f1a15.css" as="style"><link rel="preload" href="/assets/js/app.2f25c357.js" as="script"><link rel="preload" href="/assets/js/2.63c13255.js" as="script"><link rel="preload" href="/assets/js/33.8771b5d9.js" as="script"><link rel="prefetch" href="/assets/js/10.c7b7d24d.js"><link rel="prefetch" href="/assets/js/11.06f80eba.js"><link rel="prefetch" href="/assets/js/12.6f810a00.js"><link rel="prefetch" href="/assets/js/13.25833528.js"><link rel="prefetch" href="/assets/js/14.4b786116.js"><link rel="prefetch" href="/assets/js/15.abfc377c.js"><link rel="prefetch" href="/assets/js/16.c75b4166.js"><link rel="prefetch" href="/assets/js/17.453f868d.js"><link rel="prefetch" href="/assets/js/18.a490508f.js"><link rel="prefetch" href="/assets/js/19.80524214.js"><link rel="prefetch" href="/assets/js/20.a97ffa51.js"><link rel="prefetch" href="/assets/js/21.547ddc23.js"><link rel="prefetch" href="/assets/js/22.45e85bde.js"><link rel="prefetch" href="/assets/js/23.0dbcaa21.js"><link rel="prefetch" href="/assets/js/24.131b5686.js"><link rel="prefetch" href="/assets/js/25.3d4c262a.js"><link rel="prefetch" href="/assets/js/26.9cbfd763.js"><link rel="prefetch" href="/assets/js/27.542a2792.js"><link rel="prefetch" href="/assets/js/28.fbca4c4d.js"><link rel="prefetch" href="/assets/js/29.9eff63d9.js"><link rel="prefetch" href="/assets/js/3.174213b6.js"><link rel="prefetch" href="/assets/js/30.a6823283.js"><link rel="prefetch" href="/assets/js/31.6a4a92c8.js"><link rel="prefetch" href="/assets/js/32.ce935036.js"><link rel="prefetch" href="/assets/js/34.6ef7ae0f.js"><link rel="prefetch" href="/assets/js/35.08fc79cf.js"><link rel="prefetch" href="/assets/js/36.181bec7a.js"><link rel="prefetch" href="/assets/js/37.4e5cdaf9.js"><link rel="prefetch" href="/assets/js/38.f6abaf38.js"><link rel="prefetch" href="/assets/js/39.bc91b61a.js"><link rel="prefetch" href="/assets/js/4.13c31685.js"><link rel="prefetch" href="/assets/js/40.0c43ce82.js"><link rel="prefetch" href="/assets/js/41.4eeb5771.js"><link rel="prefetch" href="/assets/js/42.13baee4d.js"><link rel="prefetch" href="/assets/js/43.2812f396.js"><link rel="prefetch" href="/assets/js/44.87333552.js"><link rel="prefetch" href="/assets/js/45.79925286.js"><link rel="prefetch" href="/assets/js/46.63ec06c7.js"><link rel="prefetch" href="/assets/js/47.31484b65.js"><link rel="prefetch" href="/assets/js/48.61c835fb.js"><link rel="prefetch" href="/assets/js/49.b420b13c.js"><link rel="prefetch" href="/assets/js/5.cbba45ac.js"><link rel="prefetch" href="/assets/js/50.53f11d2b.js"><link rel="prefetch" href="/assets/js/51.1eced69f.js"><link rel="prefetch" href="/assets/js/52.cdb811f6.js"><link rel="prefetch" href="/assets/js/53.18dbb2da.js"><link rel="prefetch" href="/assets/js/54.2f8c7ead.js"><link rel="prefetch" href="/assets/js/55.c17da82b.js"><link rel="prefetch" href="/assets/js/56.ec36758b.js"><link rel="prefetch" href="/assets/js/57.639cf8a7.js"><link rel="prefetch" href="/assets/js/58.848e0216.js"><link rel="prefetch" href="/assets/js/59.89a629cb.js"><link rel="prefetch" href="/assets/js/6.8d81f0ec.js"><link rel="prefetch" href="/assets/js/60.6ee5bb23.js"><link rel="prefetch" href="/assets/js/61.778f8894.js"><link rel="prefetch" href="/assets/js/62.5b79d674.js"><link rel="prefetch" href="/assets/js/63.1f7ab42c.js"><link rel="prefetch" href="/assets/js/64.06670e46.js"><link rel="prefetch" href="/assets/js/65.d55a0cb5.js"><link rel="prefetch" href="/assets/js/66.c0d943d5.js"><link rel="prefetch" href="/assets/js/67.191b831c.js"><link rel="prefetch" href="/assets/js/68.30a1580e.js"><link rel="prefetch" href="/assets/js/69.8a91a673.js"><link rel="prefetch" href="/assets/js/7.2259505f.js"><link rel="prefetch" href="/assets/js/70.8ef61250.js"><link rel="prefetch" href="/assets/js/71.52f9a69a.js"><link rel="prefetch" href="/assets/js/72.4af68aa5.js"><link rel="prefetch" href="/assets/js/73.804ce09d.js"><link rel="prefetch" href="/assets/js/74.0dcbb650.js"><link rel="prefetch" href="/assets/js/75.ce1dff6f.js"><link rel="prefetch" href="/assets/js/76.1c3e5a54.js"><link rel="prefetch" href="/assets/js/77.f0d66982.js"><link rel="prefetch" href="/assets/js/78.436e7214.js"><link rel="prefetch" href="/assets/js/79.900d03e3.js"><link rel="prefetch" href="/assets/js/8.6b054f16.js"><link rel="prefetch" href="/assets/js/80.de0bd2c2.js"><link rel="prefetch" href="/assets/js/9.eeae1cb6.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.2b9f1a15.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/logo.jpg" alt="迪" class="logo"> <span class="site-name can-hide">迪</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">
+  Home
+</a></div><div class="nav-item"><a href="/guide/back-end/java/java集合.html" class="nav-link">
+  后端
+</a></div><div class="nav-item"><a href="/guide/前端/JavaScript/ES6.html" class="nav-link">
+  前端
+</a></div><div class="nav-item"><a href="/guide/other/docker/Docker.html" class="nav-link">
+  其他
+</a></div><div class="nav-item"><a href="https://www.baidu.com" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  百度
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Language Menu" class="dropdown-title"><span class="title">语言</span> <span class="arrow down"></span></button> <button type="button" aria-label="Language Menu" class="mobile-dropdown-title"><span class="title">语言</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/language/chinese.html" class="nav-link">
+  中文
+</a></li><li class="dropdown-item"><!----> <a href="/language/english.html" class="nav-link">
+  English
+</a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">
+  Home
+</a></div><div class="nav-item"><a href="/guide/back-end/java/java集合.html" class="nav-link">
+  后端
+</a></div><div class="nav-item"><a href="/guide/前端/JavaScript/ES6.html" class="nav-link">
+  前端
+</a></div><div class="nav-item"><a href="/guide/other/docker/Docker.html" class="nav-link">
+  其他
+</a></div><div class="nav-item"><a href="https://www.baidu.com" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  百度
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Language Menu" class="dropdown-title"><span class="title">语言</span> <span class="arrow down"></span></button> <button type="button" aria-label="Language Menu" class="mobile-dropdown-title"><span class="title">语言</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/language/chinese.html" class="nav-link">
+  中文
+</a></li><li class="dropdown-item"><!----> <a href="/language/english.html" class="nav-link">
+  English
+</a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>后端</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/back-end/java/java集合.html" class="sidebar-link">java集合</a></li><li><a href="/guide/back-end/java/多线程.html" class="sidebar-link">多线程</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>其他</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>Docker</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/docker/Docker.html" class="sidebar-link">Docker</a></li><li><a href="/guide/other/docker/docker-compose.html" class="sidebar-link">Docker-compose</a></li><li><a href="/guide/other/docker/docker-swarm.html" class="sidebar-link">Docker-swarm</a></li></ul></section></li><li><section class="sidebar-group is-sub-group depth-1"><p class="sidebar-heading"><span>Kubernetes</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/Kubernetes/1.Kubernetes部署.html" class="sidebar-link">1.Kubernetes部署</a></li><li><a href="/guide/other/Kubernetes/2-Kubernetes资源管理方式.html" class="sidebar-link">2.Kubernetes资源管理方式</a></li><li><a href="/guide/other/Kubernetes/3-Kubernetes的对象.html" class="sidebar-link">3.Kubernetes的对象</a></li><li><a href="/guide/other/Kubernetes/4-Kubernetes的Pod.html" class="sidebar-link">4.Kubernetes的Pod</a></li><li><a href="/guide/other/Kubernetes/5-Kubernetes的控制器.html" class="sidebar-link">5.Kubernetes的控制器</a></li><li><a href="/guide/other/Kubernetes/6-Kubernetes的Service.html" class="sidebar-link">6.Kubernetes的Service</a></li><li><a href="/guide/other/Kubernetes/7-Kubernetes的数据存储.html" class="sidebar-link">7.Kubernetes的数据存储</a></li></ul></section></li><li><section class="sidebar-group is-sub-group depth-1"><p class="sidebar-heading"><span>Linux</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/Linux/Linux.html" class="sidebar-link">Linux</a></li><li><a href="/guide/other/Linux/Linux基础.html" class="sidebar-link">Linux基础</a></li><li><a href="/guide/other/Linux/Shell脚本.html" class="sidebar-link">Shell脚本</a></li></ul></section></li><li><section class="sidebar-group is-sub-group depth-1"><p class="sidebar-heading"><span>项目管理</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/project-manage/git.html" class="sidebar-link">Git</a></li><li><a href="/guide/other/project-manage/maven.html" class="sidebar-link">Maven</a></li></ul></section></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="beandefinition与beanfactory扩展"><a href="#beandefinition与beanfactory扩展" class="header-anchor">#</a> BeanDefinition与BeanFactory扩展</h2> <h3 id="beandefinitionregistrypostprocessor接口"><a href="#beandefinitionregistrypostprocessor接口" class="header-anchor">#</a> <code>BeanDefinitionRegistryPostProcessor</code>接口</h3> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">/**
+ * Extension to the standard {@link BeanFactoryPostProcessor} SPI, allowing for
+ * the registration of further bean definitions &lt;i&gt;before&lt;/i&gt; regular
+ * BeanFactoryPostProcessor detection kicks in. In particular,
+ * BeanDefinitionRegistryPostProcessor may register further bean definitions
+ * which in turn define BeanFactoryPostProcessor instances.
+ *
+ * @author Juergen Hoeller
+ * @since 3.0.1
+ * @see org.springframework.context.annotation.ConfigurationClassPostProcessor
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">BeanDefinitionRegistryPostProcessor</span> <span class="token keyword">extends</span> <span class="token class-name">BeanFactoryPostProcessor</span> <span class="token punctuation">{</span>
+
+   <span class="token comment">/**
+    * Modify the application context's internal bean definition registry after its
+    * standard initialization. All regular bean definitions will have been loaded,
+    * but no beans will have been instantiated yet. This allows for adding further
+    * bean definitions before the next post-processing phase kicks in.
+    * @param registry the bean definition registry used by the application context
+    * @throws org.springframework.beans.BeansException in case of errors
+    */</span>
+   <span class="token keyword">void</span> <span class="token function">postProcessBeanDefinitionRegistry</span><span class="token punctuation">(</span><span class="token class-name">BeanDefinitionRegistry</span> registry<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">BeansException</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+</code></pre></div><p>这个接口扩展了标准的<code>BeanFactoryPostProcessor</code>接口，允许在普通的<code>BeanFactoryPostProcessor</code>接口实现类执行之前注册更多的<code>BeanDefinition</code>。特别地是，<code>BeanDefinitionRegistryPostProcessor</code>可以注册<code>BeanFactoryPostProcessor</code>的<code>BeanDefinition</code>。</p> <p><code>postProcessBeanDefinitionRegistry</code>方法可以修改在<code>BeanDefinitionRegistry</code>接口实现类中注册的任意<code>BeanDefinition</code>，也可以增加和删除<code>BeanDefinition</code>。原因是这个方法执行前所有常规的<code>BeanDefinition</code>已经被加载到<code>BeanDefinitionRegistry</code>接口实现类中，但还没有bean被实例化。</p> <h3 id="beanfactorypostprocessor接口"><a href="#beanfactorypostprocessor接口" class="header-anchor">#</a> <code>BeanFactoryPostProcessor</code>接口</h3> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">/**
+ * Factory hook that allows for custom modification of an application context's
+ * bean definitions, adapting the bean property values of the context's underlying
+ * bean factory.
+ *
+ * &lt;p&gt;Useful for custom config files targeted at system administrators that
+ * override bean properties configured in the application context. See
+ * {@link PropertyResourceConfigurer} and its concrete implementations for
+ * out-of-the-box solutions that address such configuration needs.
+ *
+ * &lt;p&gt;A {@code BeanFactoryPostProcessor} may interact with and modify bean
+ * definitions, but never bean instances. Doing so may cause premature bean
+ * instantiation, violating the container and causing unintended side-effects.
+ * If bean instance interaction is required, consider implementing
+ * {@link BeanPostProcessor} instead.
+ *
+ * &lt;h3&gt;Registration&lt;/h3&gt;
+ * &lt;p&gt;An {@code ApplicationContext} auto-detects {@code BeanFactoryPostProcessor}
+ * beans in its bean definitions and applies them before any other beans get created.
+ * A {@code BeanFactoryPostProcessor} may also be registered programmatically
+ * with a {@code ConfigurableApplicationContext}.
+ *
+ * &lt;h3&gt;Ordering&lt;/h3&gt;
+ * &lt;p&gt;{@code BeanFactoryPostProcessor} beans that are autodetected in an
+ * {@code ApplicationContext} will be ordered according to
+ * {@link org.springframework.core.PriorityOrdered} and
+ * {@link org.springframework.core.Ordered} semantics. In contrast,
+ * {@code BeanFactoryPostProcessor} beans that are registered programmatically
+ * with a {@code ConfigurableApplicationContext} will be applied in the order of
+ * registration; any ordering semantics expressed through implementing the
+ * {@code PriorityOrdered} or {@code Ordered} interface will be ignored for
+ * programmatically registered post-processors. Furthermore, the
+ * {@link org.springframework.core.annotation.Order @Order} annotation is not
+ * taken into account for {@code BeanFactoryPostProcessor} beans.
+ *
+ * @author Juergen Hoeller
+ * @author Sam Brannen
+ * @since 06.07.2003
+ * @see BeanPostProcessor
+ * @see PropertyResourceConfigurer
+ */</span>
+<span class="token annotation punctuation">@FunctionalInterface</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">BeanFactoryPostProcessor</span> <span class="token punctuation">{</span>
+
+   <span class="token comment">/**
+    * Modify the application context's internal bean factory after its standard
+    * initialization. All bean definitions will have been loaded, but no beans
+    * will have been instantiated yet. This allows for overriding or adding
+    * properties even to eager-initializing beans.
+    * @param beanFactory the bean factory used by the application context
+    * @throws org.springframework.beans.BeansException in case of errors
+    */</span>
+   <span class="token keyword">void</span> <span class="token function">postProcessBeanFactory</span><span class="token punctuation">(</span><span class="token class-name">ConfigurableListableBeanFactory</span> beanFactory<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">BeansException</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+</code></pre></div><p>这个接口允许自定义修改应用程序上下文的<code>BeanDefinition</code>，调整上下文的<code>BeanFactory</code>的<code>bean</code>属性值。应用程序上下文可以在<code>BeanFactory</code>的<code>BeanDefinition</code>中自动检测<code>BeanFactoryPostProcessor bean</code>，并在创建任何其他bean之前应用它们。对于定位于系统管理员的自定义配置文件非常有用，它们将覆盖应用程序上下文中配置的bean属性。请参阅<code>PropertyResourceConfigurer</code>及其具体实现，了解解决此类配置需求的开箱即用解决方案。<code>BeanFactoryPostProcessor</code>可能与<code>BeanDefinition</code>交互并修改，但永远不应该将<code>bean</code>实例化。这样做可能会导致过早的<code>bean</code>实例化，违反容器执行顺序并导致意想不到的副作用。如果需要<code>bean</code>实例交互，请考虑实现<code>BeanPostProcessor</code>接口。</p> <p><code>postProcessBeanFactory</code>方法在<code>BeanFactory</code>初始化后，所有的<code>bean</code>定义都被加载，但是没有<code>bean</code>会被实例化时，允许重写或添加属性。</p> <h2 id="bean实例化中的扩展"><a href="#bean实例化中的扩展" class="header-anchor">#</a> Bean实例化中的扩展</h2> <h3 id="beanpostprocessor接口"><a href="#beanpostprocessor接口" class="header-anchor">#</a> <code>BeanPostProcessor</code>接口</h3> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">/**
+ * Factory hook that allows for custom modification of new bean instances &amp;mdash;
+ * for example, checking for marker interfaces or wrapping beans with proxies.
+ *
+ * &lt;p&gt;Typically, post-processors that populate beans via marker interfaces
+ * or the like will implement {@link #postProcessBeforeInitialization},
+ * while post-processors that wrap beans with proxies will normally
+ * implement {@link #postProcessAfterInitialization}.
+ *
+ * &lt;h3&gt;Registration&lt;/h3&gt;
+ * &lt;p&gt;An {@code ApplicationContext} can autodetect {@code BeanPostProcessor} beans
+ * in its bean definitions and apply those post-processors to any beans subsequently
+ * created. A plain {@code BeanFactory} allows for programmatic registration of
+ * post-processors, applying them to all beans created through the bean factory.
+ *
+ * &lt;h3&gt;Ordering&lt;/h3&gt;
+ * &lt;p&gt;{@code BeanPostProcessor} beans that are autodetected in an
+ * {@code ApplicationContext} will be ordered according to
+ * {@link org.springframework.core.PriorityOrdered} and
+ * {@link org.springframework.core.Ordered} semantics. In contrast,
+ * {@code BeanPostProcessor} beans that are registered programmatically with a
+ * {@code BeanFactory} will be applied in the order of registration; any ordering
+ * semantics expressed through implementing the
+ * {@code PriorityOrdered} or {@code Ordered} interface will be ignored for
+ * programmatically registered post-processors. Furthermore, the
+ * {@link org.springframework.core.annotation.Order @Order} annotation is not
+ * taken into account for {@code BeanPostProcessor} beans.
+ *
+ * @author Juergen Hoeller
+ * @author Sam Brannen
+ * @since 10.10.2003
+ * @see InstantiationAwareBeanPostProcessor
+ * @see DestructionAwareBeanPostProcessor
+ * @see ConfigurableBeanFactory#addBeanPostProcessor
+ * @see BeanFactoryPostProcessor
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">BeanPostProcessor</span> <span class="token punctuation">{</span>
+
+   <span class="token comment">/**
+    * Apply this {@code BeanPostProcessor} to the given new bean instance &lt;i&gt;before&lt;/i&gt; any bean
+    * initialization callbacks (like InitializingBean's {@code afterPropertiesSet}
+    * or a custom init-method). The bean will already be populated with property values.
+    * The returned bean instance may be a wrapper around the original.
+    * &lt;p&gt;The default implementation returns the given {@code bean} as-is.
+    * @param bean the new bean instance
+    * @param beanName the name of the bean
+    * @return the bean instance to use, either the original or a wrapped one;
+    * if {@code null}, no subsequent BeanPostProcessors will be invoked
+    * @throws org.springframework.beans.BeansException in case of errors
+    * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet
+    */</span>
+   <span class="token annotation punctuation">@Nullable</span>
+   <span class="token keyword">default</span> <span class="token class-name">Object</span> <span class="token function">postProcessBeforeInitialization</span><span class="token punctuation">(</span><span class="token class-name">Object</span> bean<span class="token punctuation">,</span> <span class="token class-name">String</span> beanName<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">BeansException</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> bean<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token comment">/**
+    * Apply this {@code BeanPostProcessor} to the given new bean instance &lt;i&gt;after&lt;/i&gt; any bean
+    * initialization callbacks (like InitializingBean's {@code afterPropertiesSet}
+    * or a custom init-method). The bean will already be populated with property values.
+    * The returned bean instance may be a wrapper around the original.
+    * &lt;p&gt;In case of a FactoryBean, this callback will be invoked for both the FactoryBean
+    * instance and the objects created by the FactoryBean (as of Spring 2.0). The
+    * post-processor can decide whether to apply to either the FactoryBean or created
+    * objects or both through corresponding {@code bean instanceof FactoryBean} checks.
+    * &lt;p&gt;This callback will also be invoked after a short-circuiting triggered by a
+    * {@link InstantiationAwareBeanPostProcessor#postProcessBeforeInstantiation} method,
+    * in contrast to all other {@code BeanPostProcessor} callbacks.
+    * &lt;p&gt;The default implementation returns the given {@code bean} as-is.
+    * @param bean the new bean instance
+    * @param beanName the name of the bean
+    * @return the bean instance to use, either the original or a wrapped one;
+    * if {@code null}, no subsequent BeanPostProcessors will be invoked
+    * @throws org.springframework.beans.BeansException in case of errors
+    * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet
+    * @see org.springframework.beans.factory.FactoryBean
+    */</span>
+   <span class="token annotation punctuation">@Nullable</span>
+   <span class="token keyword">default</span> <span class="token class-name">Object</span> <span class="token function">postProcessAfterInitialization</span><span class="token punctuation">(</span><span class="token class-name">Object</span> bean<span class="token punctuation">,</span> <span class="token class-name">String</span> beanName<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">BeansException</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> bean<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+</code></pre></div><p>这个接口，允许自定义修改新的<code>bean</code>实例，例如检查标记接口或用代理包装，注意，如果有相互依赖的<code>bean</code>，这里可能无法使用代理。</p> <p><code>postProcessBeforeInitialization</code>方法，在任何<code>bean</code>初始化回调（如<code>InitializingBean</code>的<code>afterPropertiesSet</code>或自定义<code>init</code>方法）之前，将此<code>BeanPostProcessor</code>应用于给定的新的bean实例。 这个<code>bean</code>已经被填充了属性值。 返回的<code>bean</code>实例可能是原始的包装器。</p> <p><code>postProcessAfterInitialization</code>方法，在<code>Bean</code>初始化回调（如<code>InitializingBean</code>的<code>afterPropertiesSet</code>或自定义<code>init</code>方法）之后，将此<code>BeanPostProcessor</code>应用于给定的新bean实例。 这个<code>bean</code>已经被填充了属性值。  返回的<code>bean</code>实例可能是原始的包装器。这个方法也会在<code>InstantiationAwareBeanPostProcessor#postProcessBeforeInstantiation</code>方法生成对象后再次不让他生成对象（具体可以参考Spring生成bean的过程）。</p> <h3 id="instantiationawarebeanpostprocessor接口"><a href="#instantiationawarebeanpostprocessor接口" class="header-anchor">#</a> <code>InstantiationAwareBeanPostProcessor</code>接口</h3> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">/**
+ * Subinterface of {@link BeanPostProcessor} that adds a before-instantiation callback,
+ * and a callback after instantiation but before explicit properties are set or
+ * autowiring occurs.
+ *
+ * &lt;p&gt;Typically used to suppress default instantiation for specific target beans,
+ * for example to create proxies with special TargetSources (pooling targets,
+ * lazily initializing targets, etc), or to implement additional injection strategies
+ * such as field injection.
+ *
+ * &lt;p&gt;&lt;b&gt;NOTE:&lt;/b&gt; This interface is a special purpose interface, mainly for
+ * internal use within the framework. It is recommended to implement the plain
+ * {@link BeanPostProcessor} interface as far as possible, or to derive from
+ * {@link InstantiationAwareBeanPostProcessorAdapter} in order to be shielded
+ * from extensions to this interface.
+ *
+ * @author Juergen Hoeller
+ * @author Rod Johnson
+ * @since 1.2
+ * @see org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator#setCustomTargetSourceCreators
+ * @see org.springframework.aop.framework.autoproxy.target.LazyInitTargetSourceCreator
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">InstantiationAwareBeanPostProcessor</span> <span class="token keyword">extends</span> <span class="token class-name">BeanPostProcessor</span> <span class="token punctuation">{</span>
+
+	<span class="token comment">/**
+	 * Apply this BeanPostProcessor &lt;i&gt;before the target bean gets instantiated&lt;/i&gt;.
+	 * The returned bean object may be a proxy to use instead of the target bean,
+	 * effectively suppressing default instantiation of the target bean.
+	 * &lt;p&gt;If a non-null object is returned by this method, the bean creation process
+	 * will be short-circuited. The only further processing applied is the
+	 * {@link #postProcessAfterInitialization} callback from the configured
+	 * {@link BeanPostProcessor BeanPostProcessors}.
+	 * &lt;p&gt;This callback will be applied to bean definitions with their bean class,
+	 * as well as to factory-method definitions in which case the returned bean type
+	 * will be passed in here.
+	 * &lt;p&gt;Post-processors may implement the extended
+	 * {@link SmartInstantiationAwareBeanPostProcessor} interface in order
+	 * to predict the type of the bean object that they are going to return here.
+	 * &lt;p&gt;The default implementation returns {@code null}.
+	 * @param beanClass the class of the bean to be instantiated
+	 * @param beanName the name of the bean
+	 * @return the bean object to expose instead of a default instance of the target bean,
+	 * or {@code null} to proceed with default instantiation
+	 * @throws org.springframework.beans.BeansException in case of errors
+	 * @see #postProcessAfterInstantiation
+	 * @see org.springframework.beans.factory.support.AbstractBeanDefinition#getBeanClass()
+	 * @see org.springframework.beans.factory.support.AbstractBeanDefinition#getFactoryMethodName()
+	 */</span>
+	<span class="token annotation punctuation">@Nullable</span>
+	<span class="token keyword">default</span> <span class="token class-name">Object</span> <span class="token function">postProcessBeforeInstantiation</span><span class="token punctuation">(</span><span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> beanClass<span class="token punctuation">,</span> <span class="token class-name">String</span> beanName<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">BeansException</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">/**
+	 * Perform operations after the bean has been instantiated, via a constructor or factory method,
+	 * but before Spring property population (from explicit properties or autowiring) occurs.
+	 * &lt;p&gt;This is the ideal callback for performing custom field injection on the given bean
+	 * instance, right before Spring's autowiring kicks in.
+	 * &lt;p&gt;The default implementation returns {@code true}.
+	 * @param bean the bean instance created, with properties not having been set yet
+	 * @param beanName the name of the bean
+	 * @return {@code true} if properties should be set on the bean; {@code false}
+	 * if property population should be skipped. Normal implementations should return {@code true}.
+	 * Returning {@code false} will also prevent any subsequent InstantiationAwareBeanPostProcessor
+	 * instances being invoked on this bean instance.
+	 * @throws org.springframework.beans.BeansException in case of errors
+	 * @see #postProcessBeforeInstantiation
+	 */</span>
+	<span class="token keyword">default</span> <span class="token keyword">boolean</span> <span class="token function">postProcessAfterInstantiation</span><span class="token punctuation">(</span><span class="token class-name">Object</span> bean<span class="token punctuation">,</span> <span class="token class-name">String</span> beanName<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">BeansException</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">/**
+	 * Post-process the given property values before the factory applies them
+	 * to the given bean, without any need for property descriptors.
+	 * &lt;p&gt;Implementations should return {@code null} (the default) if they provide a custom
+	 * {@link #postProcessPropertyValues} implementation, and {@code pvs} otherwise.
+	 * In a future version of this interface (with {@link #postProcessPropertyValues} removed),
+	 * the default implementation will return the given {@code pvs} as-is directly.
+	 * @param pvs the property values that the factory is about to apply (never {@code null})
+	 * @param bean the bean instance created, but whose properties have not yet been set
+	 * @param beanName the name of the bean
+	 * @return the actual property values to apply to the given bean (can be the passed-in
+	 * PropertyValues instance), or {@code null} which proceeds with the existing properties
+	 * but specifically continues with a call to {@link #postProcessPropertyValues}
+	 * (requiring initialized {@code PropertyDescriptor}s for the current bean class)
+	 * @throws org.springframework.beans.BeansException in case of errors
+	 * @since 5.1
+	 * @see #postProcessPropertyValues
+	 */</span>
+	<span class="token annotation punctuation">@Nullable</span>
+	<span class="token keyword">default</span> <span class="token class-name">PropertyValues</span> <span class="token function">postProcessProperties</span><span class="token punctuation">(</span><span class="token class-name">PropertyValues</span> pvs<span class="token punctuation">,</span> <span class="token class-name">Object</span> bean<span class="token punctuation">,</span> <span class="token class-name">String</span> beanName<span class="token punctuation">)</span>
+			<span class="token keyword">throws</span> <span class="token class-name">BeansException</span> <span class="token punctuation">{</span>
+
+		<span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">/**
+	 * Post-process the given property values before the factory applies them
+	 * to the given bean. Allows for checking whether all dependencies have been
+	 * satisfied, for example based on a &quot;Required&quot; annotation on bean property setters.
+	 * &lt;p&gt;Also allows for replacing the property values to apply, typically through
+	 * creating a new MutablePropertyValues instance based on the original PropertyValues,
+	 * adding or removing specific values.
+	 * &lt;p&gt;The default implementation returns the given {@code pvs} as-is.
+	 * @param pvs the property values that the factory is about to apply (never {@code null})
+	 * @param pds the relevant property descriptors for the target bean (with ignored
+	 * dependency types - which the factory handles specifically - already filtered out)
+	 * @param bean the bean instance created, but whose properties have not yet been set
+	 * @param beanName the name of the bean
+	 * @return the actual property values to apply to the given bean (can be the passed-in
+	 * PropertyValues instance), or {@code null} to skip property population
+	 * @throws org.springframework.beans.BeansException in case of errors
+	 * @see #postProcessProperties
+	 * @see org.springframework.beans.MutablePropertyValues
+	 * @deprecated as of 5.1, in favor of {@link #postProcessProperties(PropertyValues, Object, String)}
+	 */</span>
+	<span class="token annotation punctuation">@Deprecated</span>
+	<span class="token annotation punctuation">@Nullable</span>
+	<span class="token keyword">default</span> <span class="token class-name">PropertyValues</span> <span class="token function">postProcessPropertyValues</span><span class="token punctuation">(</span>
+			<span class="token class-name">PropertyValues</span> pvs<span class="token punctuation">,</span> <span class="token class-name">PropertyDescriptor</span><span class="token punctuation">[</span><span class="token punctuation">]</span> pds<span class="token punctuation">,</span> <span class="token class-name">Object</span> bean<span class="token punctuation">,</span> <span class="token class-name">String</span> beanName<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">BeansException</span> <span class="token punctuation">{</span>
+
+		<span class="token keyword">return</span> pvs<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+</code></pre></div><ol><li><code>InstantiationAwareBeanPostProcessor</code>接口继承<code>BeanPostProcessor</code>接口，它内部提供了3个方法，再加上<code>BeanPostProcessor</code>接口内部的2个方法，所以实现这个接口需要实现5个方法。<code>InstantiationAwareBeanPostProcessor</code>接口的主要作用在于目标对象的实例化过程中需要处理的事情，包括实例化对象的前后过程以及实例的属性设置</li> <li><code>postProcessBeforeInstantiation</code>方法是最先执行的方法，它在目标对象实例化之前调用，该方法的返回值类型是<code>Object</code>，我们可以返回任何类型的值。由于这个时候目标对象还未实例化，所以这个返回值可以用来代替原本该生成的目标对象的实例(比如代理对象)。如果该方法的返回值代替原本该生成的目标对象，后续只有<code>postProcessAfterInitialization</code>方法会调用，其它方法不再调用；否则按照正常的流程走</li> <li><code>postProcessAfterInstantiation</code>方法在目标对象实例化之后调用，这个时候对象已经被实例化，但是该实例的属性还未被设置，都是null。因为它的返回值是决定要不要调用<code>postProcessPropertyValues</code>方法的其中一个因素（因为还有一个因素是<code>mbd.getDependencyCheck()</code>）；如果该方法返回<code>false</code>,并且不需要<code>check</code>，那么<code>postProcessPropertyValues</code>就会被忽略不执行；如果返回<code>true</code>,<code>postProcessPropertyValues</code>就会被执行</li> <li><code>postProcessPropertyValues</code>方法对属性值进行修改(这个时候属性值还未被设置，但是我们可以修改原本该设置进去的属性值)。如果<code>postProcessAfterInstantiation</code>方法返回<code>false</code>，该方法可能不会被调用。可以在该方法内对属性值进行修改</li> <li>父接口<code>BeanPostProcessor</code>的2个方法<code>postProcessBeforeInitialization</code>和<code>postProcessAfterInitialization</code>都是在目标对象被实例化之后，并且属性也被设置之后调用的</li></ol> <h2 id="用来感知ioc容器的各种aware扩展"><a href="#用来感知ioc容器的各种aware扩展" class="header-anchor">#</a> 用来感知<code>IOC</code>容器的各种<code>Aware</code>扩展</h2> <h3 id="beannameaware"><a href="#beannameaware" class="header-anchor">#</a> <code>BeanNameAware</code></h3> <p>实现该接口并重写<code>void setBeanName(String var1)</code>方法；获取该<code>bean</code>在<code>BeanFactory</code>配置中的名字</p> <h3 id="applicationcontextaware"><a href="#applicationcontextaware" class="header-anchor">#</a> <code>ApplicationContextAware</code></h3> <p>实现该接口，并重写<code>setApplicationContext(ApplicationContext applicationContext)</code>方法，获取<code>spring</code>上下文环境的对象，然后通过该上下文对象获取spring容器中的bean对象</p> <h3 id="beanfactoryaware"><a href="#beanfactoryaware" class="header-anchor">#</a> <code>BeanFactoryAware</code></h3> <p>实现该接口，并重写<code>void setBeanFactory(BeanFactory beanFactory)</code>方法，<code>Bean</code>获取配置他们的<code>BeanFactory</code>的引用</p> <h3 id="servletcontextaware"><a href="#servletcontextaware" class="header-anchor">#</a> <code>ServletContextAware</code></h3> <p>实现该接口，并重写<code>void setServletContext(ServletContext servletContext)</code>方法；获取<code>servletContext</code>容器。</p> <h3 id="resourceloaderaware"><a href="#resourceloaderaware" class="header-anchor">#</a> <code>ResourceLoaderAware</code></h3> <p>实现该接口，并重写<code>void setServletContext(ServletContext servletContext)</code>方法；获取<code>ResourceLoader</code>对象，便能够通过它获得各种资源。</p> <h3 id="beanclassloaderaware"><a href="#beanclassloaderaware" class="header-anchor">#</a> <code>BeanClassLoaderAware</code></h3> <p>实现该接口，并重写<code>void setBeanClassLoader(ClassLoader classLoader)</code>方法；获取 Bean 的<code>classLoader</code></p> <h3 id="initializingbean"><a href="#initializingbean" class="header-anchor">#</a> <code>InitializingBean</code></h3> <p>实现该接口，并重写<code>void afterPropertiesSet() throws Exception</code>方法；所有的属性被初始化后、在<code>init-method</code>之前调用。</p> <h2 id="spring-context"><a href="#spring-context" class="header-anchor">#</a> <code>spring-context</code></h2> <h3 id="importselector接口"><a href="#importselector接口" class="header-anchor">#</a> <code>ImportSelector</code>接口</h3> <p>在初始化<code>bean</code>工厂时期[<code>invokeBeanFactoryPostProcessors()</code>]  会调用。<code>ImportSelector</code>的导入实现是通过<code>BeanDefinitionRegistryPostProcessor.postProcessBeanDefinitionRegistry()</code>来实现的。</p> <h3 id="importbeandefinitionregistrar接口"><a href="#importbeandefinitionregistrar接口" class="header-anchor">#</a> <code>ImportBeanDefinitionRegistrar</code>接口</h3> <p>需要与 <code>@Import</code> 和 <code>@Configuration</code> 共同配合使用。<code>@EnableFeignClients</code>,  <code>@EnableDubboConfig</code> 等都是通过<code>ImportBeanDefinitionRegistrar</code> 来动态注入的服务调用类到spring容器里面。</p> <h3 id="classpathbeandefinitionscanner"><a href="#classpathbeandefinitionscanner" class="header-anchor">#</a> <code>ClassPathBeanDefinitionScanner</code></h3> <p>可以扫描路径下的类(里面的一些方法可以脱离spring环境独立使用)</p> <h2 id="spring-mvc"><a href="#spring-mvc" class="header-anchor">#</a> <code>spring-MVC</code></h2> <h3 id="handlerinterceptor"><a href="#handlerinterceptor" class="header-anchor">#</a> <code>HandlerInterceptor</code></h3> <p>拦截器，可以在一个请求被真正处理之前、请求被处理但还没输出到响应中、请求已经被输出到响应中之后这三个时间点去做任何我们想要做的事情，对应方法:  <code>preHandle()</code>/<code>postHandle()</code>/<code>afterCompletion()</code>。实际使用时，除了直接实现<code>HandlerInterceptor</code>，我们也经常直接继承<code>HandlerInterceptorAdapter</code>。</p></div> <footer class="page-edit"><!----> <!----></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.2f25c357.js" defer></script><script src="/assets/js/2.63c13255.js" defer></script><script src="/assets/js/33.8771b5d9.js" defer></script>
+  </body>
+</html>

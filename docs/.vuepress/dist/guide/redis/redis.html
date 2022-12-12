@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Nosql概述 | 迪</title>
+    <meta name="generator" content="VuePress 1.9.7">
+    <link rel="icon" href="/logo.jpg">
+    <meta name="description" content="迪的文档">
+    
+    <link rel="preload" href="/assets/css/0.styles.2b9f1a15.css" as="style"><link rel="preload" href="/assets/js/app.2f25c357.js" as="script"><link rel="preload" href="/assets/js/2.63c13255.js" as="script"><link rel="preload" href="/assets/js/55.c17da82b.js" as="script"><link rel="prefetch" href="/assets/js/10.c7b7d24d.js"><link rel="prefetch" href="/assets/js/11.06f80eba.js"><link rel="prefetch" href="/assets/js/12.6f810a00.js"><link rel="prefetch" href="/assets/js/13.25833528.js"><link rel="prefetch" href="/assets/js/14.4b786116.js"><link rel="prefetch" href="/assets/js/15.abfc377c.js"><link rel="prefetch" href="/assets/js/16.c75b4166.js"><link rel="prefetch" href="/assets/js/17.453f868d.js"><link rel="prefetch" href="/assets/js/18.a490508f.js"><link rel="prefetch" href="/assets/js/19.80524214.js"><link rel="prefetch" href="/assets/js/20.a97ffa51.js"><link rel="prefetch" href="/assets/js/21.547ddc23.js"><link rel="prefetch" href="/assets/js/22.45e85bde.js"><link rel="prefetch" href="/assets/js/23.0dbcaa21.js"><link rel="prefetch" href="/assets/js/24.131b5686.js"><link rel="prefetch" href="/assets/js/25.3d4c262a.js"><link rel="prefetch" href="/assets/js/26.9cbfd763.js"><link rel="prefetch" href="/assets/js/27.542a2792.js"><link rel="prefetch" href="/assets/js/28.fbca4c4d.js"><link rel="prefetch" href="/assets/js/29.9eff63d9.js"><link rel="prefetch" href="/assets/js/3.174213b6.js"><link rel="prefetch" href="/assets/js/30.a6823283.js"><link rel="prefetch" href="/assets/js/31.6a4a92c8.js"><link rel="prefetch" href="/assets/js/32.ce935036.js"><link rel="prefetch" href="/assets/js/33.8771b5d9.js"><link rel="prefetch" href="/assets/js/34.6ef7ae0f.js"><link rel="prefetch" href="/assets/js/35.08fc79cf.js"><link rel="prefetch" href="/assets/js/36.181bec7a.js"><link rel="prefetch" href="/assets/js/37.4e5cdaf9.js"><link rel="prefetch" href="/assets/js/38.f6abaf38.js"><link rel="prefetch" href="/assets/js/39.bc91b61a.js"><link rel="prefetch" href="/assets/js/4.13c31685.js"><link rel="prefetch" href="/assets/js/40.0c43ce82.js"><link rel="prefetch" href="/assets/js/41.4eeb5771.js"><link rel="prefetch" href="/assets/js/42.13baee4d.js"><link rel="prefetch" href="/assets/js/43.2812f396.js"><link rel="prefetch" href="/assets/js/44.87333552.js"><link rel="prefetch" href="/assets/js/45.79925286.js"><link rel="prefetch" href="/assets/js/46.63ec06c7.js"><link rel="prefetch" href="/assets/js/47.31484b65.js"><link rel="prefetch" href="/assets/js/48.61c835fb.js"><link rel="prefetch" href="/assets/js/49.b420b13c.js"><link rel="prefetch" href="/assets/js/5.cbba45ac.js"><link rel="prefetch" href="/assets/js/50.53f11d2b.js"><link rel="prefetch" href="/assets/js/51.1eced69f.js"><link rel="prefetch" href="/assets/js/52.cdb811f6.js"><link rel="prefetch" href="/assets/js/53.18dbb2da.js"><link rel="prefetch" href="/assets/js/54.2f8c7ead.js"><link rel="prefetch" href="/assets/js/56.ec36758b.js"><link rel="prefetch" href="/assets/js/57.639cf8a7.js"><link rel="prefetch" href="/assets/js/58.848e0216.js"><link rel="prefetch" href="/assets/js/59.89a629cb.js"><link rel="prefetch" href="/assets/js/6.8d81f0ec.js"><link rel="prefetch" href="/assets/js/60.6ee5bb23.js"><link rel="prefetch" href="/assets/js/61.778f8894.js"><link rel="prefetch" href="/assets/js/62.5b79d674.js"><link rel="prefetch" href="/assets/js/63.1f7ab42c.js"><link rel="prefetch" href="/assets/js/64.06670e46.js"><link rel="prefetch" href="/assets/js/65.d55a0cb5.js"><link rel="prefetch" href="/assets/js/66.c0d943d5.js"><link rel="prefetch" href="/assets/js/67.191b831c.js"><link rel="prefetch" href="/assets/js/68.30a1580e.js"><link rel="prefetch" href="/assets/js/69.8a91a673.js"><link rel="prefetch" href="/assets/js/7.2259505f.js"><link rel="prefetch" href="/assets/js/70.8ef61250.js"><link rel="prefetch" href="/assets/js/71.52f9a69a.js"><link rel="prefetch" href="/assets/js/72.4af68aa5.js"><link rel="prefetch" href="/assets/js/73.804ce09d.js"><link rel="prefetch" href="/assets/js/74.0dcbb650.js"><link rel="prefetch" href="/assets/js/75.ce1dff6f.js"><link rel="prefetch" href="/assets/js/76.1c3e5a54.js"><link rel="prefetch" href="/assets/js/77.f0d66982.js"><link rel="prefetch" href="/assets/js/78.436e7214.js"><link rel="prefetch" href="/assets/js/79.900d03e3.js"><link rel="prefetch" href="/assets/js/8.6b054f16.js"><link rel="prefetch" href="/assets/js/80.de0bd2c2.js"><link rel="prefetch" href="/assets/js/9.eeae1cb6.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.2b9f1a15.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/logo.jpg" alt="迪" class="logo"> <span class="site-name can-hide">迪</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">
+  Home
+</a></div><div class="nav-item"><a href="/guide/back-end/java/java集合.html" class="nav-link">
+  后端
+</a></div><div class="nav-item"><a href="/guide/前端/JavaScript/ES6.html" class="nav-link">
+  前端
+</a></div><div class="nav-item"><a href="/guide/other/docker/Docker.html" class="nav-link">
+  其他
+</a></div><div class="nav-item"><a href="https://www.baidu.com" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  百度
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Language Menu" class="dropdown-title"><span class="title">语言</span> <span class="arrow down"></span></button> <button type="button" aria-label="Language Menu" class="mobile-dropdown-title"><span class="title">语言</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/language/chinese.html" class="nav-link">
+  中文
+</a></li><li class="dropdown-item"><!----> <a href="/language/english.html" class="nav-link">
+  English
+</a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">
+  Home
+</a></div><div class="nav-item"><a href="/guide/back-end/java/java集合.html" class="nav-link">
+  后端
+</a></div><div class="nav-item"><a href="/guide/前端/JavaScript/ES6.html" class="nav-link">
+  前端
+</a></div><div class="nav-item"><a href="/guide/other/docker/Docker.html" class="nav-link">
+  其他
+</a></div><div class="nav-item"><a href="https://www.baidu.com" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  百度
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Language Menu" class="dropdown-title"><span class="title">语言</span> <span class="arrow down"></span></button> <button type="button" aria-label="Language Menu" class="mobile-dropdown-title"><span class="title">语言</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/language/chinese.html" class="nav-link">
+  中文
+</a></li><li class="dropdown-item"><!----> <a href="/language/english.html" class="nav-link">
+  English
+</a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>后端</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/back-end/java/java集合.html" class="sidebar-link">java集合</a></li><li><a href="/guide/back-end/java/多线程.html" class="sidebar-link">多线程</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>其他</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>Docker</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/docker/Docker.html" class="sidebar-link">Docker</a></li><li><a href="/guide/other/docker/docker-compose.html" class="sidebar-link">Docker-compose</a></li><li><a href="/guide/other/docker/docker-swarm.html" class="sidebar-link">Docker-swarm</a></li></ul></section></li><li><section class="sidebar-group is-sub-group depth-1"><p class="sidebar-heading"><span>Kubernetes</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/Kubernetes/1.Kubernetes部署.html" class="sidebar-link">1.Kubernetes部署</a></li><li><a href="/guide/other/Kubernetes/2-Kubernetes资源管理方式.html" class="sidebar-link">2.Kubernetes资源管理方式</a></li><li><a href="/guide/other/Kubernetes/3-Kubernetes的对象.html" class="sidebar-link">3.Kubernetes的对象</a></li><li><a href="/guide/other/Kubernetes/4-Kubernetes的Pod.html" class="sidebar-link">4.Kubernetes的Pod</a></li><li><a href="/guide/other/Kubernetes/5-Kubernetes的控制器.html" class="sidebar-link">5.Kubernetes的控制器</a></li><li><a href="/guide/other/Kubernetes/6-Kubernetes的Service.html" class="sidebar-link">6.Kubernetes的Service</a></li><li><a href="/guide/other/Kubernetes/7-Kubernetes的数据存储.html" class="sidebar-link">7.Kubernetes的数据存储</a></li></ul></section></li><li><section class="sidebar-group is-sub-group depth-1"><p class="sidebar-heading"><span>Linux</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/Linux/Linux.html" class="sidebar-link">Linux</a></li><li><a href="/guide/other/Linux/Linux基础.html" class="sidebar-link">Linux基础</a></li><li><a href="/guide/other/Linux/Shell脚本.html" class="sidebar-link">Shell脚本</a></li></ul></section></li><li><section class="sidebar-group is-sub-group depth-1"><p class="sidebar-heading"><span>项目管理</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/project-manage/git.html" class="sidebar-link">Git</a></li><li><a href="/guide/other/project-manage/maven.html" class="sidebar-link">Maven</a></li></ul></section></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="nosql概述"><a href="#nosql概述" class="header-anchor">#</a> Nosql概述</h2> <h3 id="为什么用nosql"><a href="#为什么用nosql" class="header-anchor">#</a> 为什么用NoSql</h3> <p>网站80%的情况都是在读，使用缓存减轻数据库压力，提高效率</p> <h3 id="什么是nosql"><a href="#什么是nosql" class="header-anchor">#</a> 什么是NoSql</h3> <blockquote><p>NoSql</p></blockquote> <p>NoSQL = Not Only SQL：泛指非关系型数据库</p> <h3 id="nosql四大分类"><a href="#nosql四大分类" class="header-anchor">#</a> NoSQL四大分类</h3> <p><strong>kv键值对：</strong></p> <ul><li>新浪：redis</li> <li>美团：redis + tair</li> <li>阿里、百度：redis + memecache</li></ul> <p><strong>文档型数据库：</strong></p> <ul><li>MongoDB（一般要掌握）
+<ul><li>MongoDB是一个基于分布式文件存储的数据库，c++编写，主要用于处理大量文档</li> <li>MongoDB是一个介于关系型数据库和非关系型数据库中间产品</li></ul></li> <li>ConthDB</li></ul> <p><strong>列存储数据库：</strong></p> <ul><li>HBase</li> <li>分布式文件系统</li></ul> <p><strong>图关系数据库</strong></p> <ul><li>存放关系，比如朋友圈，广告推荐</li> <li>Neo4j</li> <li>InfoGrid</li></ul> <h2 id="redis入门"><a href="#redis入门" class="header-anchor">#</a> Redis入门</h2> <h3 id="linux安装"><a href="#linux安装" class="header-anchor">#</a> Linux安装</h3> <p>1.解压安装包</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token punctuation">[</span>root@mylsaber redis<span class="token punctuation">]</span><span class="token comment"># mv redis-6.2.6.tar.gz /opt/</span>
+<span class="token punctuation">[</span>root@mylsaber opt<span class="token punctuation">]</span><span class="token comment"># tar -zxvf redis-6.2.6.tar.gz </span>
+</code></pre></div><p>2.进入解压后文件，安装基本环境</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token punctuation">[</span>root@mylsaber redis-6.2.6<span class="token punctuation">]</span><span class="token comment"># yum install gcc-c++</span>
+
+<span class="token function">make</span>
+
+<span class="token function">make</span> <span class="token function">install</span>
+</code></pre></div><p>3.redis默认安装路径</p> <div class="language- extra-class"><pre class="language-text"><code>/usr/local/bin/
+</code></pre></div><p>4.复制配置文件</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token punctuation">[</span>root@mylsaber bin<span class="token punctuation">]</span><span class="token comment"># cp /opt/redis-6.2.6/redis.conf config/myredisconfig</span>
+<span class="token comment"># 设置配置文件后台启动</span>
+daemonize <span class="token function">yes</span>
+</code></pre></div><p>5.启动redis</p> <div class="language-shell extra-class"><pre class="language-shell"><code>redis-server config/myredis.conf
+</code></pre></div><p>6.连接redis</p> <div class="language-shell extra-class"><pre class="language-shell"><code>redis-cli <span class="token parameter variable">-p</span> <span class="token number">6379</span>
+</code></pre></div><p>7.关闭redis服务</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> <span class="token function">shutdown</span>
+</code></pre></div><h3 id="性能测试"><a href="#性能测试" class="header-anchor">#</a> 性能测试</h3> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># 测试100个并发，100000请求</span>
+redis-benchmark <span class="token parameter variable">-h</span> localhost <span class="token parameter variable">-p</span> <span class="token number">6379</span> <span class="token parameter variable">-c</span> <span class="token number">100</span> <span class="token parameter variable">-n</span> <span class="token number">100000</span>
+</code></pre></div><h3 id="基础知识"><a href="#基础知识" class="header-anchor">#</a> 基础知识</h3> <p>redis默认有16个数据库，默认使用第0个，可以使用select进行切换</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># 切换数据库</span>
+<span class="token keyword">select</span> <span class="token number">3</span>
+<span class="token comment"># 查看所有key</span>
+keys *
+<span class="token comment"># 清空当前数据库</span>
+flushdb
+<span class="token comment"># 清空所有数据库</span>
+flushall
+</code></pre></div><blockquote><p>Redis是单线程</p></blockquote> <p>Redis基于内存操作，性能瓶颈是内存和网络带宽</p> <p>Redis是C语言编写，官方提供数据为100000+的QPS。</p> <h2 id="五大数据类型"><a href="#五大数据类型" class="header-anchor">#</a> 五大数据类型</h2> <h4 id="redis-key"><a href="#redis-key" class="header-anchor">#</a> redis-key</h4> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># 查看所有key</span>
+keys *
+<span class="token comment"># 判断当前key是否存在</span>
+exists name
+<span class="token comment"># 移动当前key到指定数据库</span>
+move name db
+<span class="token comment"># 设置key过期时间，单位秒</span>
+expire name <span class="token number">10</span>
+<span class="token comment"># 查看key过期剩余时间</span>
+ttl name
+<span class="token comment"># 查看数据类型</span>
+<span class="token builtin class-name">type</span> name
+<span class="token comment"># 删除key</span>
+del name
+</code></pre></div><h4 id="string"><a href="#string" class="header-anchor">#</a> String</h4> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># 设置值</span>
+<span class="token builtin class-name">set</span> name jiang
+<span class="token comment"># 获取值</span>
+get name
+<span class="token comment"># 追加字符串，如果有值，在后面追加，如果没有，相当于set</span>
+append name fangwei
+<span class="token comment"># 设置加1，减1</span>
+incr age
+decr age
+<span class="token comment"># 设置增加，减少步长</span>
+incrby age <span class="token number">10</span>
+decrby age <span class="token number">10</span>
+<span class="token comment"># 截取字符串，[0,3]，获取全部[0,-1]</span>
+getrange key <span class="token number">0</span> <span class="token number">3</span>
+<span class="token comment"># 替换指定位置开始的字符串</span>
+setrange key <span class="token number">1</span> xx
+<span class="token comment"># 设置过期时间</span>
+setex key <span class="token number">10</span> value
+<span class="token comment"># 如果值不存在设置</span>
+setnx key value
+<span class="token comment"># 批量设置值</span>
+mset k1 v1 k2 v2 k3 v3
+<span class="token comment"># 批量获取值</span>
+mget k1 k2 k3
+<span class="token comment"># 批量如果值不存在设置，原子操作</span>
+msetnx k1 v1 k4 v4 
+<span class="token comment"># 获取后设置,如果没有返回nil并设置值</span>
+getset key value
+</code></pre></div><p>常用场景：</p> <ul><li>计数器</li> <li>统计数量</li> <li>点赞</li></ul> <h4 id="list"><a href="#list" class="header-anchor">#</a> List</h4> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># 列表左边添加数据</span>
+lpush key v1 v2 v3
+<span class="token comment"># 列表右边添加数据</span>
+rpush key v4
+<span class="token comment"># 获取区间数据[0,1]</span>
+lrange key <span class="token number">0</span> <span class="token number">1</span>
+<span class="token comment"># 列表左边移除数据</span>
+lpop key count
+<span class="token comment"># 列表右边移除数据</span>
+rpop key count
+<span class="token comment"># 通过下标获取数据</span>
+lindex key <span class="token number">1</span>
+<span class="token comment"># 返回列表长度</span>
+llen key
+<span class="token comment"># 移除指定个数的值</span>
+lrem key count value
+<span class="token comment"># 通过下标截取并修改值[2,3]</span>
+ltrim key <span class="token number">2</span> <span class="token number">3</span>
+<span class="token comment"># 移除最后一个元素，并移动到新列表</span>
+rpoplpush <span class="token builtin class-name">source</span> destination
+<span class="token comment"># 列表指定下标值替换新值，key或下标不存在报错</span>
+lset key index value
+<span class="token comment"># 在列表某个元素前或者后插入值</span>
+linsert key before<span class="token operator">|</span>after pivot value
+
+</code></pre></div><h4 id="set"><a href="#set" class="header-anchor">#</a> Set</h4> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># 设置set值</span>
+sadd key v1 v2 v3
+<span class="token comment"># 获取set所有值</span>
+smembers key
+<span class="token comment"># 判断key中是否有指定值</span>
+sismember key value
+<span class="token comment"># 获取key集合中的元素个数</span>
+scard key
+<span class="token comment"># 移除set中指定元素</span>
+srem key v1 v2
+<span class="token comment"># 随机获取指定个数元素</span>
+srandmember key count
+<span class="token comment"># 随机删除指定个数元素</span>
+spop key count
+<span class="token comment"># 指定值移动到另外一个set</span>
+smove <span class="token builtin class-name">source</span> destination value
+<span class="token comment"># 获取第一中差集</span>
+<span class="token function">sdiff</span> key1 key2
+<span class="token comment"># 获取交集</span>
+sinter key1 key2
+<span class="token comment"># 获取并集</span>
+sunion key1 key2
+</code></pre></div><h4 id="hash-哈希"><a href="#hash-哈希" class="header-anchor">#</a> hash（哈希）</h4> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># 设置哈希的key-value</span>
+hset key name jiang age <span class="token number">18</span>
+hmset key name jiang age <span class="token number">18</span>
+<span class="token comment"># 获取key中一个字段值</span>
+hget key name
+<span class="token comment"># 获取多个字段值</span>
+hmget key name age
+<span class="token comment">#获取全部数据</span>
+hgetall key
+<span class="token comment"># 删除指定key的字段</span>
+hdel key age
+<span class="token comment"># 获取字段数量</span>
+hlen key
+<span class="token comment"># 判断字段是否存在</span>
+hexists key name
+<span class="token comment"># 只获取所有字段</span>
+hkeys key
+<span class="token comment"># 只获取所有值</span>
+hvals key
+<span class="token comment"># 设置字段值增加步长</span>
+hincrby key age <span class="token number">2</span>
+<span class="token comment"># 如果不存在设置字段值</span>
+hsetnx key age <span class="token number">19</span>
+</code></pre></div><h4 id="zset-有序集合"><a href="#zset-有序集合" class="header-anchor">#</a> Zset（有序集合）</h4> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># 添加元素，score可以是整数，也可以是浮点数，还可以是+inf表示无穷大，-inf表示负无穷大</span>
+zadd key score value <span class="token punctuation">[</span>score value<span class="token punctuation">]</span>
+
+<span class="token comment"># 获取索引区间内的元素</span>
+zrange key <span class="token number">0</span> <span class="token parameter variable">-1</span> <span class="token punctuation">[</span>withscores<span class="token punctuation">]</span>
+
+<span class="token comment"># 获取分数区间内的元素</span>
+zrangebyscore key minscore maxscore <span class="token punctuation">[</span>whitscores<span class="token punctuation">]</span> <span class="token punctuation">[</span>limit offset count<span class="token punctuation">]</span>
+
+<span class="token comment"># 删除指定元素</span>
+zrem key member <span class="token punctuation">[</span>member<span class="token punctuation">]</span>
+
+<span class="token comment"># 获取集合中元素个数</span>
+zcard key
+
+<span class="token comment"># 增减元素的score</span>
+zincrby key increment member
+
+<span class="token comment"># 获取分数区间内元素个数</span>
+zcount key min max
+
+<span class="token comment"># 获取项在zset中的索引</span>
+zrank key member
+
+<span class="token comment"># 获取元素的分数</span>
+zscore key member
+
+<span class="token comment"># 获取项在zset中倒序的索引</span>
+zrevrank key member
+
+<span class="token comment"># 倒序获取索引区间内的元素</span>
+zrevrange key start stop <span class="token punctuation">[</span>withscores<span class="token punctuation">]</span>
+
+<span class="token comment"># 倒序获取分数区间内的元素</span>
+zrevrangebyscore key max min <span class="token punctuation">[</span>whitscores<span class="token punctuation">]</span> <span class="token punctuation">[</span>limit offset count<span class="token punctuation">]</span>
+
+<span class="token comment"># 删除索引区间内的元素</span>
+zremrangebyrank key start stop
+
+<span class="token comment"># 删除分数区间内的元素</span>
+zremrangebyscore key min max
+
+<span class="token comment"># 获取指定数量的key的交集。例如有 key1:{10:A,20:B,30:C},key2{40:B,50:C,60:D},那么命令 zinterstore key3 2 key1 key2 意思就是 将key1 key2这两个集合的交集 赋给key3，如何获取key1与key2的交集呢。 key1中存在 A B C,key2中存在 B C D,那么交集就是 B 和 C，且 B与C对应的score也会叠加，即 key3{B:20+40=60,C:30+50=80}，weights表示乘法因子</span>
+zinterstore destination numkeys key <span class="token punctuation">[</span>key …<span class="token punctuation">]</span> <span class="token punctuation">[</span>WEIGHTS weight <span class="token punctuation">[</span>weight …<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token punctuation">[</span>AGGREGATE SUM<span class="token operator">|</span>MIN<span class="token operator">|</span>MAX<span class="token punctuation">]</span>
+
+<span class="token comment">#　获取指定数量key的并集，例如有 key1{10:A,20:B,30:C},key2{40:B,50:C,60:D},可以看出 A和D不是key1与key2共有的，但是并集中只要存在就会记录进去，然后B与C是共有的，即 并集的结果就是 key3{10:A,B:60,D:60,C:80}</span>
+zunionstore destination numkeys key <span class="token punctuation">[</span>key …<span class="token punctuation">]</span> <span class="token punctuation">[</span>WEIGHTS weight <span class="token punctuation">[</span>weight …<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token punctuation">[</span>AGGREGATE SUM<span class="token operator">|</span>MIN<span class="token operator">|</span>MAX<span class="token punctuation">]</span>
+</code></pre></div><h2 id="事务"><a href="#事务" class="header-anchor">#</a> 事务</h2> <p>Redis单条命令保证原子性，但是事务不保证原子性</p> <p>Redis事务没有隔离级别的概念</p> <blockquote><p>开启提交事务</p></blockquote> <div class="language-sh extra-class"><pre class="language-sh"><code><span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> multi  <span class="token comment"># 开启事务</span>
+OK
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token builtin class-name">set</span> k1 v1
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token builtin class-name">set</span> k2 v2
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> get k2
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token builtin class-name">set</span> k3 v3
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token builtin class-name">exec</span>   <span class="token comment"># 执行事务</span>
+</code></pre></div><blockquote><p>放弃事务</p></blockquote> <div class="language-sh extra-class"><pre class="language-sh"><code><span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> multi
+OK
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token builtin class-name">set</span> name jiang
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token builtin class-name">set</span> age <span class="token number">19</span>
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> DISCARD  <span class="token comment"># 取消执行，所有命令都不执行</span>
+OK
+</code></pre></div><blockquote><p>编译型异常（命令有问题）事务中所有命令都不会执行</p></blockquote> <div class="language-sh extra-class"><pre class="language-sh"><code><span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> multi
+OK
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token builtin class-name">set</span> name jiang
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> getset name <span class="token comment"># 错误命令</span>
+<span class="token punctuation">(</span>error<span class="token punctuation">)</span> ERR wrong number of arguments <span class="token keyword">for</span> <span class="token string">'getset'</span> <span class="token builtin class-name">command</span>
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token builtin class-name">set</span> age <span class="token number">18</span>
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token builtin class-name">exec</span> <span class="token comment"># 运行后所有命令不生效</span>
+<span class="token punctuation">(</span>error<span class="token punctuation">)</span> EXECABORT Transaction discarded because of previous errors.
+<span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> get name
+<span class="token punctuation">(</span>nil<span class="token punctuation">)</span>
+</code></pre></div><blockquote><p>运行时异常</p></blockquote> <div class="language-sh extra-class"><pre class="language-sh"><code><span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> multi
+OK
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token builtin class-name">set</span> name jiang
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> incr name <span class="token comment"># 执行失败，但是其他指令成功</span>
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> get name
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token builtin class-name">exec</span>
+<span class="token number">1</span><span class="token punctuation">)</span> OK
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> ERR value is not an integer or out of range
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;jiang&quot;</span>
+</code></pre></div><blockquote><p>Redis监测数据</p></blockquote> <p>watch key [key]：监视数据</p> <p>unwatch：取消监视</p> <div class="language-sh extra-class"><pre class="language-sh"><code><span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> <span class="token function">watch</span> money <span class="token comment"># 监视数据</span>
+OK
+<span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> multi
+OK
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> DECRBY money <span class="token number">20</span>
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> INCRBY out <span class="token number">20</span>
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token builtin class-name">exec</span> <span class="token comment"># 数据没有变化，事务执行成功</span>
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">80</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">20</span>
+</code></pre></div><div class="language-sh extra-class"><pre class="language-sh"><code><span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> WATCH money <span class="token comment"># 监视数据</span>
+OK
+<span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> multi
+OK
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> DECRBY money <span class="token number">10</span>
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> INCRBY out <span class="token number">10</span>
+QUEUED
+<span class="token number">127.0</span>.0.1:6379<span class="token punctuation">(</span>TX<span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token builtin class-name">exec</span> <span class="token comment"># 执行事务时，数据发生变化，事务执行失败</span>
+<span class="token punctuation">(</span>nil<span class="token punctuation">)</span>
+</code></pre></div><h2 id="redis-conf详解"><a href="#redis-conf详解" class="header-anchor">#</a> Redis.conf详解</h2> <blockquote><p>单位</p></blockquote> <div class="language-sh extra-class"><pre class="language-sh"><code><span class="token comment"># 1k =&gt; 1000 bytes</span>
+<span class="token comment"># 1kb =&gt; 1024 bytes</span>
+<span class="token comment"># 1m =&gt; 1000000 bytes</span>
+<span class="token comment"># 1mb =&gt; 1024*1024 bytes</span>
+<span class="token comment"># 1g =&gt; 1000000000 bytes</span>
+<span class="token comment"># 1gb =&gt; 1024*1024*1024 bytes</span>
+<span class="token comment">#</span>
+<span class="token comment"># units are case insensitive so 1GB 1Gb 1gB are all the same.</span>
+</code></pre></div><p>1.配置文件units大小写不敏感</p> <blockquote><p>引入配置文件</p></blockquote> <div class="language-sh extra-class"><pre class="language-sh"><code><span class="token comment"># include /path/to/local.conf</span>
+<span class="token comment"># include /path/to/other.conf</span>
+</code></pre></div><blockquote><p>网络</p></blockquote> <div class="language-sh extra-class"><pre class="language-sh"><code><span class="token builtin class-name">bind</span> <span class="token number">127.0</span>.0.1 <span class="token comment"># 绑定ip</span>
+protected-mode <span class="token function">yes</span> <span class="token comment"># 保护模式</span>
+port <span class="token number">6379</span> <span class="token comment"># 端口设置</span>
+</code></pre></div><blockquote><p>通用</p></blockquote> <div class="language-sh extra-class"><pre class="language-sh"><code>daemonize no <span class="token comment">#以守护进程方式运行，默认no，需要开启</span>
+pidfile /var/run/redis_6379.pid <span class="token comment"># 如果以后台的方式运行，需要指定一个pid文件</span>
+loglevel notice <span class="token comment"># 日志级别</span>
+logfile <span class="token string">&quot;&quot;</span> <span class="token comment"># 日志的文件位置名</span>
+databases <span class="token number">16</span> <span class="token comment"># 数据库数量，默认16个</span>
+</code></pre></div><blockquote><p>快照</p></blockquote> <div class="language-sh extra-class"><pre class="language-sh"><code>在3600秒内，至少有一个key修改，进行持久化
+<span class="token comment"># save 3600 1</span>
+<span class="token comment"># save 300 100</span>
+<span class="token comment"># save 60 10000</span>
+
+stop-writes-on-bgsave-error <span class="token function">yes</span> <span class="token comment"># 持久化如果出错，是否还需要继续工作</span>
+rdbcompression <span class="token function">yes</span> <span class="token comment"># 是否压缩rdb文件，需要消耗cpu资源</span>
+rdbchecksum <span class="token function">yes</span> <span class="token comment"># rdb文件是否错误校验</span>
+<span class="token function">dir</span> ./ <span class="token comment"># rdb文件保存目录</span>
+</code></pre></div><blockquote><p>客户端</p></blockquote> <div class="language-sh extra-class"><pre class="language-sh"><code>maxclients <span class="token number">10000</span> <span class="token comment"># 最大客户端连接数</span>
+</code></pre></div><blockquote><p>内存</p></blockquote> <div class="language-sh extra-class"><pre class="language-sh"><code>maxmemory <span class="token operator">&lt;</span>bytes<span class="token operator">&gt;</span> <span class="token comment"># redis配置最大内存</span>
+maxmemory-policy noeviction <span class="token comment"># 内存达到上限的策略</span>
+<span class="token comment"># volatile-lru：只对设置了过期时间的key进行LRU（默认）</span>
+<span class="token comment"># allkeys-lru：删除LRU算法的key</span>
+<span class="token comment"># volatile-lfu -&gt; Evict using approximated LFU, only keys with an expire set.</span>
+<span class="token comment"># allkeys-lfu -&gt; Evict any key using approximated LFU.</span>
+<span class="token comment"># volatile-random：随机删除即将过期的key</span>
+<span class="token comment"># allkeys-random：随机删除key</span>
+<span class="token comment"># volatile-ttl：删除即将过期的</span>
+<span class="token comment"># noeviction：不做任何事，返回错误</span>
+</code></pre></div><blockquote><p>AOF</p></blockquote> <div class="language-sh extra-class"><pre class="language-sh"><code>appendonly no <span class="token comment"># 默认关闭aof模式，默认使用rdb模式</span>
+appendfilename <span class="token string">&quot;appendonly.aof&quot;</span> <span class="token comment"># aof文件名字</span>
+<span class="token comment"># 同步策略</span>
+appendfsync always <span class="token comment"># 每次修改同步</span>
+appendfsync everysec <span class="token comment"># 每秒同步一次，</span>
+appendfsync no  <span class="token comment"># 操作系统自己决定同步频率</span>
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.2f25c357.js" defer></script><script src="/assets/js/2.63c13255.js" defer></script><script src="/assets/js/55.c17da82b.js" defer></script>
+  </body>
+</html>

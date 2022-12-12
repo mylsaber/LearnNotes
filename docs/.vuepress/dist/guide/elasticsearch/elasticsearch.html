@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>入门使用 | 迪</title>
+    <meta name="generator" content="VuePress 1.9.7">
+    <link rel="icon" href="/logo.jpg">
+    <meta name="description" content="迪的文档">
+    
+    <link rel="preload" href="/assets/css/0.styles.2b9f1a15.css" as="style"><link rel="preload" href="/assets/js/app.2f25c357.js" as="script"><link rel="preload" href="/assets/js/2.63c13255.js" as="script"><link rel="preload" href="/assets/js/37.4e5cdaf9.js" as="script"><link rel="prefetch" href="/assets/js/10.c7b7d24d.js"><link rel="prefetch" href="/assets/js/11.06f80eba.js"><link rel="prefetch" href="/assets/js/12.6f810a00.js"><link rel="prefetch" href="/assets/js/13.25833528.js"><link rel="prefetch" href="/assets/js/14.4b786116.js"><link rel="prefetch" href="/assets/js/15.abfc377c.js"><link rel="prefetch" href="/assets/js/16.c75b4166.js"><link rel="prefetch" href="/assets/js/17.453f868d.js"><link rel="prefetch" href="/assets/js/18.a490508f.js"><link rel="prefetch" href="/assets/js/19.80524214.js"><link rel="prefetch" href="/assets/js/20.a97ffa51.js"><link rel="prefetch" href="/assets/js/21.547ddc23.js"><link rel="prefetch" href="/assets/js/22.45e85bde.js"><link rel="prefetch" href="/assets/js/23.0dbcaa21.js"><link rel="prefetch" href="/assets/js/24.131b5686.js"><link rel="prefetch" href="/assets/js/25.3d4c262a.js"><link rel="prefetch" href="/assets/js/26.9cbfd763.js"><link rel="prefetch" href="/assets/js/27.542a2792.js"><link rel="prefetch" href="/assets/js/28.fbca4c4d.js"><link rel="prefetch" href="/assets/js/29.9eff63d9.js"><link rel="prefetch" href="/assets/js/3.174213b6.js"><link rel="prefetch" href="/assets/js/30.a6823283.js"><link rel="prefetch" href="/assets/js/31.6a4a92c8.js"><link rel="prefetch" href="/assets/js/32.ce935036.js"><link rel="prefetch" href="/assets/js/33.8771b5d9.js"><link rel="prefetch" href="/assets/js/34.6ef7ae0f.js"><link rel="prefetch" href="/assets/js/35.08fc79cf.js"><link rel="prefetch" href="/assets/js/36.181bec7a.js"><link rel="prefetch" href="/assets/js/38.f6abaf38.js"><link rel="prefetch" href="/assets/js/39.bc91b61a.js"><link rel="prefetch" href="/assets/js/4.13c31685.js"><link rel="prefetch" href="/assets/js/40.0c43ce82.js"><link rel="prefetch" href="/assets/js/41.4eeb5771.js"><link rel="prefetch" href="/assets/js/42.13baee4d.js"><link rel="prefetch" href="/assets/js/43.2812f396.js"><link rel="prefetch" href="/assets/js/44.87333552.js"><link rel="prefetch" href="/assets/js/45.79925286.js"><link rel="prefetch" href="/assets/js/46.63ec06c7.js"><link rel="prefetch" href="/assets/js/47.31484b65.js"><link rel="prefetch" href="/assets/js/48.61c835fb.js"><link rel="prefetch" href="/assets/js/49.b420b13c.js"><link rel="prefetch" href="/assets/js/5.cbba45ac.js"><link rel="prefetch" href="/assets/js/50.53f11d2b.js"><link rel="prefetch" href="/assets/js/51.1eced69f.js"><link rel="prefetch" href="/assets/js/52.cdb811f6.js"><link rel="prefetch" href="/assets/js/53.18dbb2da.js"><link rel="prefetch" href="/assets/js/54.2f8c7ead.js"><link rel="prefetch" href="/assets/js/55.c17da82b.js"><link rel="prefetch" href="/assets/js/56.ec36758b.js"><link rel="prefetch" href="/assets/js/57.639cf8a7.js"><link rel="prefetch" href="/assets/js/58.848e0216.js"><link rel="prefetch" href="/assets/js/59.89a629cb.js"><link rel="prefetch" href="/assets/js/6.8d81f0ec.js"><link rel="prefetch" href="/assets/js/60.6ee5bb23.js"><link rel="prefetch" href="/assets/js/61.778f8894.js"><link rel="prefetch" href="/assets/js/62.5b79d674.js"><link rel="prefetch" href="/assets/js/63.1f7ab42c.js"><link rel="prefetch" href="/assets/js/64.06670e46.js"><link rel="prefetch" href="/assets/js/65.d55a0cb5.js"><link rel="prefetch" href="/assets/js/66.c0d943d5.js"><link rel="prefetch" href="/assets/js/67.191b831c.js"><link rel="prefetch" href="/assets/js/68.30a1580e.js"><link rel="prefetch" href="/assets/js/69.8a91a673.js"><link rel="prefetch" href="/assets/js/7.2259505f.js"><link rel="prefetch" href="/assets/js/70.8ef61250.js"><link rel="prefetch" href="/assets/js/71.52f9a69a.js"><link rel="prefetch" href="/assets/js/72.4af68aa5.js"><link rel="prefetch" href="/assets/js/73.804ce09d.js"><link rel="prefetch" href="/assets/js/74.0dcbb650.js"><link rel="prefetch" href="/assets/js/75.ce1dff6f.js"><link rel="prefetch" href="/assets/js/76.1c3e5a54.js"><link rel="prefetch" href="/assets/js/77.f0d66982.js"><link rel="prefetch" href="/assets/js/78.436e7214.js"><link rel="prefetch" href="/assets/js/79.900d03e3.js"><link rel="prefetch" href="/assets/js/8.6b054f16.js"><link rel="prefetch" href="/assets/js/80.de0bd2c2.js"><link rel="prefetch" href="/assets/js/9.eeae1cb6.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.2b9f1a15.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/logo.jpg" alt="迪" class="logo"> <span class="site-name can-hide">迪</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">
+  Home
+</a></div><div class="nav-item"><a href="/guide/back-end/java/java集合.html" class="nav-link">
+  后端
+</a></div><div class="nav-item"><a href="/guide/前端/JavaScript/ES6.html" class="nav-link">
+  前端
+</a></div><div class="nav-item"><a href="/guide/other/docker/Docker.html" class="nav-link">
+  其他
+</a></div><div class="nav-item"><a href="https://www.baidu.com" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  百度
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Language Menu" class="dropdown-title"><span class="title">语言</span> <span class="arrow down"></span></button> <button type="button" aria-label="Language Menu" class="mobile-dropdown-title"><span class="title">语言</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/language/chinese.html" class="nav-link">
+  中文
+</a></li><li class="dropdown-item"><!----> <a href="/language/english.html" class="nav-link">
+  English
+</a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">
+  Home
+</a></div><div class="nav-item"><a href="/guide/back-end/java/java集合.html" class="nav-link">
+  后端
+</a></div><div class="nav-item"><a href="/guide/前端/JavaScript/ES6.html" class="nav-link">
+  前端
+</a></div><div class="nav-item"><a href="/guide/other/docker/Docker.html" class="nav-link">
+  其他
+</a></div><div class="nav-item"><a href="https://www.baidu.com" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  百度
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Language Menu" class="dropdown-title"><span class="title">语言</span> <span class="arrow down"></span></button> <button type="button" aria-label="Language Menu" class="mobile-dropdown-title"><span class="title">语言</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/language/chinese.html" class="nav-link">
+  中文
+</a></li><li class="dropdown-item"><!----> <a href="/language/english.html" class="nav-link">
+  English
+</a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>后端</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/back-end/java/java集合.html" class="sidebar-link">java集合</a></li><li><a href="/guide/back-end/java/多线程.html" class="sidebar-link">多线程</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>其他</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>Docker</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/docker/Docker.html" class="sidebar-link">Docker</a></li><li><a href="/guide/other/docker/docker-compose.html" class="sidebar-link">Docker-compose</a></li><li><a href="/guide/other/docker/docker-swarm.html" class="sidebar-link">Docker-swarm</a></li></ul></section></li><li><section class="sidebar-group is-sub-group depth-1"><p class="sidebar-heading"><span>Kubernetes</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/Kubernetes/1.Kubernetes部署.html" class="sidebar-link">1.Kubernetes部署</a></li><li><a href="/guide/other/Kubernetes/2-Kubernetes资源管理方式.html" class="sidebar-link">2.Kubernetes资源管理方式</a></li><li><a href="/guide/other/Kubernetes/3-Kubernetes的对象.html" class="sidebar-link">3.Kubernetes的对象</a></li><li><a href="/guide/other/Kubernetes/4-Kubernetes的Pod.html" class="sidebar-link">4.Kubernetes的Pod</a></li><li><a href="/guide/other/Kubernetes/5-Kubernetes的控制器.html" class="sidebar-link">5.Kubernetes的控制器</a></li><li><a href="/guide/other/Kubernetes/6-Kubernetes的Service.html" class="sidebar-link">6.Kubernetes的Service</a></li><li><a href="/guide/other/Kubernetes/7-Kubernetes的数据存储.html" class="sidebar-link">7.Kubernetes的数据存储</a></li></ul></section></li><li><section class="sidebar-group is-sub-group depth-1"><p class="sidebar-heading"><span>Linux</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/Linux/Linux.html" class="sidebar-link">Linux</a></li><li><a href="/guide/other/Linux/Linux基础.html" class="sidebar-link">Linux基础</a></li><li><a href="/guide/other/Linux/Shell脚本.html" class="sidebar-link">Shell脚本</a></li></ul></section></li><li><section class="sidebar-group is-sub-group depth-1"><p class="sidebar-heading"><span>项目管理</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/other/project-manage/git.html" class="sidebar-link">Git</a></li><li><a href="/guide/other/project-manage/maven.html" class="sidebar-link">Maven</a></li></ul></section></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="入门使用"><a href="#入门使用" class="header-anchor">#</a> 入门使用</h2> <h3 id="基本概念"><a href="#基本概念" class="header-anchor">#</a> 基本概念</h3> <h4 id="索引-index"><a href="#索引-index" class="header-anchor">#</a> 索引（index）</h4> <p>类似的数据放在一个索引中，一个索引可以理解成一个关系型数据库</p> <h4 id="类型-type"><a href="#类型-type" class="header-anchor">#</a> 类型（type）</h4> <p>代表document属于index中的那个类比，也有比作关系型数据库的表的一种说法</p> <p>es5中一个index可以有多种type</p> <p>es6中一个index只能有一种type</p> <p>es7以后要逐渐移除type概念</p> <h4 id="映射-mapping"><a href="#映射-mapping" class="header-anchor">#</a> 映射（mapping）</h4> <p>定义了每个字段类型等信息，类似于关系型数据中的表结构</p> <p>常用数据类型：text、keyword、number、array、range、boolean、date、geo_point、ip、nested、object</p> <h3 id="索引操作"><a href="#索引操作" class="header-anchor">#</a> 索引操作</h3> <blockquote><p>创建索引</p></blockquote> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token constant">PUT</span> <span class="token operator">/</span>索引名
+</code></pre></div><blockquote><p>查询索引是否存在</p></blockquote> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token constant">HEAD</span> <span class="token operator">/</span>索引名
+</code></pre></div><blockquote><p>获取索引</p></blockquote> <div class="language- extra-class"><pre class="language-text"><code>GET /索引名
+GET /索引名，索引名
+</code></pre></div><blockquote><p>删除索引</p></blockquote> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token constant">DELETE</span> <span class="token operator">/</span>索引名
+<span class="token constant">DELETE</span> <span class="token operator">/</span>索引名，索引名
+</code></pre></div><blockquote><p>打开关闭索引</p></blockquote> <div class="language- extra-class"><pre class="language-text"><code>POST /索引名/_close
+POST /索引名/_open
+</code></pre></div><h3 id="字段映射"><a href="#字段映射" class="header-anchor">#</a> 字段映射</h3> <blockquote><p>创建字段映射</p></blockquote> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token constant">PUT</span> <span class="token operator">/</span>索引名<span class="token operator">/</span>_mapping
+<span class="token punctuation">{</span>
+    <span class="token string-property property">&quot;properties&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span>
+        <span class="token string-property property">&quot;字段名&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span>
+            <span class="token string-property property">&quot;type&quot;</span><span class="token operator">:</span><span class="token string">&quot;类型&quot;</span><span class="token punctuation">,</span>
+             <span class="token string-property property">&quot;index&quot;</span><span class="token operator">:</span><span class="token boolean">true</span><span class="token punctuation">,</span>
+             <span class="token string-property property">&quot;store&quot;</span><span class="token operator">:</span><span class="token boolean">true</span><span class="token punctuation">,</span>
+             <span class="token string-property property">&quot;analyzer&quot;</span><span class="token operator">:</span><span class="token string">&quot;分词器&quot;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>type：字段类型</p> <ul><li><p>String类型，又分两种：</p> <ul><li>text：可分词，不可参与聚合</li> <li>keyword：不可分词，数据会作为完整字段进行匹配，可以参与聚合</li></ul></li> <li><p>Numerical：数值类型，分两类</p> <ul><li>基本数据类型：long、interger、short、byte、double、float、half_float</li> <li>浮点数的高精度类型：scaled_float</li></ul></li> <li><p>Date：日期类型</p> <ul><li>elasticsearch可以对日期格式化为字符串存储，但是建议我们存储为毫秒值，存储为long，节省 空间。</li></ul></li> <li><p>Array：数组类型</p> <ul><li>进行匹配时，任意一个元素满足，都认为满足</li> <li>排序时，如果升序则用数组中的最小值来排序，如果降序则用数组中的最大值来排序</li></ul></li> <li><p>Object：对象</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+	name<span class="token operator">:</span><span class="token string">&quot;Jack&quot;</span><span class="token punctuation">,</span>
+	age<span class="token operator">:</span><span class="token number">21</span><span class="token punctuation">,</span>
+	girl<span class="token operator">:</span><span class="token punctuation">{</span>
+		name<span class="token operator">:</span> <span class="token string">&quot;Rose&quot;</span><span class="token punctuation">,</span>
+        age<span class="token operator">:</span><span class="token number">21</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>如果存储到索引库的是对象类型，例如上面的girl，会把girl变成两个字段：girl.name和girl.age</p></li></ul> <p>index：</p> <p>index影响字段的索引情况。</p> <ul><li>true：字段会被索引，则可以用来进行搜索。默认值就是true</li> <li>false：字段不会被索引，不能用来搜索</li></ul> <p>store：</p> <p>是否将数据进行独立存储。</p> <p>原始的文本会存储在 _source 里面，默认情况下其他提取出来的字段都不是独立存储的，是从 _source 里面提取出来的。当然你也可以独立的存储某个字段，只要设置store:true即可，获取独立存 储的字段要比从_source中解析快得多，但是也会占用更多的空间，所以要根据实际业务需求来设置， 默认为false</p> <p>analyzer：指定分词器</p> <p>一般我们处理中文会选择ik分词器 ik_max_word ik_smart</p> <blockquote><p>查看索引映射</p></blockquote> <div class="language-json extra-class"><pre class="language-json"><code>GET /索引名/_mapping
+GET /_mapping
+</code></pre></div><blockquote><p>修改索引</p></blockquote> <div class="language-json extra-class"><pre class="language-json"><code>PUT /索引库名/_mapping
+<span class="token punctuation">{</span>
+	<span class="token property">&quot;properties&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+		<span class="token property">&quot;字段名&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+			<span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;类型&quot;</span><span class="token punctuation">,</span>
+			<span class="token property">&quot;index&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>，
+			<span class="token property">&quot;store&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>，
+			<span class="token property">&quot;analyzer&quot;</span><span class="token operator">:</span> <span class="token string">&quot;分词器&quot;</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>注意:修改映射增加字段 做其它更改只能删除索引 重新建立映射</p> <blockquote><p>一次性创建索引和映射</p></blockquote> <div class="language-json extra-class"><pre class="language-json"><code>PUT /索引库名称
+<span class="token punctuation">{</span>
+	<span class="token property">&quot;settings&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span>
+		<span class="token property">&quot;索引库属性名&quot;</span><span class="token operator">:</span><span class="token string">&quot;索引库属性值&quot;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+	<span class="token property">&quot;mappings&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span>
+		<span class="token property">&quot;properties&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span>
+			<span class="token property">&quot;字段名&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span>
+			<span class="token property">&quot;映射属性名&quot;</span><span class="token operator">:</span><span class="token string">&quot;映射属性值&quot;</span>
+			<span class="token punctuation">}</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="文档操作"><a href="#文档操作" class="header-anchor">#</a> 文档操作</h3> <blockquote><p>新增文档</p></blockquote> <div class="language-json extra-class"><pre class="language-json"><code>POST /索引名称/_doc/<span class="token punctuation">{</span>id<span class="token punctuation">}</span>
+<span class="token punctuation">{</span>
+	<span class="token property">&quot;field&quot;</span><span class="token operator">:</span><span class="token string">&quot;value&quot;</span>
+<span class="token punctuation">}</span>
+
+POST /索引名称/_doc
+<span class="token punctuation">{</span>
+	<span class="token property">&quot;field&quot;</span><span class="token operator">:</span><span class="token string">&quot;value&quot;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><blockquote><p>查看文档</p></blockquote> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token constant">GET</span> <span class="token operator">/</span>索引名称<span class="token operator">/</span>_doc<span class="token operator">/</span><span class="token punctuation">{</span>id<span class="token punctuation">}</span>
+<span class="token constant">GET</span> <span class="token operator">/</span>索引名<span class="token operator">/</span>_search
+</code></pre></div><table><thead><tr><th>元数据项</th> <th>含义</th></tr></thead> <tbody><tr><td>_index</td> <td>document所属index</td></tr> <tr><td>_type</td> <td>document所属type，Elasticsearch7.x默认type为_doc</td></tr> <tr><td>_id</td> <td>代表document的唯一标识，与index和type一起，可以唯一标识和定位一个 document _version document的版本号，Elasticsearch利用_version (版本号)的方式来确保应用 中相互冲突的变更不会导致数据丢失。需要修改数据时，需要指定想要修改文 档的version号，如果该版本不是当前版本号，请求将会失败</td></tr> <tr><td>_seq_no</td> <td>严格递增的顺序号，每个文档一个，Shard级别严格递增，保证后写入的Doc seq_no大于先写入的Doc的seq_no</td></tr> <tr><td>_primary_term</td> <td>任何类型的写操作，包括index、create、update和Delete，都会生成一个 _seq_no。</td></tr> <tr><td>found</td> <td>true/false，是否查找到文档</td></tr> <tr><td>_source</td> <td>存储原始文档</td></tr></tbody></table> <blockquote><p>_source定制返回结果</p></blockquote> <div class="language- extra-class"><pre class="language-text"><code>GET /index/_doc/1?_source=name
+</code></pre></div><blockquote><p>更新文档（全部更新）</p></blockquote> <p>id对应文档存在，则修改</p> <p>id对应文档不存在，则新增</p> <div class="language- extra-class"><pre class="language-text"><code>PUT /索引名称/_doc/id
+{
+	&quot;field&quot;:&quot;value&quot;
+}
+</code></pre></div><blockquote><p>更新文档（局部更新）</p></blockquote> <div class="language- extra-class"><pre class="language-text"><code>POST /索引名/_update/{id}
+{
+	&quot;doc&quot;:{
+		&quot;field&quot;:&quot;value&quot;
+	}
+}
+
+</code></pre></div><blockquote><p>删除文档</p></blockquote> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token constant">DELETE</span> <span class="token operator">/</span>索引名<span class="token operator">/</span>_doc<span class="token operator">/</span><span class="token punctuation">{</span>id<span class="token punctuation">}</span>
+</code></pre></div><blockquote><p>删除文档</p></blockquote> <ul><li>根据id进行删除：</li></ul> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token constant">DELETE</span> <span class="token operator">/</span>索引名<span class="token operator">/</span>_doc<span class="token operator">/</span>id
+</code></pre></div><ul><li>根据查询条件进行删除</li></ul> <div class="language- extra-class"><pre class="language-text"><code>POST /索引库名/_delete_by_query
+{
+	&quot;query&quot;: {
+		&quot;match&quot;: {
+			&quot;字段名&quot;: &quot;搜索关键字&quot;
+		}
+	}
+}
+
+</code></pre></div><ul><li>删除所有文档</li></ul> <div class="language- extra-class"><pre class="language-text"><code>POST 索引名/_delete_by_query
+{
+	&quot;query&quot;: {
+		&quot;match_all&quot;: {}
+	}
+}
+
+</code></pre></div><h2 id="高级应用"><a href="#高级应用" class="header-anchor">#</a> 高级应用</h2> <h3 id="query-dsl"><a href="#query-dsl" class="header-anchor">#</a> Query DSL</h3> <blockquote><p>基本语法</p></blockquote> <div class="language- extra-class"><pre class="language-text"><code>POST /索引库名/_search
+{
+	&quot;query&quot;:{
+		&quot;查询类型&quot;:{
+			&quot;查询条件&quot;:&quot;查询条件值&quot;
+		}
+	}
+}
+
+</code></pre></div><p>这里的query代表一个查询对象，里面可以有不同的查询属性</p> <ul><li><p>查询类型：</p> <p>例如： match_all ， match ， term ， range 等等</p></li> <li><p>查询条件：查询条件会根据类型的不同，写法也有差异，后面详细讲解</p></li></ul> <h4 id="查询所有-match-all-query"><a href="#查询所有-match-all-query" class="header-anchor">#</a> 查询所有(match_all query)</h4> <div class="language-shell extra-class"><pre class="language-shell"><code>POST /索引库名/_search
+<span class="token punctuation">{</span>
+	<span class="token string">&quot;query&quot;</span>:<span class="token punctuation">{</span>
+		<span class="token string">&quot;match_all&quot;</span><span class="token builtin class-name">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><blockquote><p>结果</p></blockquote> <ul><li>took：查询花费时间，单位是毫秒</li> <li>time_out：是否超时</li> <li>_shards：分片信息</li> <li>hits：搜索结果总览对象
+<ul><li>total：搜索到的总条数</li> <li>max_score：所有结果中文档得分的最高分</li> <li>hits：搜索结果的文档对象数组，每个元素是一条搜索到的文档信息
+<ul><li>_index：索引库</li> <li>_type：文档类型</li> <li>_id：文档id</li> <li>_score：文档得分</li> <li>_source：文档的源数据</li></ul></li></ul></li></ul> <h4 id="全文搜索-full-text-query"><a href="#全文搜索-full-text-query" class="header-anchor">#</a> 全文搜索(full-text query)</h4> <p>全文搜索能够搜索已分析的文本字段，如电子邮件正文，商品描述等。使用索引期间应用于字段的同一 分析器处理查询字符串。全文搜索的分类很多 几个典型的如下:</p> <h5 id="匹配搜索-match-query"><a href="#匹配搜索-match-query" class="header-anchor">#</a> 匹配搜索(match query)</h5> <p>全文查询的标准查询，它可以对一个字段进行模糊、短语查询。 match queries 接收 text/numerics/dates, 对它们进行分词分析, 再组织成一个boolean查询。可通过operator 指定bool组 合操作（or、and 默认是 or ）。</p> <ul><li><p>or关系</p> <p>match 类型查询，会把查询条件进行分词，然后进行查询,多个词条之间是or的关系</p> <div class="language-json extra-class"><pre class="language-json"><code>POST /lagou-property/_search
+<span class="token punctuation">{</span>
+	<span class="token property">&quot;query&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span>
+		<span class="token property">&quot;match&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span>
+			<span class="token property">&quot;title&quot;</span><span class="token operator">:</span><span class="token string">&quot;华为电视&quot;</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>在上面的案例中，不仅会查询到电视，而且与华为相关的都会查询到，多个词之间是 or 的关系。</p></li> <li><p>and关系</p> <p>某些情况下，我们需要更精确查找，我们希望这个关系变成 and ，可以这样做：</p> <div class="language-json extra-class"><pre class="language-json"><code>POST /lagou-property/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;match&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;title&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token string">&quot;华为电视&quot;</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;operator&quot;</span><span class="token operator">:</span> <span class="token string">&quot;and&quot;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>本例中，只有同时包含 华为 和 电视 的词条才会被搜索到。</p></li></ul> <h5 id="短语搜索-match-phrase-query"><a href="#短语搜索-match-phrase-query" class="header-anchor">#</a> 短语搜索(match phrase query)</h5> <p>match_phrase 查询用来对一个字段进行短语查询，可以指定 analyzer、slop移动因子</p> <div class="language-json extra-class"><pre class="language-json"><code>POST /lagou-property/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;match_phrase&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;title&quot;</span><span class="token operator">:</span> <span class="token string">&quot;华为电视&quot;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="query-string-查询"><a href="#query-string-查询" class="header-anchor">#</a> query_string 查询</h5> <p>Query String Query提供了无需指定某字段而对文档全文进行匹配查询的一个高级查询,同时可以指定在 哪些字段上进行匹配。</p> <div class="language-json extra-class"><pre class="language-json"><code># 默认 和 指定字段
+GET /lagou-property/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;query_string&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;query&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;2699&quot;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+GET /lagou-property/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;query_string&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;query&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;2699&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default_field&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;title&quot;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+# 逻辑查询
+GET /lagou-property/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;query_string&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;query&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;手机 OR 小米&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default_field&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;title&quot;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+GET /lagou-property/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;query_string&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;query&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;手机 AND 小米&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default_field&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;title&quot;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+# 模糊查询
+GET /lagou-property/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;query_string&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;query&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;大米~1&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default_field&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;title&quot;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+# 多字段支持
+GET /lagou-property/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;query_string&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;query&quot;</span><span class="token operator">:</span><span class="token string">&quot;2699&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;fields&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">&quot;title&quot;</span><span class="token punctuation">,</span><span class="token string">&quot;price&quot;</span><span class="token punctuation">]</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="多字段匹配搜索-multi-match-query"><a href="#多字段匹配搜索-multi-match-query" class="header-anchor">#</a> 多字段匹配搜索(multi match query)</h5> <p>如果你需要在多个字段上进行文本搜索，可用multi_match 。multi_match在 match的基础上支持对多 个字段进行文本查询。</p> <div class="language-json extra-class"><pre class="language-json"><code>GET /lagou-property/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;multi_match&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;query&quot;</span><span class="token operator">:</span><span class="token string">&quot;2699&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;fields&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">&quot;title&quot;</span><span class="token punctuation">,</span><span class="token string">&quot;price&quot;</span><span class="token punctuation">]</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>还可以使用*匹配多个字段：</p> <div class="language-json extra-class"><pre class="language-json"><code>GET /lagou-property/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;multi_match&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;query&quot;</span><span class="token operator">:</span><span class="token string">&quot;http://image.lagou.com/12479622.jpg&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;fields&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">&quot;title&quot;</span><span class="token punctuation">,</span><span class="token string">&quot;ima*&quot;</span><span class="token punctuation">]</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><h4 id="词条级搜索-term-level-queries"><a href="#词条级搜索-term-level-queries" class="header-anchor">#</a> 词条级搜索(term-level queries)</h4> <h5 id="词条搜索-term-query"><a href="#词条搜索-term-query" class="header-anchor">#</a> 词条搜索(term query)</h5> <p>term 查询用于查询指定字段包含某个词项的文档</p> <div class="language-json extra-class"><pre class="language-json"><code>POST /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;term&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">&quot;name&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;solr&quot;</span> <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="词条集合搜索-terms-query"><a href="#词条集合搜索-terms-query" class="header-anchor">#</a> 词条集合搜索(terms query)</h5> <div class="language-json extra-class"><pre class="language-json"><code>GET /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;terms&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">&quot;name&quot;</span> <span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;solr&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;elasticsearch&quot;</span><span class="token punctuation">]</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="范围搜索-range-query"><a href="#范围搜索-range-query" class="header-anchor">#</a> 范围搜索(range query)</h5> <ul><li>gte：大于等于</li> <li>gt：大于</li> <li>lte：小于等于</li> <li>lt：小于</li> <li>boost：查询权重</li></ul> <div class="language-json extra-class"><pre class="language-json"><code>GET /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;range&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;price&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">&quot;gte&quot;</span> <span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;lte&quot;</span> <span class="token operator">:</span> <span class="token number">200</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;boost&quot;</span> <span class="token operator">:</span> <span class="token number">2.0</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+GET /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;range&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;timestamp&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">&quot;gte&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;now-2d/d&quot;</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;lt&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;now/d&quot;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+GET book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;range&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;timestamp&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">&quot;gte&quot;</span><span class="token operator">:</span> <span class="token string">&quot;18/08/2020&quot;</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;lte&quot;</span><span class="token operator">:</span> <span class="token string">&quot;2021&quot;</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;format&quot;</span><span class="token operator">:</span> <span class="token string">&quot;dd/MM/yyyy||yyyy&quot;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="不为空搜索-exists-query"><a href="#不为空搜索-exists-query" class="header-anchor">#</a> 不为空搜索(exists query)</h5> <div class="language-json extra-class"><pre class="language-json"><code>GET /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;exists&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">&quot;field&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;price&quot;</span> <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><h5 id="词项前缀搜索-prefix-query"><a href="#词项前缀搜索-prefix-query" class="header-anchor">#</a> 词项前缀搜索(prefix query)</h5> <div class="language-json extra-class"><pre class="language-json"><code>GET /book/_search
+<span class="token punctuation">{</span> 
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;prefix&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">&quot;name&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;so&quot;</span> <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><h5 id="通配符搜索-wildcard-query"><a href="#通配符搜索-wildcard-query" class="header-anchor">#</a> 通配符搜索(wildcard query)</h5> <div class="language-json extra-class"><pre class="language-json"><code>GET /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;wildcard&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">&quot;name&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;so*r&quot;</span> <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+GET /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;wildcard&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;lu*&quot;</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;boost&quot;</span><span class="token operator">:</span> <span class="token number">2</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="正则搜索-regexp-query"><a href="#正则搜索-regexp-query" class="header-anchor">#</a> 正则搜索(regexp query)</h5> <p>regexp允许使用正则表达式进行term查询.注意regexp如果使用不正确，会给服务器带来很严重的性能 压力。比如.*开头的查询，将会匹配所有的倒排索引中的关键字，这几乎相当于全表扫描，会很慢。因 此如果可以的话，最好在使用正则前，加上匹配的前缀。</p> <div class="language-json extra-class"><pre class="language-json"><code>GET /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;regexp&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span>
+            <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;s.*&quot;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+GET /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;regexp&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span>
+            <span class="token property">&quot;name&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span>
+                <span class="token property">&quot;value&quot;</span><span class="token operator">:</span><span class="token string">&quot;s.*&quot;</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;boost&quot;</span><span class="token operator">:</span><span class="token number">1.2</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="模糊搜索-fuzzy-query"><a href="#模糊搜索-fuzzy-query" class="header-anchor">#</a> 模糊搜索(fuzzy query)</h5> <div class="language-json extra-class"><pre class="language-json"><code>GET /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;fuzzy&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">&quot;name&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;so&quot;</span> <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+GET /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;fuzzy&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;name&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;so&quot;</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;boost&quot;</span><span class="token operator">:</span> <span class="token number">1.0</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;fuzziness&quot;</span><span class="token operator">:</span> <span class="token number">2</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+GET /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;fuzzy&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;name&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;sorl&quot;</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;boost&quot;</span><span class="token operator">:</span> <span class="token number">1.0</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;fuzziness&quot;</span><span class="token operator">:</span> <span class="token number">2</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="ids搜索-id集合查询"><a href="#ids搜索-id集合查询" class="header-anchor">#</a> ids搜索(id集合查询)</h5> <div class="language-json extra-class"><pre class="language-json"><code>GET /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;ids&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;type&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;_doc&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;values&quot;</span> <span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;1&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;3&quot;</span><span class="token punctuation">]</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h4 id="复合搜索-compound-query"><a href="#复合搜索-compound-query" class="header-anchor">#</a> 复合搜索(compound query)</h4> <h5 id="constant-score-query"><a href="#constant-score-query" class="header-anchor">#</a> constant_score query</h5> <p>用来包装另一个查询，将查询匹配的文档的评分设为一个常值</p> <div class="language-json extra-class"><pre class="language-json"><code>GET /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;term&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">&quot;description&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;solr&quot;</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+GET /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;constant_score&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;filter&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">&quot;term&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">&quot;description&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;solr&quot;</span><span class="token punctuation">}</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;boost&quot;</span> <span class="token operator">:</span> <span class="token number">1.2</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="布尔搜索-bool-query"><a href="#布尔搜索-bool-query" class="header-anchor">#</a> 布尔搜索(bool query)</h5> <p>bool 查询用bool操作来组合多个查询字句为一个查询。 可用的关键字：</p> <ul><li>must：必须满足</li> <li>filter：必须满足，但执行的是filter上下文，不参与、不影响评分</li> <li>should：或</li> <li>must_not：必须不满足，在filter上下文中执行，不参与、不影响评分</li></ul> <div class="language-json extra-class"><pre class="language-json"><code>POST /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;bool&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;must&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">&quot;match&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">&quot;description&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;java&quot;</span> <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;filter&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">&quot;term&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">&quot;name&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;solr&quot;</span> <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;must_not&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">&quot;range&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+                    <span class="token property">&quot;price&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">&quot;gte&quot;</span> <span class="token operator">:</span> <span class="token number">200</span><span class="token punctuation">,</span> <span class="token property">&quot;lte&quot;</span> <span class="token operator">:</span> <span class="token number">300</span> <span class="token punctuation">}</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;minimum_should_match&quot;</span> <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;boost&quot;</span> <span class="token operator">:</span> <span class="token number">1.0</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>minimum_should_match代表了最小匹配精度，如果设置minimum_should_match=1，那么should 语句中至少需要有一个条件满足。</p> <h4 id="排序"><a href="#排序" class="header-anchor">#</a> 排序</h4> <ul><li><p>相关性评分排序</p> <p>默认情况下，返回的结果是按照 相关性 进行排序的——最相关的文档排在最前。 在本章的后面部 分，我们会解释 相关性 意味着什么以及它是如何计算的， 不过让我们首先看看 sort 参数以及如 何使用它。 为了按照相关性来排序，需要将相关性表示为一个数值。在 Elasticsearch 中， 相关性得分 由一 个浮点数进行表示，并在搜索结果中通过 _score 参数返回， 默认排序是 _score 降序，按照相 关性评分升序排序如下</p> <div class="language-json extra-class"><pre class="language-json"><code>POST /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;match&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">&quot;description&quot;</span><span class="token operator">:</span><span class="token string">&quot;solr&quot;</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+POST /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;match&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">&quot;description&quot;</span><span class="token operator">:</span><span class="token string">&quot;solr&quot;</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;sort&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token property">&quot;_score&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">&quot;order&quot;</span><span class="token operator">:</span> <span class="token string">&quot;asc&quot;</span><span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li> <li><p>字段值排序</p> <div class="language-json extra-class"><pre class="language-json"><code>POST /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;match_all&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;sort&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span><span class="token property">&quot;price&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">&quot;order&quot;</span><span class="token operator">:</span> <span class="token string">&quot;desc&quot;</span><span class="token punctuation">}</span><span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li> <li><p>多级排序</p> <p>假定我们想要结合使用 price和 _score（得分） 进行查询，并且匹配的结果首先按照价格排序， 然后按照相关性得分排序：</p> <div class="language-json extra-class"><pre class="language-json"><code>POST /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span>
+        <span class="token property">&quot;match_all&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;sort&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span> <span class="token property">&quot;price&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">&quot;order&quot;</span><span class="token operator">:</span> <span class="token string">&quot;desc&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span> <span class="token property">&quot;timestamp&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">&quot;order&quot;</span><span class="token operator">:</span> <span class="token string">&quot;desc&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li></ul> <h4 id="分页"><a href="#分页" class="header-anchor">#</a> 分页</h4> <div class="language-json extra-class"><pre class="language-json"><code>POST /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;match_all&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;size&quot;</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;from&quot;</span><span class="token operator">:</span> <span class="token number">0</span>
+<span class="token punctuation">}</span>
+POST /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;match_all&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;sort&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span><span class="token property">&quot;price&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">&quot;order&quot;</span><span class="token operator">:</span> <span class="token string">&quot;desc&quot;</span><span class="token punctuation">}</span><span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;size&quot;</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;from&quot;</span><span class="token operator">:</span> <span class="token number">2</span>
+<span class="token punctuation">}</span>
+</code></pre></div><ul><li>size:每页显示多少条</li> <li>from:当前页起始索引, int start = (pageNum - 1) * size</li></ul> <h4 id="高亮"><a href="#高亮" class="header-anchor">#</a> 高亮</h4> <div class="language-json extra-class"><pre class="language-json"><code>POST /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;match&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;elasticsearch&quot;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;highlight&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;pre_tags&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&lt;font color='pink'&gt;&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;post_tags&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&lt;/font&gt;&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;fields&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span><span class="token property">&quot;name&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">,</span><span class="token punctuation">{</span><span class="token property">&quot;description&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+POST /book/_search
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;query&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;query_string&quot;</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;query&quot;</span> <span class="token operator">:</span> <span class="token string">&quot;elasticsearch&quot;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;highlight&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;pre_tags&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&lt;font color='pink'&gt;&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;post_tags&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&lt;/font&gt;&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;fields&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span><span class="token property">&quot;name&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">,</span><span class="token punctuation">{</span><span class="token property">&quot;description&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>在使用match查询的同时，加上一个highlight属性：</p> <ul><li>pre_tags：前置标签</li> <li>post_tags：后置标签</li> <li>fields：需要高亮的字段</li> <li>name：这里声明title字段需要高亮，后面可以为这个字段设置特有配置，也可以空</li></ul></div> <footer class="page-edit"><!----> <!----></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.2f25c357.js" defer></script><script src="/assets/js/2.63c13255.js" defer></script><script src="/assets/js/37.4e5cdaf9.js" defer></script>
+  </body>
+</html>
