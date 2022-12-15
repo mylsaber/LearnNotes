@@ -1,15 +1,15 @@
-# 1 Docker基础
-## 1.1 Docker核心组件
-### 1.1.1 Docker引擎
+## 1 Docker基础
+### 1.1 Docker核心组件
+#### 1.1.1 Docker引擎
 Docker使用客户端-服务器架构，Docker客户端是用户与Docker交互的主要方式，与Docker守护进程（Docker引擎）进行通信。该守护进程完成了构建，运行和分发Docker容器的繁重工作，Docker客户端和守护程序可以在同一系统上运行，也可以将Docker客户端连接到远程Docker守护程序。Docker客户端和守护程序在UNIX套接字或网络接口上使用REST API进行通信。Docker守护进程侦听Docker API请求并管理Docker对象，例如镜像，容器，网络和卷等。守护程序还可以与其他守护程序通信以管理Docker服务
-### 1.1.2 Docker镜像
+#### 1.1.2 Docker镜像
 Docker镜像类似于虚拟机镜像，可以将它理解为一个只读的模板。镜像是基于联合（Union）文件 系统的一种层式的结构，由一系列指令一步一步构建出来。镜像是创建Docker容器的基础。通过版本管理和增量的文件系统， Docker提供了一套十分简单的机制来创建和更新现有的镜像，用户可以从网上下载一个已经做好的应用镜像，并直接使用我们可以利用Dockerfile构建自己的镜像。
-### 1.1.3 Docker容器
+#### 1.1.3 Docker容器
 Docker容器类似于一个轻量级的沙箱，Docker利用容器来运行和隔离应用。容器是镜像的一个运行实例。可以将其启动、开始、停止、删除，而这些容器都是彼此相互隔离的、互不可见的。 可以把容器看做是一个简易版的Linux系统环境（包括root用户权限、进程空间、用户空间和网络空间等）以及运行在其中的应用程序打包而成的盒子。容器是基于镜像启动起来的，容器中可以运行一个或多个进程。镜像是Docker生命周期中的构建或打包阶段，而容器则是启动或执行阶段。镜像自身是只读的。容器从镜像启动的时候，会在镜像的最上层创建一个可写层。
-### 1.1.4 Docker仓库
+#### 1.1.4 Docker仓库
 Docker仓库类似于代码仓库，它是Docker集中存放镜像文件的场所。仓库注册服务器（Registry）是存放仓库的地方，其上往往存放着多个仓库。每个仓库集中存放某一类镜像，往往包括多个镜像文件，通过不同的标签（tag）来进行区分
-## 1.2 Docker安装
-### 1.2.1 卸载历史版本
+### 1.2 Docker安装
+#### 1.2.1 卸载历史版本
 ```shell
 #查看安装
 yum list installed | grep docker
@@ -20,7 +20,7 @@ yum -y remove docker-ce-cli.x86_64
 #删库
 rm -rf /var/lib/docker
 ```
-### 1.2.2 安装yum源
+#### 1.2.2 安装yum源
 官方源：
 ```shell
 yum install -y yum-utils
@@ -30,11 +30,11 @@ yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce
 ```shell
 wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo
 ```
-### 1.2.3 安装Docker引擎
+#### 1.2.3 安装Docker引擎
 ```shell
 yum install -y docker-ce docker-ce-cli containerd.io
 ```
-### 1.2.4 配置docker镜像加速
+#### 1.2.4 配置docker镜像加速
 ```shell
 sudo mkdir -p /etc/docker
 sudo tee /etc/docker/daemon.json <<-'EOF'
@@ -44,7 +44,7 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
 EOF
 sudo systemctl daemon-reload
 ```
-### 1.2.5 启动Docker
+#### 1.2.5 启动Docker
 ```shell
 #开机启动
 systemctl enable docker
@@ -53,15 +53,15 @@ systemctl start docker
 #查看Docker状态
 docker info
 ```
-# 2 Docker操作
-## 2.1 Docker常用命令
+## 2 Docker操作
+### 2.1 Docker常用命令
 ```shell
 docker version # 版本信息
 docker info    # 显示docker系统信息，包括镜像和容器数量
 docker --help  # 帮助命令
 ```
-## 2.2 使用Docker镜像
-### 2.2.1 获取镜像
+### 2.2 使用Docker镜像
+#### 2.2.1 获取镜像
 ```shell
 docker pull NAME[：TAG] （拉取最新的镜像）
 ```
@@ -90,11 +90,11 @@ f7a5433ce20d: Pull complete
 docker pull registry.hub.docker.com/mysql:5.7.30
 ```
 如果从非官方的仓库下载，则需要在仓库名称前指定完整的仓库地址。
-### 2.2.2 查看镜像
+#### 2.2.2 查看镜像
 ```shell
 docker images
 ```
-### 2.2.3 添加镜像标签
+#### 2.2.3 添加镜像标签
 docker tag [原镜像名:tag号] [目标镜像名:tag号] # 如果tag号缺省，默认latest
 ```shell
 [root@localhost ~]# docker tag mysql:5.7.30 mysql5
@@ -103,24 +103,24 @@ REPOSITORY TAG IMAGE ID CREATED SIZE
 mysql5 latest 9cfcce23593a 6 weeks ago 448MB
 mysql 5.7.30 9cfcce23593a 6 weeks ago 448MB
 ```
-### 2.2.3 查看镜像详细信息
+#### 2.2.3 查看镜像详细信息
 ```shell
 docker inspect NAME[：TAG]
 ```
-### 2.2.4 搜寻镜像
+#### 2.2.4 搜寻镜像
 ```shell
 docker search 名称
 ```
-### 2.2.5 删除镜像
+#### 2.2.5 删除镜像
 
 - `docker rmi NAME[：TAG]`:当同一个镜像拥有多个标签的时候，docker rmi命令只是删除该镜像多个标签中的指定标签而已，并不影响镜像文件。当镜像只剩下一个标签的时候,使用docker rmi命令会彻底删除镜像
 - `docker rmi IMAGE ID`:使用镜像ID删除镜像
 
 如果有容器正在运行该镜像，则不能删除。如果想强行删除用 -f (不推荐)
-### 2.2.6 上传镜像
+#### 2.2.6 上传镜像
 `docker push NAME[:TAG]`:上传镜像到仓库，默认上传到Docker Hub官方仓库（需要登录）
-## 2.3 操作Docker容器
-### 2.3.1 创建容器
+### 2.3 操作Docker容器
+#### 2.3.1 创建容器
 ```shell
 docker create NAME[:TAG]
 ```
@@ -135,7 +135,7 @@ docker create NAME[:TAG]
 ```shell
 docker create -it nginx
 ```
-### 2.3.2 启动容器
+#### 2.3.2 启动容器
 `docker start 容器id`:
 ```shell
 docker start 9cfcce23593a
@@ -150,7 +150,7 @@ docker ps
 #查看所有容器
 docker ps -a
 ```
-### 2.3.3 新建并启动容器
+#### 2.3.3 新建并启动容器
 docker run NAME[:TAG]：相当于 docker create+docker start
 ```shell
 docker run -it --rm --network host redis
@@ -169,56 +169,56 @@ docker run -it --rm --network host redis
 查看命令帮助信息：
 man docker run
 docker run --help
-### 2.3.4 终止容器
+#### 2.3.4 终止容器
 docker stop 容器id -t 时间（默认10秒）
 ```shell
 docker stop ce554267d7a4 -t 5
 docker kill ce554267d7a4
 ```
-### 2.3.5 重启容器
+#### 2.3.5 重启容器
 ```shell
 docker restart ce5
 ```
-### 2.3.6 进入容器
+#### 2.3.6 进入容器
 docker exec -it [容器ID] /bin/bash
 无论在容器内进行何种操作，依据依据镜像创建的其他容器都不会受影响(由于namespace的隔离)（将数据持久化的除外） exec: 容器执行某操作，操作为容器ID后边的命令 -it: 以伪终端模式，这样我们就相当于进入到容器中了
-### 2.3.7 退出容器
+#### 2.3.7 退出容器
 ```shell
 exit # 直接容器停止并退出
 Ctrl + p + q  # 容器不停止退出
 ```
-### 2.3.8 查看容器
+#### 2.3.8 查看容器
 ```shell
 docker inspect [容器ID]
 ```
-### 2.3.9 删除容器
+#### 2.3.9 删除容器
 ```shell
 docker rm [容器ID]
 ```
-## 2.4 Docker容器常用命令
-### 2.4.1 查看容器日志信息
+### 2.4 Docker容器常用命令
+#### 2.4.1 查看容器日志信息
 ```shell
 docker logs [OPTIONS] CONTAINER
 ```
-### 2.4.2 查看容器中进程信息
+#### 2.4.2 查看容器中进程信息
 ```shell
 # 命令 docker top 容器id
 [root@mylsaber ~]# docker top 66e
 UID                 PID                 PPID                C                   STIME               TTY                 TIME                CMD
 polkitd             3359                3339                0                   16:51               pts/0               00:00:00            redis-server *:6379
 ```
-### 2.4.3 进入正在运行的容器
+#### 2.4.3 进入正在运行的容器
 ```shell
 # 方式一：进入容器后开启一个新的终端
 docker exec -it 容器id bashShell
 # 方式二：进入容器正在执行的终端
 docker attach 容器id
 ```
-### 2.4.4 从容器内拷贝文件到主机上
+#### 2.4.4 从容器内拷贝文件到主机上
 ```shell
 docker cp 容器id:源文件路径 目标路径
 ```
-### 2.4.5 commit镜像
+#### 2.4.5 commit镜像
 ```shell
 docker commit 提交容器成为一个新的副本
 
@@ -238,22 +238,22 @@ root@29a85a627874:/usr/local/tomcat# cp -r webapps.dist/* webapps
 REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
 itomcat      1.0       e12236548928   6 seconds ago   685MB
 ```
-# 3 数据卷（data volumes）
-## 3.1 数据卷容器
+## 3 数据卷（data volumes）
+### 3.1 数据卷容器
 容器内数据直接映射到宿主机目录
 ```shell
 # redis数据绑定到/home/redis/data下，配置文件绑定到/home/redis/conf下
 docker run -v /home/redis/data:/data -v /home/redis/conf:/usr/local/etc/redis redis redis-server /usr/local/etc/redis/redis.conf
 ```
-## 3.2 数据卷
+### 3.2 数据卷
 由Docker创建和管理，是一个可供容器使用的特殊目录，它将主机操作系统目录直接映射进容器
-### 3.2.1 特性
+#### 3.2.1 特性
 
 - 可以在容器之间共享和复用
 - 对数据卷内数据修改立马生效
 - 对数据卷更新不会影响镜像
 - 卷会一直存在，直到没有容器使用时，可以安全卸载它
-### 3.2.2 创建方式
+#### 3.2.2 创建方式
 **具名挂载：**
 ```shell
 # 卷命令帮助
@@ -279,7 +279,7 @@ docker volume ls
 ```
 所有的docker容器内的卷，没有指定目录的情况下都是在/var/lib/docker/volumes/xxx/_data。
 我们通过具名挂载可以方便的找到需要的卷，大多数情况下都是使用具名挂载。
-### 3.2.3 拓展
+#### 3.2.3 拓展
 ```shell
 # 通过-v容器内路径 ：ro rw 改变读写权限
 ro readonly #只读，只能通过宿主机写，容器无法写
@@ -288,15 +288,15 @@ rw readwrite #读写，默认rw
 docker run -d -P --rm -v volume1:/etc/nginx:ro nginx
 docker run -d -P --rm -v volume1:/etc/nginx:rw nginx
 ```
-## 3.3 实战：安装MySQL
+### 3.3 实战：安装MySQL
 ```shell
 # dockerhub官方启动命令
 docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
 # 挂载mysql目录
 [root@mylsaber home]# docker run -d --rm -p 3306:3306 -v /home/mysql/conf:/etc/mysql/conf.d -v /home/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root mysql:5.7
 ```
-# 4 DockerFile
-## 4.1 DockerFile概念
+## 4 DockerFile
+### 4.1 DockerFile概念
 DockerFile就是用来构建docker镜像的构建文件！命令脚本！
 构建步骤：
 
@@ -307,7 +307,7 @@ DockerFile就是用来构建docker镜像的构建文件！命令脚本！
 ```shell
 docker build -f 源dockerfile -t 目标镜像名 保存地址 . # 目录中有默认名Dockerfile文件时，可省略源dockerfile名
 ```
-## 4.2 基础知识
+### 4.2 基础知识
 
 1. 每个保留关键字（指令）都必须是大写字母
 2. 从上到下执行
@@ -315,7 +315,7 @@ docker build -f 源dockerfile -t 目标镜像名 保存地址 . # 目录中有�
 4. 每个指令都会创建提交一个新的镜像层
 
 dockerfile是面向开发的，发布项目，做镜像，就需要编写dockerfile文件。docke镜像逐渐成为企业交付标准
-## 4.3 DockerFile基本指令
+### 4.3 DockerFile基本指令
 ```shell
 FROM          #用于为映像文件构建过程指定基准镜像，后续的指令运行于此基准镜像所提供的运行环境<digest>为校验码
 FROM <repository>[:<tag>] 或者 FROM <repository>@<digest> 
@@ -356,9 +356,9 @@ ENV <key> <value>或 . ENV <key>=<value> ...
 第一种格式中， <key>之后的所有内容均会被视作其 <value>的组成部分，因此一次只能设置一个变量
 第二种格式，可用一次设置多个变量，每个变量为一个“<key>=<value>”的键值对，如果<value>包含空格，可以以反斜线（\）进行转义，也可通过对<value>加引号进行标识；另外反斜线也可以用于续行；定义多个变量时，建议使用第二种方式，以便在同一层中完成所有功能
 ```
-## 4.4 实战测试
+### 4.4 实战测试
 Docker Hub中大多数镜像都是从scratch继承。
-### 4.4.1 centos
+#### 4.4.1 centos
 ```shell
 [root@mylsaber dockerfiles]# cat mydockerfile 
 FROM centos
@@ -376,7 +376,7 @@ CMD echo $MYPATH
 CMD echo "----end----"
 CMD /bin/bash
 ```
-### 4.4.2 Tomcat镜像
+#### 4.4.2 Tomcat镜像
 ```shell
 #准备好jdk和tomcat安装包
 #编写dockerfile文件，官方命名Dockerfile
@@ -405,7 +405,7 @@ CMD /usr/local/apache-tomcat-9.0.56/bin/startup.sh && tail -F /usr/local/apache-
 #构建镜像
 docker build -t mytomcat:1.0 .
 ```
-### 4.4.3 推送到阿里镜像
+#### 4.4.3 推送到阿里镜像
 登录阿里云，选择控制台，选择容器镜像服务，新建命名空间，创建镜像仓库
 ```
 #登录阿里云Docker Registry
@@ -434,21 +434,21 @@ IMAGE          CREATED       CREATED BY                                      SIZ
 <missing>      4 weeks ago   /bin/sh -c #(nop)  CMD ["bash"]                 0B        
 <missing>      4 weeks ago   /bin/sh -c #(nop) ADD file:09675d11695f65c55…   80.4MB
 ```
-# 5 Docker网络
+## 5 Docker网络
 ```shell
 docker run -d -P --name tomcat01 tomcat
 #查看容器内部网络地址ip addr
 docker exec -it tomcat01 ip addr
 ```
 我们每启动一个docker容器，docker就会给容器分配一个ip，我们只要安装了docker，就会有一个docker0桥接模式，使用的技术是evth-pair技术。--link就是在hosts中增加一个地址映射
-## 5.1 自定义网络
-### 5.1.1 网络模式
+### 5.1 自定义网络
+#### 5.1.1 网络模式
 
 - bridge：桥接docker（默认）
 - none：不配置网络
 - host：和宿主机共享网络
 - container：容器网络连通（少用，局限大）
-### 5.1.2 测试
+#### 5.1.2 测试
 ```shell
 # 我们直接启动命令默认自动加了 --net bridge，这个就是我们的docker0
 docker run -d -P --name tomcat01 --net bridge tomcat
@@ -470,14 +470,14 @@ PING tomcat02 (192.168.0.3) 56(84) bytes of data.
 PING tomcat01 (192.168.0.2) 56(84) bytes of data.
 64 bytes from tomcat01.mynet (192.168.0.2): icmp_seq=1 ttl=64 time=0.056 ms
 ```
-### 5.1.2 连接网络
+#### 5.1.2 连接网络
 ```shell
 # 默认docker0启动，无法ping通mynet下的容器
 [root@mylsaber tomcat]# docker run -d -P --rm --name tomcat03 tomcat
 # 可以通过docker network connect连接mynet，实现方式通过给容器再增加一个ip地址
 [root@mylsaber tomcat]# docker network connect mynet tomcat03
 ```
-## 5.2 实战：部署redis集群
+### 5.2 实战：部署redis集群
 ```shell
 # 创建网卡
 docker network create redis --subnet 172.38.0.0、16
