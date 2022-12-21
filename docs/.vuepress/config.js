@@ -26,8 +26,23 @@ module.exports = {
                 title: '后端',
                 collapsable: false,
                 children: [
-                    ['/guide/back-end/java/java集合', 'java集合'],
-                    ['/guide/back-end/java/多线程', '多线程'],
+                    {
+                        title: '设计模式',
+                        collapsable: false,
+                        children: [
+                            ["/guide/back-end/design-mode/创建型模式.md", "创建型模式"],
+                        ]
+                    },
+                    {
+                        title: 'Mybatis',
+                        collapsable: false,
+                        children: [
+                            ["/guide/back-end/Mybatis/Mybatis.md", "Mybatis"],
+                            ["/guide/back-end/Mybatis/mybatis1-基本使用.md", "mybatis-基本使用"],
+                            ["/guide/back-end/Mybatis/mybatis2-插件原理-责任链模式.md", "mybatis-插件原理"],
+                            ["/guide/back-end/Mybatis/mybatis3-多数据源.md", "mybatis-多数据源"],
+                        ]
+                    },
                 ]
             },
             {
@@ -36,7 +51,7 @@ module.exports = {
                 children: [
                     {
                         title: 'Docker',
-                        collapsable: true,
+                        collapsable: false,
                         children: [
                             ["/guide/other/docker/Docker", "Docker"],
                             ["/guide/other/docker/docker-compose", "Docker-compose"],
